@@ -1,0 +1,92 @@
+[
+  {
+    "id": "traffic_controller_01",
+    "game": "traffic_controller",
+    "title": "Campus Registration Rush",
+    "description": "Network load is rapidly escalating during online course registration.",
+    "baseline_mean": 50.0,
+    "baseline_std": 5.0,
+    "history": [
+      {"time": "08:00", "load": 42.0},
+      {"time": "10:00", "load": 49.0},
+      {"time": "12:00", "load": 53.0},
+      {"time": "14:00", "load": 62.0},
+      {"time": "15:00", "load": 91.0}
+    ],
+    "current_load": 91.0,
+    "options": [
+      "Continue Monitoring",
+      "Investigate",
+      "Emergency Response"
+    ],
+    "correct_option": "Emergency Response",
+    "explanation": "At 91.0 Mbps with μ = 50.0 and σ = 5.0, Z = (91 - 50) / 5 = +8.20. This is an extreme anomaly (> 3σ) indicating severe network congestion requiring immediate emergency mitigation."
+  },
+  {
+    "id": "zscore_challenge_01",
+    "game": "zscore_challenge",
+    "title": "Afternoon Peak Load",
+    "description": "Calculate the standardized Z-score for the peak afternoon lecture streaming.",
+    "mean": 50.0,
+    "std_dev": 5.0,
+    "current_load": 62.0,
+    "question": "What is the Z-score for a network load of 62.0 Mbps?",
+    "options": ["1.2", "2.4", "3.2", "0.8"],
+    "correct_answer": "2.4",
+    "formula": "Z = (X - μ) / σ = (62 - 50) / 5 = 2.4",
+    "explanation": "Z = (62 - 50) / 5 = 12 / 5 = 2.4. A Z-score of 2.4 signifies the load is 2.4 standard deviations above the campus average."
+  },
+  {
+    "id": "normal_curve_01",
+    "game": "normal_curve_challenge",
+    "title": "Bell Curve Boundary Marker",
+    "description": "Drag the interactive marker to locate where Z = +2.0 falls on the standard normal distribution.",
+    "mean": 50.0,
+    "std_dev": 5.0,
+    "target_z": 2.0,
+    "target_load": 60.0,
+    "tolerance_z": 0.15,
+    "explanation": "Z = +2.0 corresponds to μ + 2σ = 50 + 2(5) = 60 Mbps. In a normal distribution, 97.72% of observations fall below Z = +2.0."
+  },
+  {
+    "id": "anomaly_hunter_01",
+    "game": "anomaly_hunter",
+    "title": "Dormitory Traffic Audit",
+    "description": "Scan the sampled telemetry data to isolate the anomalous packet surge.",
+    "dataset": [48, 51, 49, 52, 50, 47, 53, 91, 51, 49],
+    "mean": 54.1,
+    "std_dev": 13.06,
+    "suspicious_value": 91,
+    "explanation": "91 Mbps is visibly detached from the cluster (47-53 Mbps). Compared to baseline μ = 50, σ = 5, Z = 8.2; it represents an unmistakable telemetry anomaly."
+  },
+  {
+    "id": "emergency_mission_01",
+    "game": "emergency_mission",
+    "title": "Operation Cyber Shield: DDoS Triage",
+    "description": "A suspected SYN flood attack has hit the central campus core gateway. Conduct statistical triage.",
+    "mean": 50.0,
+    "std_dev": 5.0,
+    "current_load": 68.0,
+    "steps": [
+      {
+        "step": 1,
+        "prompt": "Calculate the Z-score for the current load of 68.0 Mbps:",
+        "expected_z": 3.6,
+        "hint": "Z = (68 - 50) / 5"
+      },
+      {
+        "step": 2,
+        "prompt": "Classify the current operational state:",
+        "options": ["NORMAL", "UNUSUALLY LOW", "UNUSUALLY HIGH"],
+        "correct": "UNUSUALLY HIGH"
+      },
+      {
+        "step": 3,
+        "prompt": "Select the appropriate network mitigation protocol:",
+        "options": ["Log for weekly audit", "Activate rate-limiting and DDoS scrubbers", "Reboot gateway switch"],
+        "correct": "Activate rate-limiting and DDoS scrubbers"
+      }
+    ],
+    "explanation": "Z = 3.6 indicates an event that occurs under normal conditions with probability P(X ≥ 68) < 0.00016 (< 0.02%). Immediate automated filtering is required."
+  }
+]

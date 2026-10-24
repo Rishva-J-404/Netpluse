@@ -1,0 +1,23 @@
+# NETPULSE 10-Phase Development Roadmap
+**Course:** Probability and Statistics for Computer Science (`25CS203`)
+
+- **Phase 1: Project Scaffolding & Directory Setup** (COMPLETED & APPROVED)
+  - Unified project layout, React + Vite frontend setup, FastAPI backend structure, dataset scaffolding (`network_load.csv`, `scenarios.json`), Supabase SQL schemas, baseline verification.
+- **Phase 2: Python Statistical Engine** (COMPLETED & APPROVED)
+  - NumPy and SciPy statistical implementations (`statistics.py`, `probability.py`, `anomaly.py`, `health.py`, `simulator.py`, `explanation.py`), standard deviation zero-variance guard, anomaly classifier, health scoring, 65 pytest unit tests passed.
+- **Phase 3: FastAPI Backend Endpoints** (COMPLETED & APPROVED)
+  - REST API routes (`/api/analyze`, `/api/probability`, `/api/simulation`, `/api/games/check-answer`, `/api/dataset`, `/api/scenarios`) with Pydantic request/response validation, error handling, CORS, 31 integration tests (96 total passing).
+- **Phase 4: React UI Architecture & NOC Dashboard** (COMPLETED & APPROVED)
+  - Futuristic dark NOC theme tokens, Tailwind CSS 4 + `@tailwindcss/vite` integration on Vite 8, responsive collapsible sidebar across 5 categories, Top Navbar with live FastAPI heartbeat probe, Recharts telemetry time-series visualization, all 15 routes + 404 fallback page operational.
+- **Phase 5: Technical Lab Implementation** (COMPLETED)
+  - Recharts Gaussian bell curve visualizer (`GaussianBellChart.jsx`) powered by 60 discrete coordinates computed by SciPy, interactive Normal Distribution Explorer with empirical standard deviation zones (68-95-99.7%), Probability Lab lower-tail / upper-tail / interval calculator with SciPy backend, standardized Z-score analysis workbench with visual horizontal deviation scale, and reactive What-If Simulator with debounced dual-input parameter sweeping and instant health scoring.
+- **Phase 6: Learn & Play Gaming Suite** (COMPLETED)
+  - 5 interactive educational game modules (Traffic Controller, Z-Score Challenge, Normal Curve Challenge, Anomaly Hunter, and Multi-Step Network Emergency Mission) powered by backend scenario definitions from `GET /api/scenarios`. Authoritative server-side answer verification via `POST /api/games/check-answer`, session scoring and XP tracking with duplicate-submission safeguards, dataset record count alignment (n = 24 hourly records), and seamless Golden Bridge transition (`[View Technical Analysis]`) into the Technical Lab.
+- **Phase 7: Supabase Database Integration** (COMPLETED)
+  - Production-ready 6-table relational schema (`profiles`, `game_results`, `achievements`, `user_achievements`, `analysis_history`, `datasets`), comprehensive Row-Level Security (RLS) policies for user data isolation, private Supabase Storage bucket (`network-datasets`) with `<auth.uid()>/` ownership path checks, modular persistence service layer (`profileService`, `analysisHistoryService`, `gameResultsService`, `achievementService`, `datasetService`), repeatable achievement catalog seeds, reproducible transaction-safe SQL tests (`rls_validation.sql`), and strict `.gitignore` secrets hygiene.
+- **Phase 8: Supabase Authentication & User Profiles** (COMPLETED)
+  - Supabase Auth integration with central session management in `AuthContext.jsx` (`signUp`, `signIn`, `signOut`, `getSession`, `onAuthStateChange`). Reusable `ProtectedRoute.jsx` guarding authenticated views (`/profile`, `/analysis-history`). Fully implemented `Register.jsx`, `Login.jsx`, and `Profile.jsx` with email verification feedback and callsign customization. Automated database trigger `handle_new_user()` on `auth.users` with client-side reconciliation fallback in `profileService.getOrCreateProfile`.
+- **Phase 9: XP, Achievements & Leaderboard** (UPCOMING)
+  - XP progression, automatic badge unlocks, global leaderboard ranking.
+- **Phase 10: Testing, Hardening & Academic Documentation**
+  - End-to-end tests, mobile responsiveness, final report.

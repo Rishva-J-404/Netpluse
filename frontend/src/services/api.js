@@ -1,0 +1,116 @@
+/**
+ * NETPULSE - API Service Layer
+ * Connects React UI directly to FastAPI backend statistical engine.
+ * Course: Probability and Statistics for Computer Science (25CS203)
+ */
+
+const RAW_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
+// Strip trailing slash if present
+export const API_BASE = RAW_BASE.replace(/\/+$/, '');
+
+/**
+ * Generic helper for handling JSON fetch requests and standardizing backend errors.
+ */
+async function request(endpoint, options = {}) {
+  const url = `${API_BASE}${endpoint}`;
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      },
+      ...options
+    });
+
+    if (!res.ok) {
+      let errorMsg = `Server error (${res.status})`;
+      try {
+        const errorData = await res.json();
+        errorMsg = errorData.message || errorData.detail || errorData.error || errorMsg;
+      } catch {
+        // use status text if JSON parse fails
+        errorMsg = res.statusText || errorMsg;
+      }
+      const err = new Error(errorMsg);
+      err.status = res.status;
+      throw err;
+    }
+
+    return await res.json();
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message.includes('fetch')) {
+      const netErr = new Error(`Cannot reach NETPULSE backend at ${API_BASE}. Ensure the FastAPI server is running.`);
+      netErr.isNetworkError = true;
+      throw netErr;
+    }
+    throw err;
+  }
+}
+
+/**
+ * Health check & telemetry status probe
+ * GET /health
+ */
+export async function fetchHealth() {
+  return request('/health');
+}
+
+/**
+ * Baseline campus telemetry dataset with statistical summary
+ * GET /api/dataset?name=campus_network
+ */
+export async function fetchDataset(name = 'campus_network') {
+  return request(`/api/dataset?name=${encodeURIComponent(name)}`);
+}
+
+/**
+ * Educational curriculum scenarios
+ * GET /api/scenarios
+ */
+export async function fetchScenarios() {
+  return request('/api/scenarios');
+}
+
+/**
+ * Full statistical telemetry analysis
+ * POST /api/analyze
+ */
+export async function analyzeLoad(payload) {
+  return request('/api/analyze', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
+/**
+ * Normal distribution tail and interval cumulative probability
+ * POST /api/probability
+ */
+export async function solveProbability(payload) {
+  return request('/api/probability', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
+/**
+ * What-If live parameter sweep and Gaussian coordinates
+ * POST /api/simulation
+ */
+export async function runSimulation(payload) {
+  return request('/api/simulation', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
+
+/**
+ * Game decision validation & Golden Bridge payload generator
+ * POST /api/games/check-answer
+ */
+export async function checkGameAnswer(payload) {
+  return request('/api/games/check-answer', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+}
