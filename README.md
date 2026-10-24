@@ -1,18 +1,6 @@
 # NETPULSE
 ### Network Load Analysis Using Normal Distribution
 
-**Course:** Probability and Statistics for Computer Science  
-**Course Code:** 25CS203  
-**Project Period:** 21 September 2026 – 21 October 2026  
-
----
-
-## Team Information
-- **Neavis Rishva J** — Register Number: `URK25CS1236`
-- **Jegath Kishore P** — Register Number: `URK25CS1153`
-- **P Joel Sathiyan** — Register Number: `URK25CS1100`
-- **Starbin S** — Register Number: `URK25CS1242`
-
 ---
 
 ## 1. Project Overview & Problem Statement
