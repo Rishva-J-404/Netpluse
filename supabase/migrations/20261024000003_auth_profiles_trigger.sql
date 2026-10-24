@@ -5,7 +5,11 @@
 
 -- Trigger function executed whenever a new user is inserted into auth.users
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
 DECLARE
     initial_username TEXT;
 BEGIN
@@ -13,7 +17,7 @@ BEGIN
     initial_username := COALESCE(
         NULLIF(TRIM(NEW.raw_user_meta_data->>'username'), ''),
         NULLIF(TRIM(split_part(NEW.email, '@', 1)), ''),
-        'student_' || SUBSTRING(NEW.id::text, 1, 8)
+        'student_' || SUBSTRING(NEW.id::text FROM 1 FOR 8)
     );
 
     -- Insert new student profile idempotently
@@ -33,7 +37,7 @@ EXCEPTION WHEN OTHERS THEN
     -- profileService.js includes client-side getOrCreateProfile recovery fallback.
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
 -- Attach trigger to auth.users table
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

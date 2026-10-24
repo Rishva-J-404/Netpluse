@@ -1,0 +1,47 @@
+# ====================================================================
+# NETPULSE Supabase Configuration
+# Course: Probability and Statistics for Computer Science (25CS203)
+# ====================================================================
+
+# Project identification
+project_id = "netpulse"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[api.tls]
+enabled = false
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[db.pooler]
+enabled = false
+port = 54329
+mode = "transaction"
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["https://localhost:5173", "http://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[storage.buckets.network-datasets]
+public = false
+file_size_limit = "5MiB"
+allowed_mime_types = ["text/csv", "application/vnd.ms-excel", "text/plain"]

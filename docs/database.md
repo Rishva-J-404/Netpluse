@@ -198,12 +198,17 @@ Row-Level Security is strictly enabled on all six tables. Unauthenticated (`anon
 4. Copy and run the contents of [`supabase/seed.sql`](file:///c:/Users/NEAVISHRISHVA%20J/Videos/netpulse/supabase/seed.sql).
 5. (Optional) Run [`supabase/tests/rls_validation.sql`](file:///c:/Users/NEAVISHRISHVA%20J/Videos/netpulse/supabase/tests/rls_validation.sql) to execute the automated transaction-wrapped RLS security verification.
 
-### Option B: Via Supabase CLI Migrations
+### Option B: Via Supabase CLI & GitHub Integration
+The project is configured for automated Supabase GitHub Integration deployments via `supabase/config.toml` and timestamped migrations in `supabase/migrations/`:
+- `20261024000001_initial_schema.sql` (Tables & Indexes)
+- `20261024000002_rls_and_storage.sql` (RLS Policies & Private Storage Bucket)
+- `20261024000003_auth_profiles_trigger.sql` (Auth Profile Trigger)
+
 ```bash
 # Link your remote Supabase project
 supabase link --project-ref your-project-ref
 
-# Apply numbered migrations
+# Apply timestamped migrations
 supabase db push
 
 # Seed master achievement definitions
@@ -234,7 +239,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
 To guarantee that every registered student in Supabase Auth (`auth.users`) has a corresponding analytical profile in `public.profiles`:
 
 ### 7.1 Database Level: `on_auth_user_created` Trigger
-Configured in `supabase/migrations/003_auth_profiles_trigger.sql` and `supabase/schema.sql`:
+Configured in `supabase/migrations/20261024000003_auth_profiles_trigger.sql` and `supabase/schema.sql`:
 ```sql
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER

@@ -93,7 +93,7 @@ All 15 approved routes + 404 fallback:
 - `GameContext.jsx`: Ephemeral session state manager with interaction deduplication preventing duplicate reward exploitation.
 
 ### 4.6 Database Persistence & Storage Architecture (Phase 7)
-- `supabase/`: Idempotent SQL migrations (`001_initial_schema.sql`, `002_rls_and_storage.sql`), master schema (`schema.sql`), repeatable achievement seeds (`seed.sql`), and transaction-safe security tests (`tests/rls_validation.sql`).
+- `supabase/`: Automated Supabase GitHub Integration configuration (`config.toml`), timestamped idempotent SQL migrations (`20261024000001_initial_schema.sql`, `20261024000002_rls_and_storage.sql`, `20261024000003_auth_profiles_trigger.sql`), master reference schema (`schema.sql`), repeatable achievement seeds (`seed.sql`), and transaction-safe security tests (`tests/rls_validation.sql`).
 - `profiles`: User account metadata linked 1:1 with `auth.users(id)` with auto-updating timestamps.
 - `game_results`: Authoritative mission telemetry and scores awarded by the backend.
 - `achievements` & `user_achievements`: Master catalog with public visibility and isolated per-user unlock records.
@@ -108,5 +108,5 @@ All 15 approved routes + 404 fallback:
 - `Login.jsx`: Secure sign-in form with toggleable password visibility, inline error reporting, and automatic redirect back to original destination.
 - `Profile.jsx`: Authenticated student dashboard displaying operator callsign, unique account ID, verification status, member tenure, server-authoritative level and XP, custom callsign updater (`updateCallsign`), and sign-out controls.
 - `Navbar.jsx` & `Sidebar.jsx`: Synchronized authentication indicators showing real-time callsign badges, quick links to profile, and contextual sign-out buttons.
-- `supabase/migrations/003_auth_profiles_trigger.sql`: Automatic database trigger `on_auth_user_created` executing `public.handle_new_user()` to guarantee immediate 1:1 `profiles` record creation upon student registration.
+- `supabase/migrations/20261024000003_auth_profiles_trigger.sql`: Automatic database trigger `on_auth_user_created` executing `public.handle_new_user()` to guarantee immediate 1:1 `profiles` record creation upon student registration.
 - `profileService.getOrCreateProfile`: Client-side reconciliation layer guaranteeing that even if a trigger is delayed, a matching profile record is created and linked safely.
