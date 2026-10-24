@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from routes import analysis, probability, simulation, games, dataset
+from routes import analysis, probability, simulation, games, dataset, progression
 
 # Description and Metadata for generated Swagger/OpenAPI docs
 app = FastAPI(
@@ -94,6 +94,7 @@ app.include_router(probability.router)
 app.include_router(simulation.router)
 app.include_router(games.router)
 app.include_router(dataset.router)
+app.include_router(progression.router)
 
 @app.get("/", tags=["Health"])
 async def root():

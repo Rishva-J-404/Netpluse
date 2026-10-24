@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { fetchAchievementCatalog, fetchUserUnlockedAchievements } from '../services/achievementService'
+import { fetchProgressionAuthoritative } from '../services/api'
 import { isSupabaseConfigured } from '../services/supabase'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
@@ -96,15 +97,29 @@ export default function Achievements() {
     }
 
     // 2. Fetch user unlocks if authenticated
-    if (configured && isAuthenticated) {
-      const { data } = await fetchUserUnlockedAchievements()
-      if (data && data.length > 0) {
-        const map = {}
-        data.forEach(item => {
-          map[item.achievement_id] = item
-        })
-        setUnlockedMap(map)
+    if (isAuthenticated) {
+      const map = {}
+      if (configured) {
+        const { data } = await fetchUserUnlockedAchievements()
+        if (data && data.length > 0) {
+          data.forEach(item => {
+            map[item.achievement_id] = item
+          })
+        }
       }
+      try {
+        const prog = await fetchProgressionAuthoritative()
+        if (prog && prog.unlocked_achievements) {
+          prog.unlocked_achievements.forEach(achId => {
+            if (!map[achId]) {
+              map[achId] = { achievement_id: achId, unlocked_at: new Date().toISOString() }
+            }
+          })
+        }
+      } catch {
+        // Fallback gracefully
+      }
+      setUnlockedMap(map)
     }
 
     setLoading(false)

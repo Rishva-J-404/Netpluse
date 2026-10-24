@@ -17,7 +17,7 @@
   - Production-ready 6-table relational schema (`profiles`, `game_results`, `achievements`, `user_achievements`, `analysis_history`, `datasets`), comprehensive Row-Level Security (RLS) policies for user data isolation, private Supabase Storage bucket (`network-datasets`) with `<auth.uid()>/` ownership path checks, modular persistence service layer (`profileService`, `analysisHistoryService`, `gameResultsService`, `achievementService`, `datasetService`), repeatable achievement catalog seeds, reproducible transaction-safe SQL tests (`rls_validation.sql`), and strict `.gitignore` secrets hygiene.
 - **Phase 8: Supabase Authentication & User Profiles** (COMPLETED)
   - Supabase Auth integration with central session management in `AuthContext.jsx` (`signUp`, `signIn`, `signOut`, `getSession`, `onAuthStateChange`). Reusable `ProtectedRoute.jsx` guarding authenticated views (`/profile`, `/analysis-history`). Fully implemented `Register.jsx`, `Login.jsx`, and `Profile.jsx` with email verification feedback and callsign customization. Automated database trigger `handle_new_user()` on `auth.users` with client-side reconciliation fallback in `profileService.getOrCreateProfile`.
-- **Phase 9: XP, Achievements & Leaderboard** (UPCOMING)
-  - XP progression, automatic badge unlocks, global leaderboard ranking.
-- **Phase 10: Testing, Hardening & Academic Documentation**
-  - End-to-end tests, mobile responsiveness, final report.
+- **Phase 9: Persistent XP, Achievements, History & Leaderboard** (COMPLETED)
+  - End-to-end persistent progression backed by Supabase PostgreSQL and FastAPI authoritative verification. Migration `20261024000004_progression_leaderboard.sql` adds idempotency keys to `game_results`, level progression function `calculate_level()`, atomic XP increment `award_user_progression()`, and restricted public `get_leaderboard()` RPC. Endpoints `POST /api/games/complete`, `POST /api/analysis/save`, `GET /api/analysis/history`, `GET /api/progression`, and `GET /api/leaderboard` enforce Bearer token verification, user data isolation, and anti-tamper security. Real leaderboard standings, audit trail reload via Golden Bridge, and 116 passing backend unit/integration tests.
+- **Phase 10: Testing, Hardening & Academic Documentation** (UPCOMING)
+  - End-to-end integration tests, mobile responsiveness, security review, and final academic report.

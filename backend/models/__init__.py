@@ -22,6 +22,19 @@ from models.results import (
     ScenariosListResponse
 )
 
+from models.progression import (
+    GameCompletionRequest,
+    UnlockedAchievement,
+    GameCompletionResponse,
+    SaveAnalysisRequest,
+    SaveAnalysisResponse,
+    AnalysisHistoryItem,
+    AnalysisHistoryResponse,
+    ProgressionResponse,
+    LeaderboardEntry,
+    LeaderboardResponse
+)
+
 __all__ = [
     "NetworkLoadRequest",
     "ProbabilityRequest",
@@ -35,5 +48,15 @@ __all__ = [
     "GameCheckAnswerResponse",
     "DatasetRecord",
     "DatasetResponse",
-    "ScenariosListResponse"
+    "ScenariosListResponse",
+    "GameCompletionRequest",
+    "UnlockedAchievement",
+    "GameCompletionResponse",
+    "SaveAnalysisRequest",
+    "SaveAnalysisResponse",
+    "AnalysisHistoryItem",
+    "AnalysisHistoryResponse",
+    "ProgressionResponse",
+    "LeaderboardEntry",
+    "LeaderboardResponse"
 ]

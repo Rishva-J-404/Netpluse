@@ -18,10 +18,13 @@ import {
   CheckCircle2,
   Layers,
   Sparkles,
-  Database
+  Database,
+  BookmarkPlus,
+  Check
 } from 'lucide-react'
-import { analyzeLoad, fetchDataset } from '../services/api'
+import { analyzeLoad, fetchDataset, saveAnalysisAuthoritative } from '../services/api'
 import { useStats } from '../contexts/StatsContext'
+import { useAuth } from '../contexts/AuthContext'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
 import MetricCard from '../components/MetricCard'
@@ -30,6 +33,7 @@ import LoadingState from '../components/LoadingState'
 import ErrorState from '../components/ErrorState'
 
 export default function TechnicalLab() {
+  const { isAuthenticated, refreshProfile } = useAuth()
   const { currentLoad, setCurrentLoad, datasetName, setDatasetName, lastAnalysis, setLastAnalysis, bridgePayload } = useStats()
   const [inputLoad, setInputLoad] = useState(currentLoad || 62.0)
   const [selectedDataset, setSelectedDataset] = useState(datasetName || 'campus_network')
@@ -37,6 +41,9 @@ export default function TechnicalLab() {
   const [analysis, setAnalysis] = useState(lastAnalysis)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [saving, setSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState(null)
+  const [saveError, setSaveError] = useState(null)
 
   // Load dataset metadata (total records, baseline min/max)
   useEffect(() => {
@@ -79,7 +86,38 @@ export default function TechnicalLab() {
   const handleReset = () => {
     setInputLoad(62.0)
     setSelectedDataset('campus_network')
+    setSaveMessage(null)
+    setSaveError(null)
     runAnalysis(62.0)
+  }
+
+  const handleSaveAnalysis = async () => {
+    if (!analysis) return
+    if (!isAuthenticated) {
+      setSaveError('Sign in to persist private telemetry snapshots to your audit history.')
+      return
+    }
+    setSaving(true)
+    setSaveMessage(null)
+    setSaveError(null)
+    try {
+      const res = await saveAnalysisAuthoritative({
+        network_load: Number(analysis.current_load),
+        dataset: selectedDataset
+      })
+      if (res && res.saved) {
+        let msg = `✓ Snapshot saved to audit history (Record: ${res.history_id.substring(0, 8)})`
+        if (res.newly_unlocked_achievements && res.newly_unlocked_achievements.length > 0) {
+          msg += ` • 🎉 Unlocked: ${res.newly_unlocked_achievements.map(a => a.name).join(', ')}!`
+        }
+        setSaveMessage(msg)
+        if (refreshProfile) refreshProfile()
+      }
+    } catch (err) {
+      setSaveError(err.message || 'Failed to save analysis record.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -177,16 +215,41 @@ export default function TechnicalLab() {
           </div>
 
           <div>
-            <button
-              onClick={() => runAnalysis(inputLoad)}
-              disabled={loading}
-              className="w-full px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-cyan-950/60"
-            >
-              <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-              <span>{loading ? 'Executing on Backend...' : 'Run Statistical Analysis'}</span>
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => runAnalysis(inputLoad)}
+                disabled={loading}
+                className="w-full px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-cyan-950/60"
+              >
+                <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+                <span>{loading ? 'Executing on Backend...' : 'Run Statistical Analysis'}</span>
+              </button>
+              {analysis && (
+                <button
+                  onClick={handleSaveAnalysis}
+                  disabled={saving || loading}
+                  className="w-full px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 text-slate-300 font-mono text-[11px] font-semibold flex items-center justify-center gap-1.5 border border-slate-700 hover:border-cyan-700 transition-all"
+                >
+                  <BookmarkPlus className={`w-3 h-3 ${saving ? 'animate-spin' : ''}`} />
+                  <span>{saving ? 'Persisting...' : 'Save to Audit History'}</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
+
+        {saveMessage && (
+          <div className="mt-3 p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-600/40 text-xs font-mono text-emerald-300 flex items-center gap-2">
+            <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{saveMessage}</span>
+          </div>
+        )}
+        {saveError && (
+          <div className="mt-3 p-2.5 rounded-lg bg-rose-950/40 border border-rose-600/40 text-xs font-mono text-rose-300 flex items-center justify-between gap-2">
+            <span>{saveError}</span>
+            <Link to="/login" className="underline text-cyan-300 font-bold shrink-0">Sign In</Link>
+          </div>
+        )}
       </Panel>
 
       {/* Loading & Error States */}

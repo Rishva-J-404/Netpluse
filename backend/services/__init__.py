@@ -64,6 +64,28 @@ from services.simulator import (
     generate_what_if_sweep
 )
 
+from services.progression_engine import (
+    calculate_level,
+    get_level_title,
+    evaluate_achievement_eligibility,
+    ACHIEVEMENTS_CATALOG
+)
+
+from services.supabase_auth import (
+    verify_supabase_token,
+    get_current_user,
+    get_optional_user
+)
+
+from services.supabase_client import (
+    record_authoritative_game_completion,
+    save_authoritative_analysis,
+    get_user_analysis_history,
+    get_authoritative_leaderboard,
+    get_user_progression_summary,
+    get_memory_db
+)
+
 __all__ = [
     "calculate_mean",
     "calculate_variance",

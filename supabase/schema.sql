@@ -73,6 +73,7 @@ CREATE TABLE IF NOT EXISTS public.game_results (
     score INTEGER DEFAULT 0 CHECK (score >= 0),
     xp_earned INTEGER DEFAULT 0 CHECK (xp_earned >= 0),
     accuracy NUMERIC(5, 2) DEFAULT 0.00 CHECK (accuracy >= 0.00 AND accuracy <= 100.00),
+    idempotency_key TEXT,
     completed_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
@@ -252,3 +253,74 @@ CREATE POLICY "storage_datasets_update_own" ON storage.objects FOR UPDATE TO aut
 DROP POLICY IF EXISTS "storage_datasets_delete_own" ON storage.objects;
 CREATE POLICY "storage_datasets_delete_own" ON storage.objects FOR DELETE TO authenticated
     USING (bucket_id = 'network-datasets' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- --------------------------------------------------------------------
+-- 10. Progression Helpers & Leaderboard View/Function (Phase 9)
+-- --------------------------------------------------------------------
+CREATE UNIQUE INDEX IF NOT EXISTS idx_game_results_idempotency 
+    ON public.game_results(user_id, idempotency_key) 
+    WHERE idempotency_key IS NOT NULL;
+
+CREATE OR REPLACE FUNCTION public.calculate_level(xp int)
+RETURNS int LANGUAGE sql IMMUTABLE AS $$
+    SELECT CASE
+        WHEN xp >= 700 THEN 5
+        WHEN xp >= 450 THEN 4
+        WHEN xp >= 250 THEN 3
+        WHEN xp >= 100 THEN 2
+        ELSE 1
+    END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.get_leaderboard(limit_count int DEFAULT 50)
+RETURNS TABLE (
+    rank bigint,
+    username text,
+    level integer,
+    total_xp integer
+)
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+STABLE
+AS $$
+    SELECT
+        ROW_NUMBER() OVER (ORDER BY total_xp DESC, updated_at ASC, id ASC) AS rank,
+        username,
+        level,
+        total_xp
+    FROM public.profiles
+    WHERE total_xp > 0 OR level > 1
+    ORDER BY total_xp DESC, updated_at ASC, id ASC
+    LIMIT LEAST(GREATEST(limit_count, 1), 100);
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_leaderboard(int) TO anon, authenticated;
+
+CREATE OR REPLACE FUNCTION public.award_user_progression(p_user_id uuid, p_xp_to_add int)
+RETURNS TABLE (
+    new_total_xp integer,
+    new_level integer
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    updated_xp integer;
+    updated_lvl integer;
+BEGIN
+    UPDATE public.profiles
+    SET total_xp = GREATEST(0, total_xp + GREATEST(0, p_xp_to_add)),
+        level = public.calculate_level(GREATEST(0, total_xp + GREATEST(0, p_xp_to_add))),
+        updated_at = NOW()
+    WHERE id = p_user_id
+    RETURNING total_xp, level INTO updated_xp, updated_lvl;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Profile for user % not found', p_user_id;
+    END IF;
+
+    RETURN QUERY SELECT updated_xp, updated_lvl;
+END;
+$$;

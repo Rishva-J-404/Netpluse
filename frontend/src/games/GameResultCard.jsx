@@ -10,7 +10,8 @@ import {
   Activity,
   Target,
   ShieldAlert,
-  Info
+  Info,
+  Award
 } from 'lucide-react'
 import { useStats } from '../contexts/StatsContext'
 import { createBridgePayload } from '../utils/bridge'
@@ -86,7 +87,9 @@ export default function GameResultCard({
           </div>
 
           <div className="text-right">
-            <span className="text-xs font-mono text-slate-400 block">Session Reward</span>
+            <span className="text-xs font-mono text-slate-400 block">
+              {result.total_xp !== undefined ? 'Verified XP Reward' : 'Session Reward'}
+            </span>
             <span
               className={`text-xl font-mono font-bold ${
                 isCorrect ? 'text-emerald-400' : 'text-amber-400'
@@ -94,7 +97,17 @@ export default function GameResultCard({
             >
               +{result.xp_awarded} XP
             </span>
-            {result.alreadyEvaluated && (
+            {result.total_xp !== undefined && (
+              <span className="text-[10px] font-mono text-cyan-300 block">
+                Total XP: {result.total_xp} • Level {result.level}
+              </span>
+            )}
+            {result.already_completed && (
+              <span className="text-[10px] font-mono text-slate-500 block">
+                (Previously recorded)
+              </span>
+            )}
+            {result.alreadyEvaluated && !result.already_completed && (
               <span className="text-[10px] font-mono text-slate-500 block">
                 (Previously evaluated)
               </span>
@@ -152,6 +165,28 @@ export default function GameResultCard({
           </div>
         )}
       </div>
+
+      {/* Newly Unlocked Achievements Banner (Phase 9) */}
+      {result.newly_unlocked_achievements && result.newly_unlocked_achievements.length > 0 && (
+        <div className="p-4 rounded-xl bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 border border-amber-500/60 flex items-center justify-between gap-4 animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0">
+              <Award className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono tracking-widest uppercase text-amber-400 font-bold block">
+                🎉 Milestone Unlocked!
+              </span>
+              <div className="text-sm font-bold text-white">
+                {result.newly_unlocked_achievements.map(a => a.name).join(', ')}
+              </div>
+              <p className="text-xs text-slate-400">
+                {result.newly_unlocked_achievements.map(a => `+${a.xp_reward} XP Bonus awarded`).join(' • ')}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* The Golden Bridge Transition Card */}
       {bridgeData && (

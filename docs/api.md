@@ -244,7 +244,78 @@ Returns all 5 curriculum game and triage scenarios from `scenarios.json`.
 
 ---
 
-## 3. Standard Error Response Schemas
+## 3. Progression, Persistence & Leaderboard Endpoints (Phase 9)
+
+### `POST /api/games/complete`
+Authoritatively evaluates game completion, computes exact score and XP, persists to `game_results`, atomically increments user progression, and evaluates achievement unlocks.
+- **Authentication:** Required (`Authorization: Bearer <token>`).
+- **Idempotency:** Enforced via `idempotency_key` unique constraint.
+
+#### Request Body
+```json
+{
+  "game_id": "traffic_controller",
+  "scenario_id": "traffic_controller_01",
+  "user_decision": "Emergency Response",
+  "idempotency_key": "uuid-v4-client-string"
+}
+```
+
+#### Response `200 OK`
+```json
+{
+  "is_correct": true,
+  "score": 100,
+  "accuracy": 100.0,
+  "xp_awarded": 10,
+  "total_xp": 110,
+  "level": 2,
+  "correct_answer": "Emergency Response",
+  "ground_truth": { "calculated_z": 8.2, "status": "UNUSUALLY HIGH" },
+  "explanation": "Load is 8.2 standard deviations above baseline.",
+  "technical_analysis": { ... },
+  "newly_unlocked_achievements": [
+    {
+      "id": "traffic_controller",
+      "name": "Campus Traffic Controller",
+      "description": "Successfully resolve 3 escalating congestion events in the Learn & Play simulator.",
+      "icon": "Shield",
+      "xp_reward": 100
+    }
+  ],
+  "already_completed": false
+}
+```
+
+### `POST /api/analysis/save`
+Calculates statistical analysis metrics on backend and persists snapshot to `analysis_history`.
+- **Authentication:** Required (`Authorization: Bearer <token>`).
+
+#### Request Body
+```json
+{
+  "network_load": 62.0,
+  "dataset": "campus_network"
+}
+```
+
+### `GET /api/analysis/history`
+Retrieves private audit history snapshots strictly for the authenticated user.
+- **Authentication:** Required (`Authorization: Bearer <token>`).
+- **Query Parameters:** `limit` (default: 50, max: 100), `offset` (default: 0).
+
+### `GET /api/progression`
+Retrieves the authenticated user's authoritative Level, Total XP, and unlocked badge counts.
+- **Authentication:** Required (`Authorization: Bearer <token>`).
+
+### `GET /api/leaderboard`
+Returns public ranked student standings without exposing private emails, account IDs, or analysis logs.
+- **Authentication:** Public (No token required).
+- **Query Parameters:** `limit` (default: 50, max: 100).
+
+---
+
+## 4. Standard Error Response Schemas
 
 ### `400 Bad Request`
 ```json

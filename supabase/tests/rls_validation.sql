@@ -184,5 +184,38 @@ BEGIN
     END IF;
 END $$;
 
+-- --------------------------------------------------------------------
+-- Test 6: Leaderboard & Idempotency Function Verification (Phase 9)
+-- --------------------------------------------------------------------
+RESET ROLE;
+DO $$
+DECLARE
+    lb_count integer;
+    test_user uuid := '11111111-1111-1111-1111-111111111111'::uuid;
+    updated_xp integer;
+    updated_lvl integer;
+BEGIN
+    -- 1. Test award_user_progression
+    SELECT new_total_xp, new_level INTO updated_xp, updated_lvl 
+    FROM public.award_user_progression(test_user, 150);
+
+    IF updated_xp < 250 OR updated_lvl < 3 THEN
+        RAISE EXCEPTION 'award_user_progression calculation error! got xp=%, lvl=%', updated_xp, updated_lvl;
+    ELSE
+        RAISE NOTICE 'SUCCESS: award_user_progression updated user to xp=%, lvl=%.', updated_xp, updated_lvl;
+    END IF;
+
+    -- 2. Test get_leaderboard execution by anon role
+    SET LOCAL ROLE anon;
+    SELECT count(*) INTO lb_count FROM public.get_leaderboard(10);
+    IF lb_count = 0 THEN
+        RAISE EXCEPTION 'get_leaderboard returned 0 rows for anon role!';
+    ELSE
+        RAISE NOTICE 'SUCCESS: anon role executed get_leaderboard successfully (% rows returned).', lb_count;
+    END IF;
+END $$;
+
+RESET ROLE;
+
 ROLLBACK;
 -- Clean rollback ensuring no test artifacts remain.

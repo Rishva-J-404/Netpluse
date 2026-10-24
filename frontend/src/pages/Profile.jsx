@@ -18,8 +18,17 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { updateCurrentProfile } from '../services/profileService'
+import { fetchProgressionAuthoritative } from '../services/api'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
+
+const LEVEL_TITLES = {
+  1: 'Analyst Intern',
+  2: 'Junior NOC Operator',
+  3: 'Telemetry Specialist',
+  4: 'Senior Systems Analyst',
+  5: 'Chief Infrastructure Architect'
+}
 
 export default function Profile() {
   const { user, profile, isAuthenticated, signOut, refreshProfile } = useAuth()
@@ -29,6 +38,15 @@ export default function Profile() {
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [progStats, setProgStats] = useState(null)
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      fetchProgressionAuthoritative()
+        .then(setProgStats)
+        .catch(() => {})
+    }
+  }, [isAuthenticated, profile])
 
   const handleStartEdit = () => {
     setEditUsername(profile?.username || '')
@@ -208,6 +226,49 @@ export default function Profile() {
             {errorMessage}
           </div>
         )}
+      </Panel>
+
+      {/* Verified Progression & Activity Metrics (Phase 9) */}
+      <Panel
+        title="Verified Laboratory Progression"
+        subtitle={`Current Rank Tier: ${LEVEL_TITLES[profile?.level || 1] || 'Analyst'}`}
+        icon={Zap}
+        className="border-cyan-900/40"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <span className="text-[10px] text-slate-500 uppercase block">Missions Resolved</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xl font-bold text-white">
+                {progStats?.games_completed_count ?? 0}
+              </span>
+              <Activity className="w-4 h-4 text-cyan-400" />
+            </div>
+            <span className="text-[10px] text-slate-500 block">Verified incident runs</span>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <span className="text-[10px] text-slate-500 uppercase block">Milestones Unlocked</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xl font-bold text-amber-400">
+                {progStats?.achievements_count ?? 0} / 7
+              </span>
+              <Sparkles className="w-4 h-4 text-amber-400" />
+            </div>
+            <span className="text-[10px] text-slate-500 block">Curriculum badges</span>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <span className="text-[10px] text-slate-500 uppercase block">Audit Snapshots</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xl font-bold text-emerald-400">
+                {progStats?.analyses_count ?? 0}
+              </span>
+              <Shield className="w-4 h-4 text-emerald-400" />
+            </div>
+            <span className="text-[10px] text-slate-500 block">Saved telemetry analyses</span>
+          </div>
+        </div>
       </Panel>
 
       {/* Academic Affiliation Card */}

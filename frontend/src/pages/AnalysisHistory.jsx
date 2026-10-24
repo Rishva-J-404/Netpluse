@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   History,
   Database,
@@ -9,11 +9,15 @@ import {
   LogIn,
   RefreshCw,
   Clock,
-  Activity
+  Activity,
+  ExternalLink
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useStats } from '../contexts/StatsContext'
 import { fetchUserAnalysisHistory } from '../services/analysisHistoryService'
+import { fetchAnalysisHistoryAuthoritative } from '../services/api'
 import { isSupabaseConfigured } from '../services/supabase'
+import { createBridgePayload } from '../utils/bridge'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
 import EmptyState from '../components/EmptyState'
@@ -21,7 +25,9 @@ import StatusBadge from '../components/StatusBadge'
 import LoadingState from '../components/LoadingState'
 
 export default function AnalysisHistory() {
+  const navigate = useNavigate()
   const { isAuthenticated, user } = useAuth()
+  const { setBridgePayload, setCurrentLoad, setDatasetName } = useStats()
   const [historyRecords, setHistoryRecords] = useState([])
   const [loading, setLoading] = useState(true)
   const [errorMsg, setErrorMsg] = useState(null)
@@ -31,26 +37,37 @@ export default function AnalysisHistory() {
     setLoading(true)
     setErrorMsg(null)
 
-    if (!configured) {
-      setLoading(false)
-      return
-    }
-
     if (!isAuthenticated) {
       setLoading(false)
       return
     }
 
     try {
-      const { data, error } = await fetchUserAnalysisHistory({ limit: 50 })
-      if (error) {
-        setErrorMsg(error)
-      } else {
-        setHistoryRecords(data || [])
+      // 1. Try authoritative backend endpoint
+      const authRes = await fetchAnalysisHistoryAuthoritative(50, 0)
+      if (authRes && authRes.records) {
+        setHistoryRecords(authRes.records)
+        setLoading(false)
+        return
       }
-    } catch (err) {
-      setErrorMsg(err.message || 'Failed to fetch telemetry history.')
-    } finally {
+    } catch {
+      // Fall through to direct Supabase query
+    }
+
+    if (configured) {
+      try {
+        const { data, error } = await fetchUserAnalysisHistory({ limit: 50 })
+        if (error) {
+          setErrorMsg(error)
+        } else {
+          setHistoryRecords(data || [])
+        }
+      } catch (err) {
+        setErrorMsg(err.message || 'Failed to fetch telemetry history.')
+      } finally {
+        setLoading(false)
+      }
+    } else {
       setLoading(false)
     }
   }
@@ -59,8 +76,33 @@ export default function AnalysisHistory() {
     loadHistory()
   }, [isAuthenticated])
 
+  const handleLoadIntoLab = (rec) => {
+    const bridge = createBridgePayload({
+      scenarioId: `history_${rec.id.substring(0, 8)}`,
+      gameId: 'audit_trail',
+      title: `Saved Analysis (${rec.dataset_name})`,
+      currentLoad: Number(rec.current_load),
+      mean: Number(rec.mean),
+      stdDev: Number(rec.std_deviation),
+      zScore: Number(rec.z_score),
+      probabilityBelow: Number(rec.probability),
+      status: rec.status,
+      healthScore: rec.health_score,
+      healthBand: rec.health_score >= 90 ? 'Excellent' : rec.health_score >= 70 ? 'Healthy' : rec.health_score >= 50 ? 'Warning' : rec.health_score >= 30 ? 'Poor' : 'Critical',
+      zFormula: `Z = (${Number(rec.current_load).toFixed(2)} - ${Number(rec.mean).toFixed(2)}) / ${Number(rec.std_deviation).toFixed(2)} = ${Number(rec.z_score).toFixed(2)}`,
+      explanation: `Loaded from persistent telemetry audit trail recorded at ${new Date(rec.created_at).toLocaleString()}.`
+    })
+
+    setBridgePayload(bridge)
+    setCurrentLoad(bridge.currentLoad)
+    if (rec.dataset_name) {
+      setDatasetName(rec.dataset_name)
+    }
+    navigate('/technical-lab')
+  }
+
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
       <PageHeader
         title="Analysis History & Telemetry Audit Trail"
         subtitle="Historical statistical records, calculation snapshots, and reload-into-lab parameters."
@@ -81,7 +123,7 @@ export default function AnalysisHistory() {
                 You are currently in <strong className="text-amber-300">Guest Analyst Mode</strong>. Under NETPULSE security policies, private analysis history records require an authenticated user identity (<code className="text-cyan-300 font-bold">auth.uid()</code>).
               </p>
               <p className="text-slate-400">
-                Authentication flows and persistent student accounts are scheduled for <strong className="text-cyan-300">Phase 8</strong>. No fake history entries are simulated.
+                Please sign in to save and review historical calculation snapshots.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -95,17 +137,6 @@ export default function AnalysisHistory() {
             </div>
           </div>
         </Panel>
-      ) : !configured ? (
-        <Panel
-          title="Cloud Database Offline"
-          subtitle="Supabase environment configuration required"
-          icon={Database}
-          className="border-cyan-900/40 bg-cyan-950/20"
-        >
-          <p className="text-xs font-mono text-slate-300">
-            Supabase credentials are not configured. To enable cloud persistence, configure <code className="text-cyan-300">VITE_SUPABASE_URL</code> and <code className="text-cyan-300">VITE_SUPABASE_PUBLISHABLE_KEY</code> in <code className="text-slate-200 font-bold">frontend/.env</code>.
-          </p>
-        </Panel>
       ) : null}
 
       {/* Audit Log Table */}
@@ -114,12 +145,13 @@ export default function AnalysisHistory() {
         subtitle={isAuthenticated ? `Audit log for authenticated operator: ${user?.username || 'Student'}` : 'Historical execution log (Sign in to view)'}
         icon={History}
         actions={
-          isAuthenticated && configured ? (
+          isAuthenticated ? (
             <button
               onClick={loadHistory}
+              disabled={loading}
               className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-cyan-300 transition-colors"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
             </button>
           ) : null
@@ -128,7 +160,7 @@ export default function AnalysisHistory() {
       >
         {loading ? (
           <div className="p-8">
-            <LoadingState message="Checking Supabase analysis_history..." compact />
+            <LoadingState message="Retrieving private analysis history..." compact />
           </div>
         ) : errorMsg ? (
           <div className="p-8 text-center text-xs font-mono text-rose-300">
@@ -146,17 +178,18 @@ export default function AnalysisHistory() {
                 <th className="py-3 px-5">Probability</th>
                 <th className="py-3 px-5">Status</th>
                 <th className="py-3 px-5">Health</th>
+                <th className="py-3 px-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-800/60">
               {historyRecords.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="p-8">
+                  <td colSpan="9" className="p-8">
                     <EmptyState
                       title={isAuthenticated ? 'No Persisted Records Found' : 'No Analysis History in Guest Mode'}
                       message={
                         isAuthenticated
-                          ? 'You have not persisted any statistical analyses yet. Perform an evaluation in the Technical Lab.'
+                          ? 'You have not persisted any statistical analyses yet. Perform an evaluation in the Technical Lab and click "Save to Audit History".'
                           : 'Sign in to access your saved historical records. In guest mode, no fake entries are fabricated.'
                       }
                       icon={History}
@@ -174,7 +207,7 @@ export default function AnalysisHistory() {
                 </tr>
               ) : (
                 historyRecords.map((rec) => (
-                  <tr key={rec.id} className="border-b border-slate-800/60 hover:bg-slate-900/40 transition-colors">
+                  <tr key={rec.id} className="hover:bg-slate-900/40 transition-colors">
                     <td className="py-3 px-5 text-slate-400">
                       {new Date(rec.created_at).toLocaleString()}
                     </td>
@@ -197,7 +230,18 @@ export default function AnalysisHistory() {
                       <StatusBadge status={rec.status} size="sm" />
                     </td>
                     <td className="py-3 px-5 font-bold">
-                      {rec.health_score} / 100
+                      <span className={rec.health_score >= 70 ? 'text-emerald-400' : rec.health_score >= 50 ? 'text-amber-400' : 'text-rose-400'}>
+                        {rec.health_score} / 100
+                      </span>
+                    </td>
+                    <td className="py-3 px-5 text-right">
+                      <button
+                        onClick={() => handleLoadIntoLab(rec)}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-cyan-950 hover:text-cyan-300 border border-slate-700 hover:border-cyan-700 text-slate-300 text-[11px] font-semibold transition-all"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        <span>Load Lab</span>
+                      </button>
                     </td>
                   </tr>
                 ))

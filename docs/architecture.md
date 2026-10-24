@@ -110,3 +110,12 @@ All 15 approved routes + 404 fallback:
 - `Navbar.jsx` & `Sidebar.jsx`: Synchronized authentication indicators showing real-time callsign badges, quick links to profile, and contextual sign-out buttons.
 - `supabase/migrations/20261024000003_auth_profiles_trigger.sql`: Automatic database trigger `on_auth_user_created` executing `public.handle_new_user()` to guarantee immediate 1:1 `profiles` record creation upon student registration.
 - `profileService.getOrCreateProfile`: Client-side reconciliation layer guaranteeing that even if a trigger is delayed, a matching profile record is created and linked safely.
+
+### 4.8 Persistent Progression, Achievements & Leaderboard (Phase 9)
+- `20261024000004_progression_leaderboard.sql`: Numbered migration introducing `idempotency_key` on `game_results`, `calculate_level()` pure progression function, atomic `award_user_progression()` updater, and privacy-preserving `get_leaderboard()` RPC.
+- `progression_engine.py`: Server-authoritative rules mapping XP to level tiers (Level 1 Analyst Intern through Level 5 Chief Infrastructure Architect) and milestone criteria for all 7 curriculum achievements.
+- `supabase_auth.py`: Central token verification dependency (`get_current_user`, `get_optional_user`) authenticating Supabase Bearer tokens and deriving verified student identity.
+- `supabase_client.py`: Authoritative database operations with idempotency enforcement, atomic transactions, and in-memory test store for deterministic test execution.
+- `Leaderboard.jsx`: Public ranked standings showing rank badges, student callsigns, tier titles, and total XP with deterministic tie-breaking.
+- `AnalysisHistory.jsx`: Private telemetry audit log with Golden Bridge action button to reload saved parameters into Technical Lab.
+- `GameContext.jsx` & `GameResultCard.jsx`: Authoritative completion workflow triggering server-side grading, persistent XP updates, and achievement celebration banners.

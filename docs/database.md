@@ -203,6 +203,7 @@ The project is configured for automated Supabase GitHub Integration deployments 
 - `20261024000001_initial_schema.sql` (Tables & Indexes)
 - `20261024000002_rls_and_storage.sql` (RLS Policies & Private Storage Bucket)
 - `20261024000003_auth_profiles_trigger.sql` (Auth Profile Trigger)
+- `20261024000004_progression_leaderboard.sql` (Idempotency Key, Level Rules, Leaderboard & Atomic XP Functions)
 
 ```bash
 # Link your remote Supabase project
@@ -280,3 +281,76 @@ In `frontend/src/services/profileService.js`, `getOrCreateProfile(authUser)` exe
 2. If absent (e.g. email confirmation timing delay or trigger bypassed), generates a profile using `user_metadata` or email prefix and inserts into `public.profiles`.
 3. Handles duplicate usernames automatically with fallback random suffix.
 4. Returns the verified profile record to `AuthContext`.
+
+---
+
+## 8. Progression, Idempotency & Leaderboard Functions (Phase 9)
+
+### 8.1 Idempotency Key in `game_results`
+```sql
+ALTER TABLE public.game_results ADD COLUMN IF NOT EXISTS idempotency_key TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_game_results_idempotency 
+  ON public.game_results(user_id, idempotency_key) 
+  WHERE idempotency_key IS NOT NULL;
+```
+
+### 8.2 XP-to-Level Progression Function
+```sql
+CREATE OR REPLACE FUNCTION public.calculate_level(xp int)
+RETURNS int LANGUAGE sql IMMUTABLE AS $$
+  SELECT CASE
+    WHEN xp >= 700 THEN 5 -- Chief Infrastructure Architect
+    WHEN xp >= 450 THEN 4 -- Senior Systems Analyst
+    WHEN xp >= 250 THEN 3 -- Telemetry Specialist
+    WHEN xp >= 100 THEN 2 -- Junior NOC Operator
+    ELSE 1                -- Analyst Intern
+  END;
+$$;
+```
+
+### 8.3 Restricted Public Leaderboard Function
+```sql
+CREATE OR REPLACE FUNCTION public.get_leaderboard(limit_count int DEFAULT 50)
+RETURNS TABLE (
+  rank bigint,
+  username text,
+  level integer,
+  total_xp integer
+)
+LANGUAGE sql SECURITY DEFINER SET search_path = public STABLE AS $$
+  SELECT
+    ROW_NUMBER() OVER (ORDER BY total_xp DESC, updated_at ASC, id ASC) AS rank,
+    username,
+    level,
+    total_xp
+  FROM public.profiles
+  WHERE total_xp > 0 OR level > 1
+  ORDER BY total_xp DESC, updated_at ASC, id ASC
+  LIMIT LEAST(GREATEST(limit_count, 1), 100);
+$$;
+GRANT EXECUTE ON FUNCTION public.get_leaderboard(int) TO anon, authenticated;
+```
+
+### 8.4 Atomic Progression Update Function
+```sql
+CREATE OR REPLACE FUNCTION public.award_user_progression(p_user_id uuid, p_xp_to_add int)
+RETURNS TABLE (
+  new_total_xp integer,
+  new_level integer
+)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+DECLARE
+  updated_xp integer;
+  updated_lvl integer;
+BEGIN
+  UPDATE public.profiles
+  SET total_xp = GREATEST(0, total_xp + GREATEST(0, p_xp_to_add)),
+      level = public.calculate_level(GREATEST(0, total_xp + GREATEST(0, p_xp_to_add))),
+      updated_at = NOW()
+  WHERE id = p_user_id
+  RETURNING total_xp, level INTO updated_xp, updated_lvl;
+
+  RETURN QUERY SELECT updated_xp, updated_lvl;
+END;
+$$;
+```
