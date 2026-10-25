@@ -24,7 +24,7 @@ import { useAuth } from '../contexts/AuthContext'
 export default function Sidebar({ isOpen, onClose }) {
   const { isAuthenticated, signOut } = useAuth()
   const navLinkClass = ({ isActive }) =>
-    `flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-mono transition-all ${
+    `flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-sans font-medium transition-all ${
       isActive
         ? 'bg-[#161f30] text-[#3b82f6] border border-[#26354d] font-semibold shadow-sm'
         : 'text-[#94a3b8] hover:text-[#f9fafb] hover:bg-[#111827] border border-transparent'
@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen, onClose }) {
       >
         {/* Mobile Header with close button */}
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800/60 lg:hidden">
-          <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-sans uppercase tracking-wider text-slate-400 font-semibold">
             Navigation Menu
           </span>
           <button
@@ -72,7 +72,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <nav className="space-y-5">
           {/* 1. OVERVIEW */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-slate-500 font-semibold">
+            <div className="px-3 pb-1.5 text-[11px] font-sans tracking-wider uppercase text-slate-500 font-semibold">
               Overview
             </div>
             <div className="space-y-1">
@@ -87,15 +87,15 @@ export default function Sidebar({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* 2. LEARN & PLAY */}
+          {/* 2. HIGHWAY SIMULATION */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-emerald-400 font-semibold flex items-center gap-1.5">
-              <span>🎮 Learn & Play</span>
+            <div className="px-3 pb-1.5 text-[11px] font-sans tracking-wider uppercase text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span>Simulation & Gaming</span>
             </div>
             <div className="space-y-1">
               <NavLink to="/learn-and-play" className={navLinkClass} onClick={handleLinkClick}>
                 <Gamepad2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Learn & Play</span>
+                <span>Highway Simulator</span>
               </NavLink>
               <NavLink to="/achievements" className={navLinkClass} onClick={handleLinkClick}>
                 <Award className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -110,8 +110,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* 3. TECHNICAL LAB */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-blue-400 font-semibold flex items-center gap-1.5">
-              <span>🔬 Technical Lab</span>
+            <div className="px-3 pb-1.5 text-[11px] font-sans tracking-wider uppercase text-blue-400 font-semibold flex items-center gap-1.5">
+              <span>Statistical Workbench</span>
             </div>
             <div className="space-y-1">
               <NavLink to="/technical-lab" className={navLinkClass} onClick={handleLinkClick}>
@@ -143,8 +143,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* 4. LEARN */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-indigo-400 font-semibold">
-              Learn
+            <div className="px-3 pb-1.5 text-[11px] font-sans tracking-wider uppercase text-indigo-400 font-semibold">
+              Course Guide
             </div>
             <div className="space-y-1">
               <NavLink to="/learning-center" className={navLinkClass} onClick={handleLinkClick}>
@@ -156,8 +156,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* 5. ACCOUNT */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-slate-500 font-semibold">
-              Account
+            <div className="px-3 pb-1.5 text-[11px] font-sans tracking-wider uppercase text-slate-500 font-semibold">
+              Student Account
             </div>
             <div className="space-y-1">
               {isAuthenticated ? (
@@ -171,7 +171,7 @@ export default function Sidebar({ isOpen, onClose }) {
                       signOut()
                       handleLinkClick()
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-mono text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 border border-transparent transition-all"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-sans font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 border border-transparent transition-all"
                   >
                     <LogOut className="w-4 h-4 text-rose-400 shrink-0" />
                     <span>Sign Out</span>

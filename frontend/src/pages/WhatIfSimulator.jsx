@@ -213,7 +213,7 @@ export default function WhatIfSimulator() {
       <PageHeader
         title="What-If Simulator — Telemetry Parameter Sweeper"
         subtitle="Simulate dynamic campus network throughput scenarios, shift Gaussian parameters, and observe instantaneous Z-score, CDF probability, and health score responses in real time."
-        modeBadge="MODE 2: TECHNICAL LAB"
+        modeBadge="STATISTICAL WORKBENCH"
         actions={
           <button
             onClick={handleResetToBaseline}

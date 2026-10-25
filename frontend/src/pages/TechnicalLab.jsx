@@ -106,9 +106,9 @@ export default function TechnicalLab() {
         dataset: selectedDataset
       })
       if (res && res.saved) {
-        let msg = `✓ Snapshot saved to audit history (Record: ${res.history_id.substring(0, 8)})`
+        let msg = `Snapshot saved to audit history (Record: ${res.history_id.substring(0, 8)})`
         if (res.newly_unlocked_achievements && res.newly_unlocked_achievements.length > 0) {
-          msg += ` • 🎉 Unlocked: ${res.newly_unlocked_achievements.map(a => a.name).join(', ')}!`
+          msg += ` • Achievement Unlocked: ${res.newly_unlocked_achievements.map(a => a.name).join(', ')}!`
         }
         setSaveMessage(msg)
         if (refreshProfile) refreshProfile()
@@ -125,13 +125,13 @@ export default function TechnicalLab() {
       <PageHeader
         title="Technical Lab — Statistical Telemetry Workbench"
         subtitle="Complete statistical telemetry pipeline powered by Python (NumPy, SciPy, Pandas). Calculates exact sample moments, standardized Z-scores, normal distribution cumulative probabilities, and empirical health scores."
-        modeBadge="MODE 2: TECHNICAL LAB"
+        modeBadge="STATISTICAL WORKBENCH"
         actions={
           <div className="flex items-center gap-2">
             <button
               onClick={handleReset}
               title="Reset to 62.0 Mbps Golden Case baseline"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-mono transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-sans font-medium transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset to Baseline (62 Mbps)</span>
@@ -140,15 +140,17 @@ export default function TechnicalLab() {
         }
       />
 
-      {/* Golden Bridge Banner if arriving from a Game */}
+      {/* Active Scenario Telemetry Bridge */}
       {bridgePayload && (
-        <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 via-slate-900 to-slate-900 border border-emerald-600/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
-          <div className="flex items-center gap-2.5">
-            <Sparkles className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="p-3.5 sm:p-4 rounded-xl bg-[#161f30] border border-blue-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
+              <Layers className="w-4 h-4" />
+            </div>
             <div>
-              <span className="font-bold text-white">Golden Bridge Active: {bridgePayload.title}</span>
-              <p className="text-slate-400">
-                Transferred scenario load: <strong className="text-emerald-300">{bridgePayload.currentLoad} Mbps</strong> (Z = {bridgePayload.zScore}σ)
+              <span className="font-semibold text-white">Scenario Telemetry Bridge: {bridgePayload.title}</span>
+              <p className="text-slate-400 mt-0.5">
+                Scenario load: <strong className="text-blue-300 font-mono tabular-nums">{bridgePayload.currentLoad} Mbps</strong> (Z = <span className="font-mono tabular-nums">{bridgePayload.zScore}σ</span>)
               </p>
             </div>
           </div>
@@ -157,9 +159,9 @@ export default function TechnicalLab() {
               setInputLoad(bridgePayload.currentLoad)
               runAnalysis(bridgePayload.currentLoad)
             }}
-            className="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition-colors"
+            className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-sans text-xs font-semibold transition-colors shrink-0"
           >
-            Analyze Scenario Load
+            Load Into Workbench
           </button>
         </div>
       )}
@@ -172,7 +174,7 @@ export default function TechnicalLab() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
           <div>
-            <label htmlFor="lab-dataset" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="lab-dataset" className="block text-xs font-sans font-medium text-slate-300 mb-1.5 uppercase tracking-wider">
               Baseline Telemetry Dataset
             </label>
             <select
@@ -184,14 +186,14 @@ export default function TechnicalLab() {
               <option value="campus_network">campus_network.csv (24-hr campus load)</option>
             </select>
             {datasetMeta && (
-              <span className="text-[10px] font-mono text-slate-500 mt-1 block">
+              <span className="text-xs font-sans text-slate-500 mt-1 block">
                 Records: {datasetMeta.total_records} observations (Min: {datasetMeta.min}M, Max: {datasetMeta.max}M)
               </span>
             )}
           </div>
 
           <div>
-            <label htmlFor="lab-load-input" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="lab-load-input" className="block text-xs font-sans font-medium text-slate-300 mb-1.5 uppercase tracking-wider">
               Current Load Throughput (Mbps)
             </label>
             <div className="relative">
@@ -209,7 +211,7 @@ export default function TechnicalLab() {
                 Mbps
               </span>
             </div>
-            <span className="text-[10px] font-mono text-slate-500 mt-1 block">
+            <span className="text-xs font-sans text-slate-500 mt-1 block">
               Default Golden Benchmark: 62.0 Mbps
             </span>
           </div>
@@ -261,9 +263,9 @@ export default function TechnicalLab() {
         <div className="space-y-6 sm:space-y-8">
           {/* 1. Primary Output Metrics */}
           <section className="space-y-3">
-            <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
               <Layers className="w-4 h-4 text-blue-400" />
-              <span>Calculated Statistical Indicators (Authority: Python Engine)</span>
+              <span>Calculated Statistical Indicators</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -306,7 +308,7 @@ export default function TechnicalLab() {
 
           {/* 2. Descriptive Statistics Moments */}
           <section className="space-y-3">
-            <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-blue-400" />
               <span>Baseline Dataset Sample Moments</span>
             </h2>
@@ -379,7 +381,7 @@ export default function TechnicalLab() {
 
           {/* 4. Cross-Navigation to Specialized Tools with the Active Load */}
           <section className="space-y-3">
-            <h2 className="text-xs font-mono uppercase tracking-wider text-slate-400">
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-slate-300">
               Explore Active Load ({analysis.current_load} Mbps) Across Statistical Suites
             </h2>
 

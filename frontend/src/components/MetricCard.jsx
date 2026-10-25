@@ -37,7 +37,7 @@ export default function MetricCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1 min-w-0">
-          <p className="text-xs font-mono uppercase tracking-wider text-[#94a3b8] truncate">
+          <p className="text-xs font-sans font-medium uppercase tracking-wider text-slate-400 truncate">
             {label}
           </p>
           <div className="flex items-baseline gap-1.5 flex-wrap">
@@ -45,7 +45,7 @@ export default function MetricCard({
               {value !== undefined && value !== null ? value : '—'}
             </span>
             {unit && (
-              <span className="text-xs font-mono text-[#94a3b8]">
+              <span className="text-xs font-mono text-slate-400">
                 {unit}
               </span>
             )}
@@ -63,7 +63,7 @@ export default function MetricCard({
       </div>
 
       {(subtext || badge) && (
-        <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-mono text-[#94a3b8]">
+        <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-sans text-slate-400">
           {subtext && <span className="truncate">{subtext}</span>}
           {badge && <span className="ml-auto shrink-0">{badge}</span>}
         </div>

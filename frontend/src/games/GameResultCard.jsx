@@ -175,7 +175,7 @@ export default function GameResultCard({
             </div>
             <div>
               <span className="text-[10px] font-mono tracking-widest uppercase text-amber-400 font-bold block">
-                🎉 Milestone Unlocked!
+                Milestone Achievement Unlocked
               </span>
               <div className="text-sm font-bold text-white">
                 {result.newly_unlocked_achievements.map(a => a.name).join(', ')}
@@ -191,7 +191,7 @@ export default function GameResultCard({
       {/* The Golden Bridge Transition Card */}
       {bridgeData && (
         <Panel
-          title="The Golden Bridge — Transition to Technical Lab"
+          title="Scenario Telemetry Transition"
           subtitle="Inspect the full Gaussian probability density curve and formula substitution for this scenario."
           icon={Sparkles}
           className="border-blue-800/40 bg-gradient-to-r from-blue-950/30 via-slate-900/60 to-slate-900/40"

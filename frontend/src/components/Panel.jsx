@@ -24,12 +24,12 @@ export default function Panel({
             )}
             <div className="min-w-0">
               {title && (
-                <h2 className="text-sm sm:text-base font-semibold text-[#f9fafb] tracking-wide truncate">
+                <h2 className="text-sm sm:text-base font-sans font-semibold text-[#f9fafb] tracking-normal truncate">
                   {title}
                 </h2>
               )}
               {subtitle && (
-                <p className="text-xs text-[#94a3b8] font-mono truncate">
+                <p className="text-xs text-[#94a3b8] font-sans mt-0.5 truncate">
                   {subtitle}
                 </p>
               )}

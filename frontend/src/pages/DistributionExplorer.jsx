@@ -79,7 +79,7 @@ export default function DistributionExplorer() {
       <PageHeader
         title="Distribution Explorer — Gaussian Density Modeling"
         subtitle="Explore the fitted Normal Probability Density Function, empirical standard deviation intervals (±1σ, ±2σ, ±3σ), and bell curve properties. All coordinates computed by Python SciPy."
-        modeBadge="MODE 2: TECHNICAL LAB"
+        modeBadge="STATISTICAL WORKBENCH"
         actions={
           <div className="flex items-center gap-2">
             <button

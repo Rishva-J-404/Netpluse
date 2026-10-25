@@ -85,16 +85,16 @@ export default function LearningCenter() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Topic Index Sidebar */}
         <div className="space-y-2">
-          <div className="px-3 pb-1 text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
+          <div className="px-3 pb-1 text-xs font-sans font-semibold uppercase tracking-wider text-slate-400 font-semibold">
             Curriculum Lessons ({lessons.length} Topics)
           </div>
           {lessons.map((lesson, idx) => (
             <button
               key={idx}
               onClick={() => setActiveLesson(idx)}
-              className={`w-full text-left p-3 rounded-xl border text-xs font-mono transition-all flex items-center justify-between ${
+              className={`w-full text-left p-3 rounded-xl border text-xs font-sans transition-all flex items-center justify-between ${
                 activeLesson === idx
-                  ? 'bg-indigo-950/70 border-indigo-500/70 text-white shadow-md shadow-indigo-950/40'
+                  ? 'bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-indigo-950/40'
                   : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
               }`}
             >

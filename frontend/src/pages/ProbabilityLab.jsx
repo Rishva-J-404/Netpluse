@@ -116,7 +116,7 @@ export default function ProbabilityLab() {
       <PageHeader
         title="Probability Lab — Normal Cumulative Distribution Solver"
         subtitle="Evaluate exact Gaussian cumulative tail probabilities P(X ≤ x), exceedance probabilities P(X ≥ x), and intervals P(a ≤ X ≤ b) using Python SciPy norm.cdf() and norm.sf()."
-        modeBadge="MODE 2: TECHNICAL LAB"
+        modeBadge="STATISTICAL WORKBENCH"
         actions={
           <button
             onClick={handleResetToBaseline}

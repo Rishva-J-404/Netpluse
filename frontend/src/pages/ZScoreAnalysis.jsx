@@ -135,7 +135,7 @@ export default function ZScoreAnalysis() {
       <PageHeader
         title="Z-Score Analysis Workbench — Standardized Distance"
         subtitle="Normalize raw telemetry load measurements into dimensionless standard deviation units: Z = (X - μ) / s. Evaluates relative distance and empirical anomaly status."
-        modeBadge="MODE 2: TECHNICAL LAB"
+        modeBadge="STATISTICAL WORKBENCH"
         actions={
           <div className="flex items-center gap-2">
             <button

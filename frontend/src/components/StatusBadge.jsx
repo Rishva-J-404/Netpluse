@@ -98,7 +98,7 @@ export default function StatusBadge({ status, size = 'md', className = '' }) {
 
   return (
     <span
-      className={`inline-flex items-center font-mono font-medium rounded-full border ${current.bg} ${current.text} ${current.border} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center font-sans font-semibold rounded-full border ${current.bg} ${current.text} ${current.border} ${sizeClasses} ${className}`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${current.dot}`} aria-hidden="true" />
       <span>{current.label}</span>

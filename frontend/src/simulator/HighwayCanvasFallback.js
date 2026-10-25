@@ -125,9 +125,43 @@ export class HighwayCanvasFallback {
     if (!w || !h) return
     const ctx = this.ctx
 
-    // Sky
-    ctx.fillStyle = '#0b0f17'
+    // Vibrant Cyber Sky
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY)
+    skyGrad.addColorStop(0, '#060a15')
+    skyGrad.addColorStop(0.6, '#0d152a')
+    skyGrad.addColorStop(1, '#1e1b4b')
+    ctx.fillStyle = skyGrad
     ctx.fillRect(0, 0, w, h)
+
+    // Twinkling stars in sky
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+    for (let s = 0; s < 30; s++) {
+      const sx = ((s * 47) % w)
+      const sy = ((s * 19) % (horizonY * 0.9))
+      ctx.fillRect(sx, sy, 1.5, 1.5)
+    }
+
+    // Distant Cyber City Skyline with Glowing Windows
+    const bColors = ['#00f0ff', '#34d399', '#f59e0b', '#a855f7', '#ffffff']
+    for (let b = 0; b < 16; b++) {
+      const bw = 35 + (b * 13) % 40
+      const bh = 50 + (b * 19) % 75
+      const bx = b < 8 ? (b * 45) : (w - (b - 7) * 45)
+      const by = horizonY - bh
+
+      ctx.fillStyle = '#0a1020'
+      ctx.fillRect(bx, by, bw, bh)
+      ctx.strokeStyle = '#1e293b'
+      ctx.lineWidth = 1
+      ctx.strokeRect(bx, by, bw, bh)
+
+      // Glowing windows
+      for (let wr = 0; wr < Math.floor(bh / 10); wr++) {
+        if ((wr + b) % 3 === 0) continue
+        ctx.fillStyle = bColors[(wr + b) % bColors.length]
+        ctx.fillRect(bx + 6, by + wr * 10 + 4, bw - 12, 3)
+      }
+    }
 
     const horizonY = h * 0.42
     const roadTopWidth = w * 0.14
@@ -148,17 +182,37 @@ export class HighwayCanvasFallback {
     ctx.lineWidth = 2
     ctx.stroke()
 
-    // 4 Lanes (3 dividers)
+    // Left Guardrail: Electric Cyan Neon Rail (#00f0ff)
+    ctx.save()
+    ctx.shadowColor = '#00f0ff'
+    ctx.shadowBlur = 8
+    ctx.strokeStyle = '#00f0ff'
+    ctx.lineWidth = 3.5
+    ctx.beginPath()
+    ctx.moveTo(roadTopX, horizonY)
+    ctx.lineTo(roadBottomX, h)
+    ctx.stroke()
+
+    // Right Guardrail: Electric Neon Violet Rail (#a855f7)
+    ctx.shadowColor = '#a855f7'
+    ctx.strokeStyle = '#a855f7'
+    ctx.beginPath()
+    ctx.moveTo(roadTopX + roadTopWidth, horizonY)
+    ctx.lineTo(roadBottomX + roadBottomWidth, h)
+    ctx.stroke()
+    ctx.restore()
+
+    // 4 Lanes (3 glowing dividers)
     for (let l = 1; l <= 3; l++) {
       const topLX = roadTopX + (roadTopWidth / 4) * l
       const botLX = roadBottomX + (roadBottomWidth / 4) * l
       ctx.beginPath()
-      ctx.setLineDash([12, 14])
+      ctx.setLineDash([14, 16])
       ctx.lineDashOffset = -this.roadOffset
       ctx.moveTo(topLX, horizonY)
       ctx.lineTo(botLX, h)
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.45)'
-      ctx.lineWidth = 2
+      ctx.strokeStyle = 'rgba(224, 242, 254, 0.75)'
+      ctx.lineWidth = 2.5
       ctx.stroke()
       ctx.setLineDash([])
     }

@@ -65,14 +65,14 @@ export default function Navbar({ onToggleSidebar }) {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="font-bold tracking-wider text-base sm:text-lg text-[#f9fafb] font-mono">
+              <span className="font-bold tracking-tight text-base sm:text-lg text-white font-sans">
                 NETPULSE
               </span>
-              <span className="text-[10px] font-mono text-[#3b82f6] bg-[#161f30] px-1.5 py-0.5 rounded border border-[#26354d]">
+              <span className="text-[10px] font-mono text-[#3b82f6] bg-[#161f30] px-1.5 py-0.5 rounded border border-[#26354d] font-semibold">
                 25CS203
               </span>
             </div>
-            <span className="text-[10px] font-mono text-[#94a3b8] hidden sm:inline">
+            <span className="text-[11px] font-sans text-slate-400 hidden sm:inline">
               Network Operations Center
             </span>
           </div>
@@ -85,7 +85,7 @@ export default function Navbar({ onToggleSidebar }) {
         <button
           onClick={checkStatus}
           title="Click to re-probe backend service status"
-          className={`flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-full border text-[11px] font-mono transition-colors ${
+          className={`flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-full border text-xs font-sans font-medium transition-colors ${
             healthStatus === 'online'
               ? 'bg-[#10b981]/10 border-[#10b981]/40 text-[#10b981] hover:bg-[#10b981]/20'
               : healthStatus === 'offline'

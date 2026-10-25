@@ -77,11 +77,11 @@ export default function Home() {
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#f9fafb] font-mono">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-sans">
             NETPULSE
           </h1>
 
-          <p className="text-base sm:text-lg text-[#3b82f6] font-semibold font-mono">
+          <p className="text-base sm:text-lg text-[#00f0ff] font-semibold font-sans">
             "Network Load Analysis Using Normal Distribution"
           </p>
 
@@ -95,10 +95,10 @@ export default function Home() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/learn-and-play"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-mono text-xs font-bold transition-all shadow-lg shadow-blue-500/20"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-sans text-xs font-semibold transition-all shadow-lg shadow-blue-500/20"
             >
               <Gamepad2 className="w-4 h-4" />
-              <span>Network Highway Ops (3D Simulator)</span>
+              <span>Network Highway Simulator (3D)</span>
             </Link>
 
             <Link
@@ -211,7 +211,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Mode 1 Showcase */}
             <Panel
-              title="🎮 MODE 1: Learn & Play"
+              title="Simulator and Missions"
               subtitle="5 Gamified incident response missions for conceptual understanding"
               icon={Gamepad2}
               bodyClassName="space-y-4"
@@ -243,7 +243,7 @@ export default function Home() {
                   to="/learn-and-play"
                   className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
                 >
-                  <span>Launch Learn & Play Missions</span>
+                  <span>Launch Simulator Missions</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -251,7 +251,7 @@ export default function Home() {
 
             {/* Mode 2 Showcase */}
             <Panel
-              title="🔬 MODE 2: Technical Lab"
+              title="Technical Analytics Lab"
               subtitle="Scientific computing workbench with live Gaussian distribution modeling"
               icon={FlaskConical}
               bodyClassName="space-y-4"
@@ -285,7 +285,7 @@ export default function Home() {
                   to="/technical-lab"
                   className="inline-flex items-center gap-2 text-xs font-mono text-blue-400 hover:text-blue-300 font-semibold transition-colors"
                 >
-                  <span>Open Technical Workbench</span>
+                  <span>Launch Technical Workbench</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

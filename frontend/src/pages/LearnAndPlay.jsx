@@ -149,7 +149,7 @@ export default function LearnAndPlay() {
       <PageHeader
         title="Gaming Suite — Mission Operations Lobby"
         subtitle="Gamified network administration scenarios connecting practical troubleshooting directly to Probability & Statistics (Course 25CS203)."
-        modeBadge="MODE 1: LEARN & PLAY"
+        modeBadge="INTERACTIVE SIMULATOR"
       />
 
       {/* Featured 3D Simulator Hero Banner */}
@@ -165,8 +165,8 @@ export default function LearnAndPlay() {
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-mono text-[#f9fafb] tracking-tight">
-            NETWORK HIGHWAY: INCIDENT RESPONSE
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
+            Network Highway: Incident Response
           </h2>
 
           <p className="text-sm text-[#94a3b8] leading-relaxed">
@@ -176,10 +176,10 @@ export default function LearnAndPlay() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={() => startGame('zscore_challenge')}
-              className="px-6 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-mono font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-[#00f0ff] hover:opacity-95 text-slate-950 text-xs font-sans font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20"
             >
               <Play className="w-4 h-4 fill-white" />
-              START ENGINE ▶
+              Start Simulation Engine
             </button>
 
             <a
@@ -226,9 +226,9 @@ export default function LearnAndPlay() {
         </div>
       </div>
 
-      {/* The Golden Bridge Concept Explainer */}
+      {/* Analytical Telemetry Continuity Explainer */}
       <Panel
-        title="The Golden Bridge Concept"
+        title="Analytical Telemetry Continuity"
         subtitle="Game Decision → Statistical Proof → Gaussian Bell Curve Visualization"
         icon={Sparkles}
         className="border-[#26354d] bg-[#111827]"
@@ -258,7 +258,7 @@ export default function LearnAndPlay() {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-mono uppercase tracking-wider text-[#94a3b8] flex items-center gap-2 font-bold">
             <Layers className="w-4 h-4 text-[#3b82f6]" />
-            <span>Curriculum Game Catalog ({gameDefinitions.length} Missions Available)</span>
+            <span>Curriculum Simulation Catalog ({gameDefinitions.length} Missions Available)</span>
           </h2>
           <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
             <Zap className="w-3.5 h-3.5" />
@@ -346,7 +346,7 @@ export default function LearnAndPlay() {
                     </span>
                     <button
                       onClick={() => startGame(game.id, matchingScenario)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-mono text-xs font-bold transition shadow"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-sans text-xs font-semibold transition shadow"
                     >
                       <Play className="w-3.5 h-3.5 fill-white" />
                       <span>{isCompleted ? 'Replay Mission' : 'Start Mission'}</span>
