@@ -3,7 +3,7 @@ NETPULSE - Progression Engine & Achievement Rule Matrix
 Course: Probability and Statistics for Computer Science (25CS203)
 """
 
-from typing import Dict, Any, List, Set, Tuple
+from typing import Dict, Any, List, Set, Tuple, Optional
 
 
 ACHIEVEMENTS_CATALOG = [
@@ -59,7 +59,7 @@ ACHIEVEMENTS_CATALOG = [
 ]
 
 
-def calculate_level(total_xp: int) -> int:
+def calculate_level(total_xp: Optional[int]) -> int:
     """
     Computes operator rank level based on verified cumulative experience points.
     - Level 1: Analyst Intern (0 - 99 XP)
@@ -68,7 +68,9 @@ def calculate_level(total_xp: int) -> int:
     - Level 4: Senior Systems Analyst (450 - 699 XP)
     - Level 5: Chief Infrastructure Architect (700+ XP)
     """
-    xp = max(0, total_xp)
+    if total_xp is None:
+        return 1
+    xp = max(0, int(total_xp))
     if xp >= 700:
         return 5
     elif xp >= 450:

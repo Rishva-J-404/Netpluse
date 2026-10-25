@@ -27,7 +27,7 @@ app = FastAPI(
 )
 
 # Configurable CORS for React Frontend (Vite: http://localhost:5173)
-env_origins = os.getenv("ALLOWED_ORIGINS", "")
+env_origins = os.getenv("ALLOWED_ORIGINS", os.getenv("CORS_ORIGINS", ""))
 if env_origins:
     origins = [orig.strip() for orig in env_origins.split(",") if orig.strip()]
 else:

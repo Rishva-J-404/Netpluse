@@ -217,5 +217,44 @@ END $$;
 
 RESET ROLE;
 
+-- --------------------------------------------------------------------
+-- Test 7: Function Permission Lockdown & Profile Immutability (Phase 10)
+-- --------------------------------------------------------------------
+DO 
+DECLARE
+    test_user uuid := '11111111-1111-1111-1111-111111111111'::uuid;
+    err_caught boolean := false;
+BEGIN
+    -- 1. Verify authenticated role cannot directly invoke award_user_progression
+    SET LOCAL ROLE authenticated;
+    BEGIN
+        PERFORM public.award_user_progression(test_user, 500);
+    EXCEPTION WHEN insufficient_privilege THEN
+        err_caught := true;
+    END;
+
+    IF NOT err_caught THEN
+        RAISE EXCEPTION 'SECURITY FAILURE: authenticated role was able to invoke award_user_progression!';
+    ELSE
+        RAISE NOTICE 'SUCCESS: authenticated role blocked from invoking award_user_progression.';
+    END IF;
+
+    -- 2. Verify direct modification of total_xp on profiles is blocked by trigger
+    err_caught := false;
+    BEGIN
+        UPDATE public.profiles SET total_xp = 99999 WHERE id = test_user;
+    EXCEPTION WHEN OTHERS THEN
+        err_caught := true;
+    END;
+
+    IF NOT err_caught THEN
+        RAISE EXCEPTION 'SECURITY FAILURE: Direct update to total_xp succeeded for authenticated role!';
+    ELSE
+        RAISE NOTICE 'SUCCESS: Direct total_xp modification rejected by trigger.';
+    END IF;
+END ;
+
+RESET ROLE;
+
 ROLLBACK;
 -- Clean rollback ensuring no test artifacts remain.

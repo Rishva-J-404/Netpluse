@@ -354,3 +354,52 @@ BEGIN
 END;
 $$;
 ```
+
+### 8.5 Function Permission Lockdown & Profile Immutability Trigger (Phase 10)
+```sql
+-- Lockdown: Restrict progression award strictly to trusted backend service_role
+REVOKE EXECUTE ON FUNCTION public.award_user_progression(uuid, int) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.award_user_progression(uuid, int) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.award_user_progression(uuid, int) FROM authenticated;
+GRANT EXECUTE ON FUNCTION public.award_user_progression(uuid, int) TO service_role;
+
+-- Enforce profile progression immutability: block direct modification of total_xp or level by browser clients
+CREATE OR REPLACE FUNCTION public.enforce_profile_progression_immutability()
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+    IF current_user IN ('authenticated', 'anon') THEN
+        IF NEW.total_xp IS DISTINCT FROM OLD.total_xp THEN
+            RAISE EXCEPTION 'Forbidden: total_xp cannot be modified directly. XP must be earned through verified backend game completions.';
+        END IF;
+        IF NEW.level IS DISTINCT FROM OLD.level THEN
+            RAISE EXCEPTION 'Forbidden: level cannot be modified directly. Level is computed from verified XP.';
+        END IF;
+        IF NEW.id IS DISTINCT FROM OLD.id THEN
+            RAISE EXCEPTION 'Forbidden: User identity (id) is immutable.';
+        END IF;
+        IF NEW.created_at IS DISTINCT FROM OLD.created_at THEN
+            NEW.created_at = OLD.created_at;
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trigger_protect_profile_progression ON public.profiles;
+CREATE TRIGGER trigger_protect_profile_progression
+    BEFORE UPDATE ON public.profiles
+    FOR EACH ROW
+    EXECUTE FUNCTION public.enforce_profile_progression_immutability();
+```
+
+---
+
+## 9. Migration Inventory
+
+| Migration Version | Description | Target Tables / Objects | Purpose |
+|---|---|---|---|
+| `20261024000001_initial_schema.sql` | Initial Relational Schema | 6 tables (`profiles`, `game_results`, `achievements`, `user_achievements`, `analysis_history`, `datasets`) | Core database structure & updated_at trigger |
+| `20261024000002_rls_and_storage.sql` | Row-Level Security & Storage Bucket | All 6 tables + `storage.buckets` + `storage.objects` | User isolation via `auth.uid() = user_id` and private storage bucket |
+| `20261024000003_auth_profiles_trigger.sql` | Auth Profile Creation Trigger | `auth.users` -> `public.profiles` | Idempotent automatic profile generation on user sign-up |
+| `20261024000004_progression_leaderboard.sql` | Progression, Idempotency & Leaderboard | `game_results.idempotency_key`, `calculate_level()`, `get_leaderboard()`, `award_user_progression()` | Anti-tamper game completion & privacy-preserving leaderboard |
+| `20261024000005_security_hardening.sql` | Security Hardening & Function Lockdown | `award_user_progression`, `profiles` trigger, `get_leaderboard` | Revokes execute from anon/authenticated, blocks direct XP manipulation |

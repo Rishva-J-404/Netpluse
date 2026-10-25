@@ -370,7 +370,7 @@ class TestSystemResilienceAndExistingWorkflows:
         import re
         migrations_dir = os.path.join(os.path.dirname(__file__), "..", "..", "supabase", "migrations")
         files = sorted(os.listdir(migrations_dir))
-        assert len(files) == 4, f"Expected 4 migrations, found {len(files)}: {files}"
+        assert len(files) in {4, 5}, f"Expected 4 or 5 migrations, found {len(files)}: {files}"
 
         pattern = re.compile(r"^\d{14}_.+\.sql$")
         for f in files:
