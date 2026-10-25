@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Target, Activity, Info, TrendingUp, AlertTriangle, CheckCircle2, RotateCcw, ArrowRight, BarChart2 } from 'lucide-react'
+import { Target, Activity, Info, TrendingUp, AlertTriangle, CheckCircle2, RotateCcw, BarChart2 } from 'lucide-react'
 import { analyzeLoad, fetchDataset } from '../services/api'
 import { useStats } from '../contexts/StatsContext'
 import PageHeader from '../components/PageHeader'
@@ -24,13 +23,13 @@ function ZScoreScale({ zScore }) {
     <div className="space-y-4 font-sans text-xs">
       {/* Zone Legend Header */}
       <div className="grid grid-cols-3 text-center text-[10px] tracking-wider uppercase font-semibold">
-        <div className="text-[#8cc8ff] bg-[#1b2b46] border border-[#2c3d58] py-1.5 rounded-l-xl font-mono">
+        <div className="text-[#4f7cff] bg-[#202938] border border-[#2b3545] py-1.5 rounded-l-xl font-mono">
           Unusually Low (Z &lt; -2.0)
         </div>
-        <div className="text-[#34d399] bg-[#14233d] border-y border-[#2c3d58] py-1.5 font-mono">
+        <div className="text-[#35a875] bg-[#181f2b] border-y border-[#2b3545] py-1.5 font-mono">
           Normal Band (-2.0 ≤ Z ≤ +2.0)
         </div>
-        <div className="text-[#f87171] bg-[#1b2b46] border border-[#2c3d58] py-1.5 rounded-r-xl font-mono">
+        <div className="text-[#d95c5c] bg-[#202938] border border-[#2b3545] py-1.5 rounded-r-xl font-mono">
           Unusually High (Z &gt; +2.0)
         </div>
       </div>
@@ -42,27 +41,27 @@ function ZScoreScale({ zScore }) {
           className="absolute -top-1 transition-all duration-300 transform -translate-x-1/2 flex flex-col items-center z-20 pointer-events-none"
           style={{ left: `${markerPercent}%` }}
         >
-          <span className="px-2 py-0.5 rounded-lg bg-[#1b2b46] border border-[#8cc8ff] text-[#8cc8ff] text-[11px] font-bold shadow-md whitespace-nowrap font-mono">
+          <span className="px-2 py-0.5 rounded-lg bg-[#202938] border border-[#4f7cff] text-[#4f7cff] text-[11px] font-bold shadow-md whitespace-nowrap font-mono">
             Z = {z > 0 ? `+${z.toFixed(2)}` : z.toFixed(2)}σ
           </span>
-          <div className="w-2 h-2 bg-[#8cc8ff] rotate-45 -mt-1" />
+          <div className="w-2 h-2 bg-[#4f7cff] rotate-45 -mt-1" />
         </div>
 
         {/* Continuous Bar with 3 Colored Segments */}
-        <div className="h-4 rounded-full overflow-hidden flex border border-[#2c3d58] bg-[#0b1426] shadow-inner">
-          <div className="w-[21.43%] bg-[#8cc8ff]/15 border-r border-[#2c3d58]" />
-          <div className="w-[57.14%] bg-[#34d399]/20 border-r border-[#2c3d58]" />
-          <div className="w-[21.43%] bg-[#f87171]/20" />
+        <div className="h-4 rounded-full border border-[#2b3545] bg-[#111827] shadow-inner flex">
+          <div className="w-[21.43%] bg-[#4f7cff]/20 border-r border-[#2b3545]" />
+          <div className="w-[57.14%] bg-[#35a875]/20 border-r border-[#2b3545]" />
+          <div className="w-[21.43%] bg-[#d95c5c]/20" />
         </div>
 
         {/* Needle on the bar */}
         <div
-          className="absolute top-6 w-1 h-5 bg-[#8cc8ff] rounded shadow-sm z-10 transition-all duration-300 transform -translate-x-1/2"
+          className="absolute top-6 w-1 h-5 bg-[#4f7cff] rounded shadow-sm z-10 transition-all duration-300 transform -translate-x-1/2"
           style={{ left: `${markerPercent}%` }}
         />
 
         {/* Reference Tick Marks */}
-        <div className="relative w-full flex justify-between pt-2 text-[10px] text-[#a6b4c9] font-mono">
+        <div className="relative w-full flex justify-between pt-2 text-[10px] text-[#9ca8b8] font-mono">
           {ticks.map(t => {
             const pos = ((t + 3.5) / 7.0) * 100
             const isCenter = t === 0
@@ -74,8 +73,8 @@ function ZScoreScale({ zScore }) {
                 className="absolute flex flex-col items-center transform -translate-x-1/2"
                 style={{ left: `${pos}%` }}
               >
-                <div className={`w-0.5 h-1.5 ${isCenter ? 'bg-[#8cc8ff] h-2.5' : isBoundary ? 'bg-[#fbbf24] h-2' : 'bg-[#2c3d58]'}`} />
-                <span className={`mt-0.5 ${isCenter ? 'text-[#8cc8ff] font-bold' : isBoundary ? 'text-[#fbbf24] font-bold' : 'text-[#a6b4c9]'}`}>
+                <div className={`w-0.5 h-1.5 ${isCenter ? 'bg-[#4f7cff] h-2.5' : isBoundary ? 'bg-[#d9a441] h-2' : 'bg-[#2b3545]'}`} />
+                <span className={`mt-0.5 ${isCenter ? 'text-[#4f7cff] font-bold' : isBoundary ? 'text-[#d9a441] font-bold' : 'text-[#9ca8b8]'}`}>
                   {t > 0 ? `+${t}` : t}
                 </span>
               </div>
@@ -136,9 +135,9 @@ export default function ZScoreAnalysis() {
               setLoadInput(62.0)
               evaluateZ(62.0)
             }}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] text-xs font-sans transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] hover:border-[#4f7cff] text-xs font-sans transition-colors cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#8cc8ff]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
             <span>Benchmark 62 Mbps</span>
           </button>
         }
@@ -147,26 +146,26 @@ export default function ZScoreAnalysis() {
       {/* Input query panel */}
       <Panel
         title="Telemetry Normalization Query"
-        subtitle="Query the FastAPI statistical engine with a network load measurement in Mbps"
+        subtitle="Query the statistical engine with a network load measurement in Mbps"
         icon={Target}
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end max-w-2xl">
           <div>
-            <label htmlFor="z-dataset" className="block text-xs font-sans text-[#a6b4c9] mb-1.5 uppercase tracking-wider font-medium">
+            <label htmlFor="z-dataset" className="block text-xs font-sans text-[#9ca8b8] mb-1.5 uppercase tracking-wider font-medium">
               Baseline Dataset
             </label>
             <select
               id="z-dataset"
               value={datasetName}
               onChange={e => setDatasetName(e.target.value)}
-              className="w-full bg-[#0b1426] border border-[#2c3d58] rounded-xl px-3 py-2 text-xs font-sans text-[#f4f7fc] focus:outline-none focus:border-[#8cc8ff]"
+              className="w-full bg-[#111827] border border-[#2b3545] rounded-xl px-3 py-2 text-xs font-sans text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff]"
             >
               <option value="campus_network">campus_network.csv (Baseline 24-hr)</option>
             </select>
           </div>
 
           <div>
-            <label htmlFor="z-load-input" className="block text-xs font-sans text-[#a6b4c9] mb-1.5 uppercase tracking-wider font-medium">
+            <label htmlFor="z-load-input" className="block text-xs font-sans text-[#9ca8b8] mb-1.5 uppercase tracking-wider font-medium">
               Observed Load Throughput (Mbps)
             </label>
             <div className="relative">
@@ -177,9 +176,9 @@ export default function ZScoreAnalysis() {
                 min="0"
                 value={loadInput}
                 onChange={e => setLoadInput(e.target.value)}
-                className="w-full bg-[#0b1426] border border-[#2c3d58] rounded-xl px-3 py-2 text-xs font-mono text-[#f4f7fc] focus:outline-none focus:border-[#8cc8ff] pr-14"
+                className="w-full bg-[#111827] border border-[#2b3545] rounded-xl px-3 py-2 text-xs font-mono text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff] pr-14"
               />
-              <span className="absolute right-3 top-2 text-xs font-sans text-[#a6b4c9] pointer-events-none">
+              <span className="absolute right-3 top-2 text-xs font-sans text-[#9ca8b8] pointer-events-none">
                 Mbps
               </span>
             </div>
@@ -189,7 +188,7 @@ export default function ZScoreAnalysis() {
             <button
               onClick={() => evaluateZ(loadInput)}
               disabled={loading}
-              className="w-full px-4 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-sans text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+              className="w-full px-4 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white font-sans text-xs font-medium flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
             >
               <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>{loading ? 'Evaluating...' : 'Compute Z-Score'}</span>
@@ -248,19 +247,19 @@ export default function ZScoreAnalysis() {
             subtitle={`Observed load ${analysis.current_load} Mbps mapped onto the dimensionless standard normal scale`}
             icon={Target}
           >
-            <div className="p-4 sm:p-6 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-6">
+            <div className="p-4 sm:p-6 rounded-xl bg-[#111827] border border-[#2b3545] space-y-6">
               <ZScoreScale zScore={analysis.z_score} />
 
-              <div className="pt-4 border-t border-[#2c3d58] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans text-[#a6b4c9]">
+              <div className="pt-4 border-t border-[#2b3545] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans text-[#9ca8b8]">
                 <div>
-                  Position: <strong className="text-[#f4f7fc]">{analysis.current_load} Mbps</strong> is{' '}
-                  <strong className={Math.abs(zVal) > 2 ? 'text-[#f87171]' : 'text-[#34d399]'}>
+                  Position: <strong className="text-[#f3f4f6]">{analysis.current_load} Mbps</strong> is{' '}
+                  <strong className={Math.abs(zVal) > 2 ? 'text-[#d95c5c]' : 'text-[#35a875]'}>
                     {Math.abs(zVal)} standard deviations {zVal >= 0 ? 'above' : 'below'}
                   </strong>{' '}
-                  the campus baseline mean ({analysis.mean} Mbps).
+                  the network baseline mean ({analysis.mean} Mbps).
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[#a6b4c9]">Classification:</span>
+                  <span className="text-[#9ca8b8]">Classification:</span>
                   <StatusBadge status={analysis.status} size="sm" />
                 </div>
               </div>
@@ -280,16 +279,16 @@ export default function ZScoreAnalysis() {
                 <div
                   className={`p-3.5 rounded-xl border transition-all ${
                     zVal < -2.0
-                      ? 'bg-[#1b2b46] border-[#8cc8ff]'
-                      : 'bg-[#0b1426] border-[#2c3d58] opacity-75'
+                      ? 'bg-[#202938] border-[#4f7cff]'
+                      : 'bg-[#111827] border-[#2b3545] opacity-75'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-bold text-[#8cc8ff]">
+                  <div className="flex items-center justify-between font-bold text-[#4f7cff]">
                     <span>ZONE 1: Z &lt; -2.0σ → UNUSUALLY LOW</span>
                     {zVal < -2.0 && <StatusBadge status="ACTIVE STATE" size="sm" />}
                   </div>
-                  <p className="text-[#a6b4c9] mt-1 font-sans">
-                    Observed load is more than 2 standard deviations below average. Potential cause: fiber break, upstream gateway fault, or switch disconnection.
+                  <p className="text-[#9ca8b8] mt-1 font-sans">
+                    Observed load is more than 2 standard deviations below average. Potential cause: link fault, upstream gateway issue, or route redirection.
                   </p>
                 </div>
 
@@ -297,15 +296,15 @@ export default function ZScoreAnalysis() {
                 <div
                   className={`p-3.5 rounded-xl border transition-all ${
                     zVal >= -2.0 && zVal <= 2.0
-                      ? 'bg-[#1b2b46] border-[#34d399]'
-                      : 'bg-[#0b1426] border-[#2c3d58] opacity-75'
+                      ? 'bg-[#202938] border-[#35a875]'
+                      : 'bg-[#111827] border-[#2b3545] opacity-75'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-bold text-[#34d399]">
+                  <div className="flex items-center justify-between font-bold text-[#35a875]">
                     <span>ZONE 2: -2.0σ ≤ Z ≤ +2.0σ → NORMAL</span>
                     {zVal >= -2.0 && zVal <= 2.0 && <StatusBadge status="ACTIVE STATE" size="sm" />}
                   </div>
-                  <p className="text-[#a6b4c9] mt-1 font-sans">
+                  <p className="text-[#9ca8b8] mt-1 font-sans">
                     Normal operating variance. Encompasses approximately 95.45% of nominal campus network throughput. Both boundaries (Z = -2.0 and Z = +2.0) are classified as NORMAL.
                   </p>
                 </div>
@@ -314,34 +313,34 @@ export default function ZScoreAnalysis() {
                 <div
                   className={`p-3.5 rounded-xl border transition-all ${
                     zVal > 2.0
-                      ? 'bg-[#1b2b46] border-[#f87171]'
-                      : 'bg-[#0b1426] border-[#2c3d58] opacity-75'
+                      ? 'bg-[#202938] border-[#d95c5c]'
+                      : 'bg-[#111827] border-[#2b3545] opacity-75'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-bold text-[#f87171]">
+                  <div className="flex items-center justify-between font-bold text-[#d95c5c]">
                     <span>ZONE 3: Z &gt; +2.0σ → UNUSUALLY HIGH</span>
                     {zVal > 2.0 && <StatusBadge status="ACTIVE STATE" size="sm" />}
                   </div>
-                  <p className="text-[#a6b4c9] mt-1 font-sans">
-                    Severe traffic surge. Occurs less than 2.3% of the time by chance under nominal conditions. Requires investigation to determine whether cause is benign streaming surge or malicious attack.
+                  <p className="text-[#9ca8b8] mt-1 font-sans">
+                    Severe traffic surge. Occurs less than 2.3% of the time by chance under nominal conditions. Requires triage to determine if cause is expected large transfer or anomaly.
                   </p>
                 </div>
               </div>
             </Panel>
 
             <Panel
-              title="Academic Interpretation Note"
+              title="Statistical Interpretation Note"
               subtitle="Statistical anomaly vs. root cause"
               icon={CheckCircle2}
             >
-              <div className="space-y-3 text-xs font-sans text-[#a6b4c9] leading-relaxed">
+              <div className="space-y-3 text-xs font-sans text-[#9ca8b8] leading-relaxed">
                 <p>
-                  A calculated Z-score above +2.0σ is an <strong className="text-[#f4f7fc]">empirical statistical anomaly</strong>, not a definitive diagnosis of a cyber attack or DDoS.
+                  A calculated Z-score above +2.0σ is an <strong className="text-[#f3f4f6]">empirical statistical anomaly</strong>, not a definitive diagnosis of a network attack.
                 </p>
-                <p className="text-[#a6b4c9]">
-                  Statistical models detect departure from baseline expectation. In real network operations, an elevated Z-score initiates an investigation workflow to inspect packet signatures.
+                <p className="text-[#9ca8b8]">
+                  Statistical models detect departure from baseline expectation. In real telemetry operations, an elevated Z-score initiates an investigation workflow to inspect traffic patterns.
                 </p>
-                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] font-mono text-[11px] text-[#8cc8ff]">
+                <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] font-mono text-[11px] text-[#4f7cff]">
                   Formula: Z = (X - μ) / s<br />
                   Z = ({analysis.current_load} - {analysis.mean}) / {analysis.std_dev} = {analysis.formula_breakdown?.z_result}
                 </div>

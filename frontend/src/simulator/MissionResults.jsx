@@ -4,12 +4,9 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
-  Target,
   RotateCcw,
   FlaskConical,
-  Sparkles,
   ArrowRight,
-  TrendingUp,
   Activity
 } from 'lucide-react'
 
@@ -36,115 +33,101 @@ export default function MissionResults({
   const isSuccess = accuracyPercentage >= 60
 
   return (
-    <div className="absolute inset-0 bg-[#0b1426]/90 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn font-sans">
-      <div className="bg-[#14233d] border border-[#2c3d58] rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl space-y-5">
+    <div className="absolute inset-0 bg-[#111827]/85 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn font-sans">
+      <div className="bg-[#181f2b] border border-[#2b3545] rounded-xl max-w-xl w-full p-6 shadow-2xl space-y-4">
         
-        {/* Header Banner */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#2c3d58]">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-3 border-b border-[#2b3545]">
           <div className="flex items-center gap-3">
             <div
-              className={`p-2.5 rounded-xl border ${
+              className={`p-2 rounded-lg border ${
                 isSuccess
-                  ? 'bg-[#34d399]/10 text-[#34d399] border-[#34d399]/30'
-                  : 'bg-[#f87171]/10 text-[#f87171] border-[#f87171]/30'
+                  ? 'bg-[#35a875]/10 text-[#35a875] border-[#35a875]/30'
+                  : 'bg-[#d95c5c]/10 text-[#d95c5c] border-[#d95c5c]/30'
               }`}
             >
-              <Award className="w-6 h-6" />
+              <Award className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[11px] font-sans uppercase tracking-wider text-[#8cc8ff] font-semibold block">
-                Mission Completed · Scorecard
+              <span className="text-[11px] font-sans uppercase tracking-wider text-[#4f7cff] font-semibold block">
+                Simulation Summary
               </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#f4f7fc] font-sans">
-                {missionTitle || 'Network Highway Operations'}
+              <h2 className="text-lg font-bold text-[#f3f4f6]">
+                {missionTitle || 'Network Route Completed'}
               </h2>
             </div>
           </div>
-          <div className="text-right">
-            <span className="text-[10px] text-[#a6b4c9] uppercase font-semibold block font-sans">Status</span>
-            <span className={`text-xs font-semibold font-sans ${isSuccess ? 'text-[#34d399]' : 'text-[#f87171]'}`}>
-              {isSuccess ? 'Operational Clearance' : 'Investigation Required'}
-            </span>
-          </div>
+          <span className={`text-xs font-semibold ${isSuccess ? 'text-[#35a875]' : 'text-[#d95c5c]'}`}>
+            {isSuccess ? 'Completed' : 'Review Needed'}
+          </span>
         </div>
 
-        {/* Core Metrics Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-          <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-            <span className="text-[10px] text-[#a6b4c9] uppercase font-semibold block font-sans">Final Score</span>
-            <div className="text-xl font-bold text-[#f4f7fc] mt-0.5 font-mono tabular-nums">
-              {score} <span className="text-[10px] text-[#a6b4c9] font-normal font-sans">pts</span>
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+          <div className="p-3 rounded-lg bg-[#111827] border border-[#2b3545]">
+            <span className="text-[10px] text-[#9ca8b8] uppercase font-semibold block">Score</span>
+            <div className="text-xl font-bold text-[#f3f4f6] mt-0.5 font-mono tabular-nums">
+              {score}
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-            <span className="text-[10px] text-[#a6b4c9] uppercase font-semibold block font-sans">Decision Accuracy</span>
-            <div className="text-xl font-bold text-[#34d399] mt-0.5 font-mono tabular-nums">
+          <div className="p-3 rounded-lg bg-[#111827] border border-[#2b3545]">
+            <span className="text-[10px] text-[#9ca8b8] uppercase font-semibold block">Accuracy</span>
+            <div className="text-xl font-bold text-[#35a875] mt-0.5 font-mono tabular-nums">
               {accuracyPercentage}%
             </div>
-            <span className="text-[10px] text-[#a6b4c9] font-sans">{correctCount}/{totalCheckpoints} checkpoints</span>
+            <span className="text-[10px] text-[#9ca8b8]">{correctCount}/{totalCheckpoints} checkpoints</span>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-            <span className="text-[10px] text-[#a6b4c9] uppercase font-semibold block font-sans">Mission Time</span>
-            <div className="text-xl font-bold text-[#f4f7fc] mt-0.5 font-mono tabular-nums">
+          <div className="p-3 rounded-lg bg-[#111827] border border-[#2b3545]">
+            <span className="text-[10px] text-[#9ca8b8] uppercase font-semibold block">Time</span>
+            <div className="text-xl font-bold text-[#f3f4f6] mt-0.5 font-mono tabular-nums">
               {formatTime(elapsedSeconds)}
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-            <span className="text-[10px] text-[#a6b4c9] uppercase font-semibold block font-sans">Verified XP</span>
-            <div className="text-xl font-bold text-[#8cc8ff] mt-0.5 font-mono tabular-nums">
-              +{xpEarned} <span className="text-[10px] text-[#a6b4c9] font-normal font-sans">XP</span>
+          <div className="p-3 rounded-lg bg-[#111827] border border-[#2b3545]">
+            <span className="text-[10px] text-[#9ca8b8] uppercase font-semibold block">Verified XP</span>
+            <div className="text-xl font-bold text-[#4f7cff] mt-0.5 font-mono tabular-nums">
+              +{xpEarned} XP
             </div>
           </div>
         </div>
 
-        {/* Unlocked Achievements Banner (if any) */}
-        {unlockedAchievements && unlockedAchievements.length > 0 && (
-          <div className="p-3.5 rounded-xl bg-[#1b2b46] border border-[#2c3d58] flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-[#8cc8ff] flex-shrink-0" />
-            <div className="text-xs">
-              <span className="text-[#8cc8ff] font-semibold block font-sans">New Achievement Unlocked!</span>
-              <span className="text-[#f4f7fc] font-medium font-sans">{unlockedAchievements[0].title || 'Statistical Mastery'}</span>
-            </div>
-          </div>
-        )}
-
-        {/* Educational Statistical Transfer */}
-        <div className="p-4 rounded-xl bg-[#1b2b46] border border-[#2c3d58] space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8cc8ff] font-sans">
+        {/* Concept Transfer Card */}
+        <div className="p-3.5 rounded-lg bg-[#111827] border border-[#2b3545] space-y-1.5 text-xs">
+          <div className="flex items-center gap-1.5 font-semibold text-[#4f7cff]">
             <Activity className="w-4 h-4" />
-            <span>Statistical Analysis Concept</span>
+            <span>Statistical Concept Applied</span>
           </div>
-          <p className="text-xs text-[#a6b4c9] leading-relaxed font-sans">
-            By analyzing the standardized distance of an observed network load from the baseline mean (<span className="text-[#f4f7fc] font-mono">Z = (X - μ) / σ</span>), you evaluated whether network throughput operated within the empirical 95% confidence interval (<span className="text-[#34d399] font-mono">-2.0 ≤ Z ≤ +2.0</span>) or constituted an anomalous event requiring routing mitigation.
+          <p className="text-[#9ca8b8] leading-relaxed">
+            By standardizing observed network throughput against the baseline mean (<span className="text-[#f3f4f6] font-mono">Z = (X - μ) / σ</span>), you determined whether traffic operated within the nominal 95% confidence interval (<span className="text-[#35a875] font-mono">-2.0 ≤ Z ≤ +2.0</span>) or represented an anomalous surge.
           </p>
         </div>
 
-        {/* Major Actions */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        {/* Actions */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
           <button
             onClick={onReplay}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] font-medium flex items-center justify-center gap-2 transition cursor-pointer"
+            className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] font-medium flex items-center justify-center gap-1.5 transition cursor-pointer"
           >
-            <RotateCcw className="w-4 h-4 text-[#8cc8ff]" />
-            Replay Mission
+            <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
+            <span>Replay</span>
           </button>
 
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               onClick={onExit}
-              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#a6b4c9] hover:text-[#f4f7fc] border border-[#2c3d58] transition text-center font-medium cursor-pointer"
+              className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition text-center font-medium cursor-pointer"
             >
-              Exit to Lobby
+              Lobby
             </button>
             <button
               onClick={onOpenTechnicalLab}
-              className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-bold transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <FlaskConical className="w-4 h-4" />
-              Analyze in Technical Lab →
+              <FlaskConical className="w-3.5 h-3.5" />
+              <span>Open in Statistical Lab</span>
             </button>
           </div>
         </div>

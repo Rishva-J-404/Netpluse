@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b1426] text-[#f4f7fc] antialiased selection:bg-[#8cc8ff]/20 selection:text-[#8cc8ff] font-sans">
+    <div className="min-h-screen flex flex-col bg-[#111827] text-[#f3f4f6] antialiased selection:bg-[#4f7cff]/20 selection:text-[#4f7cff] font-sans">
       <Navbar onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex-1 flex relative">
@@ -17,10 +17,10 @@ export default function Layout({ children }) {
             {children}
           </div>
 
-          <footer className="mt-auto border-t border-[#2c3d58] bg-[#0b1426] py-4 px-6 text-center text-xs text-[#a6b4c9] font-sans">
+          <footer className="mt-auto border-t border-[#2b3545] bg-[#111827] py-4 px-6 text-center text-xs text-[#9ca8b8] font-sans">
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-              <span>NETPULSE · Course Code 25CS203 · Department of Computer Science & Engineering</span>
-              <span className="text-[#a6b4c9]">Probability & Statistics for CS Project</span>
+              <span>NETPULSE — Network Load Analysis Using Normal Distribution</span>
+              <span className="text-[#9ca8b8]/75">Interactive Telemetry Simulation & Statistical Modeling</span>
             </div>
           </footer>
         </main>

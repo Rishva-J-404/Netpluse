@@ -1,93 +1,53 @@
 import React from 'react'
 
 /**
- * StatusBadge - Semantic status indicator for NETPULSE operational states
- * Colors match mathematical thresholds (Normal: emerald, Warning: amber, High/Critical: rose, Low: light-blue)
+ * StatusBadge - Restrained indicator for statistical anomaly triage states
  */
 export default function StatusBadge({ status, size = 'md', className = '' }) {
-  if (!status) return null
-
-  const normalized = String(status).toUpperCase().trim()
+  const norm = String(status || 'NORMAL').toUpperCase().trim()
 
   const config = {
     NORMAL: {
-      bg: 'bg-[#34d399]/10',
-      text: 'text-[#34d399]',
-      border: 'border-[#34d399]/30',
-      dot: 'bg-[#34d399]',
-      label: 'NORMAL'
-    },
-    'UNUSUALLY LOW': {
-      bg: 'bg-[#8cc8ff]/10',
-      text: 'text-[#8cc8ff]',
-      border: 'border-[#8cc8ff]/30',
-      dot: 'bg-[#8cc8ff]',
-      label: 'UNUSUALLY LOW'
+      label: 'NORMAL',
+      bg: 'bg-[#35a875]/10',
+      text: 'text-[#35a875]',
+      border: 'border-[#35a875]/30',
+      dot: 'bg-[#35a875]'
     },
     'UNUSUALLY HIGH': {
-      bg: 'bg-[#f87171]/10',
-      text: 'text-[#f87171]',
-      border: 'border-[#f87171]/30',
-      dot: 'bg-[#f87171]',
-      label: 'UNUSUALLY HIGH'
+      label: 'UNUSUALLY HIGH',
+      bg: 'bg-[#d95c5c]/10',
+      text: 'text-[#d95c5c]',
+      border: 'border-[#d95c5c]/30',
+      dot: 'bg-[#d95c5c]'
     },
-    EXCELLENT: {
-      bg: 'bg-[#34d399]/10',
-      text: 'text-[#34d399]',
-      border: 'border-[#34d399]/30',
-      dot: 'bg-[#34d399]',
-      label: 'EXCELLENT'
-    },
-    HEALTHY: {
-      bg: 'bg-[#8cc8ff]/10',
-      text: 'text-[#8cc8ff]',
-      border: 'border-[#8cc8ff]/30',
-      dot: 'bg-[#8cc8ff]',
-      label: 'HEALTHY'
-    },
-    WARNING: {
-      bg: 'bg-[#fbbf24]/10',
-      text: 'text-[#fbbf24]',
-      border: 'border-[#fbbf24]/30',
-      dot: 'bg-[#fbbf24]',
-      label: 'WARNING'
-    },
-    POOR: {
-      bg: 'bg-[#fbbf24]/10',
-      text: 'text-[#fbbf24]',
-      border: 'border-[#fbbf24]/30',
-      dot: 'bg-[#fbbf24]',
-      label: 'POOR'
-    },
-    CRITICAL: {
-      bg: 'bg-[#f87171]/15',
-      text: 'text-[#f87171]',
-      border: 'border-[#f87171]/40',
-      dot: 'bg-[#f87171] animate-pulse',
-      label: 'CRITICAL'
+    'UNUSUALLY LOW': {
+      label: 'UNUSUALLY LOW',
+      bg: 'bg-[#d9a441]/10',
+      text: 'text-[#d9a441]',
+      border: 'border-[#d9a441]/30',
+      dot: 'bg-[#d9a441]'
     },
     ONLINE: {
-      bg: 'bg-[#34d399]/10',
-      text: 'text-[#34d399]',
-      border: 'border-[#34d399]/30',
-      dot: 'bg-[#34d399]',
-      label: 'ONLINE'
+      label: 'ONLINE',
+      bg: 'bg-[#35a875]/10',
+      text: 'text-[#35a875]',
+      border: 'border-[#35a875]/30',
+      dot: 'bg-[#35a875]'
     },
     OFFLINE: {
-      bg: 'bg-[#f87171]/10',
-      text: 'text-[#f87171]',
-      border: 'border-[#f87171]/30',
-      dot: 'bg-[#f87171]',
-      label: 'OFFLINE'
+      label: 'OFFLINE',
+      bg: 'bg-[#d95c5c]/10',
+      text: 'text-[#d95c5c]',
+      border: 'border-[#d95c5c]/30',
+      dot: 'bg-[#d95c5c]'
     }
-  }
-
-  const current = config[normalized] || {
-    bg: 'bg-[#14233d]',
-    text: 'text-[#a6b4c9]',
-    border: 'border-[#2c3d58]',
-    dot: 'bg-[#a6b4c9]',
-    label: normalized
+  }[norm] || {
+    label: norm,
+    bg: 'bg-[#202938]',
+    text: 'text-[#9ca8b8]',
+    border: 'border-[#2b3545]',
+    dot: 'bg-[#9ca8b8]'
   }
 
   const sizeClasses = {
@@ -96,12 +56,18 @@ export default function StatusBadge({ status, size = 'md', className = '' }) {
     lg: 'text-sm px-3.5 py-1.5 gap-2.5'
   }[size] || 'text-xs px-2.5 py-1 gap-2'
 
+  const dotSizes = {
+    sm: 'w-1.5 h-1.5',
+    md: 'w-2 h-2',
+    lg: 'w-2.5 h-2.5'
+  }[size] || 'w-2 h-2'
+
   return (
     <span
-      className={`inline-flex items-center font-sans font-semibold rounded-full border ${current.bg} ${current.text} ${current.border} ${sizeClasses} ${className}`}
+      className={`inline-flex items-center font-mono font-medium rounded-full border ${config.bg} ${config.text} ${config.border} ${sizeClasses} ${className}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${current.dot}`} aria-hidden="true" />
-      <span>{current.label}</span>
+      <span className={`${dotSizes} rounded-full ${config.dot}`} />
+      <span>{config.label}</span>
     </span>
   )
 }

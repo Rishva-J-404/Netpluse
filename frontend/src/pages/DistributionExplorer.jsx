@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   LineChart,
   Info,
@@ -79,14 +79,14 @@ export default function DistributionExplorer() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowMarkers(!showMarkers)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] text-xs font-sans transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] text-xs font-sans transition-colors cursor-pointer"
             >
-              {showMarkers ? <EyeOff className="w-3.5 h-3.5 text-[#8cc8ff]" /> : <Eye className="w-3.5 h-3.5 text-[#8cc8ff]" />}
+              {showMarkers ? <EyeOff className="w-3.5 h-3.5 text-[#4f7cff]" /> : <Eye className="w-3.5 h-3.5 text-[#4f7cff]" />}
               <span>{showMarkers ? 'Hide SD Markers' : 'Show SD Markers'}</span>
             </button>
             <Link
               to="/zscore-analysis"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] text-xs font-sans font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white text-xs font-sans font-medium transition-colors"
             >
               <Target className="w-3.5 h-3.5" />
               <span>Analyze Z-Score</span>
@@ -96,22 +96,22 @@ export default function DistributionExplorer() {
       />
 
       {/* Model Assumption Academic Note */}
-      <div className="p-4 rounded-2xl bg-[#14233d] border border-[#2c3d58] text-xs font-sans text-[#a6b4c9] flex items-start gap-3">
-        <Info className="w-4 h-4 text-[#8cc8ff] shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] text-xs font-sans text-[#9ca8b8] flex items-start gap-3">
+        <Info className="w-4 h-4 text-[#4f7cff] shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-semibold text-[#f4f7fc]">
-            Educational Modeling Framework (Course 25CS203):
+          <p className="font-semibold text-[#f3f4f6]">
+            Statistical Modeling Framework:
           </p>
-          <p className="text-[#a6b4c9] leading-relaxed">
-            In real campus networks, telemetry distributions often exhibit skewness or traffic surges. For this micro-project,
-            a continuous Gaussian model <code className="text-[#8cc8ff] font-mono">X ~ N(μ, σ²)</code> is fitted to the campus sample mean (μ = {mean} Mbps)
+          <p className="text-[#9ca8b8] leading-relaxed">
+            In campus networks, telemetry distributions may exhibit temporary surges. For standard load modeling,
+            a continuous Gaussian model <code className="text-[#4f7cff] font-mono">X ~ N(μ, σ²)</code> is fitted to the network sample mean (μ = {mean} Mbps)
             and sample standard deviation (s = {std} Mbps) to explore classical probability theorems, tail exceedance, and empirical standard deviation boundaries.
           </p>
         </div>
       </div>
 
       {loading ? (
-        <LoadingState message="Retrieving Gaussian coordinates from FastAPI simulation engine..." />
+        <LoadingState message="Retrieving Gaussian coordinates from simulation engine..." />
       ) : error ? (
         <ErrorState message={error} onRetry={() => window.location.reload()} />
       ) : simResult && dataset ? (
@@ -161,7 +161,7 @@ export default function DistributionExplorer() {
           >
             <div className="flex flex-col sm:flex-row items-end gap-4 max-w-xl">
               <div className="flex-1 w-full">
-                <label htmlFor="explorer-load-input" className="block text-xs font-sans text-[#a6b4c9] mb-1.5 uppercase tracking-wider font-medium">
+                <label htmlFor="explorer-load-input" className="block text-xs font-sans text-[#9ca8b8] mb-1.5 uppercase tracking-wider font-medium">
                   Throughput Observation (Mbps)
                 </label>
                 <div className="relative">
@@ -172,9 +172,9 @@ export default function DistributionExplorer() {
                     min="0"
                     value={loadInput}
                     onChange={e => handleUpdateLoad(e.target.value)}
-                    className="w-full bg-[#0b1426] border border-[#2c3d58] rounded-xl px-3 py-2 text-xs font-mono text-[#f4f7fc] focus:outline-none focus:border-[#8cc8ff] pr-14"
+                    className="w-full bg-[#111827] border border-[#2b3545] rounded-xl px-3 py-2 text-xs font-mono text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff] pr-14"
                   />
-                  <span className="absolute right-3 top-2 text-xs font-sans text-[#a6b4c9] pointer-events-none">
+                  <span className="absolute right-3 top-2 text-xs font-sans text-[#9ca8b8] pointer-events-none">
                     Mbps
                   </span>
                 </div>
@@ -183,15 +183,15 @@ export default function DistributionExplorer() {
               <div className="flex gap-2 w-full sm:w-auto">
                 <button
                   onClick={() => handleUpdateLoad(39.77)}
-                  className="px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] text-xs font-sans transition-colors cursor-pointer border border-[#2c3d58]"
+                  className="px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] text-xs font-sans transition-colors cursor-pointer border border-[#2b3545]"
                 >
                   Set to Mean
                 </button>
                 <button
                   onClick={() => handleUpdateLoad(62.0)}
-                  className="px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] text-xs font-sans transition-colors cursor-pointer border border-[#2c3d58]"
+                  className="px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] text-xs font-sans transition-colors cursor-pointer border border-[#2b3545]"
                 >
-                  Golden 62M
+                  62.0 Mbps
                 </button>
               </div>
             </div>
@@ -223,13 +223,13 @@ export default function DistributionExplorer() {
               icon={Info}
             >
               <div className="space-y-2 font-sans text-xs">
-                <div className="text-[#34d399] font-bold text-sm font-mono">
+                <div className="text-[#35a875] font-bold text-sm font-mono">
                   {(mean - std).toFixed(2)} Mbps – {(mean + std).toFixed(2)} Mbps
                 </div>
-                <p className="text-[#a6b4c9] leading-relaxed">
+                <p className="text-[#9ca8b8] leading-relaxed">
                   Under a Gaussian model, roughly two out of every three hourly measurements are expected to fall within one standard deviation of the average.
                 </p>
-                <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] text-[11px] text-[#a6b4c9] font-mono">
+                <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545] text-[11px] text-[#9ca8b8] font-mono">
                   Z-Interval: [-1.0σ, +1.0σ]
                 </div>
               </div>
@@ -242,13 +242,13 @@ export default function DistributionExplorer() {
               icon={Info}
             >
               <div className="space-y-2 font-sans text-xs">
-                <div className="text-[#8cc8ff] font-bold text-sm font-mono">
+                <div className="text-[#4f7cff] font-bold text-sm font-mono">
                   {Math.max(0, mean - 2 * std).toFixed(2)} Mbps – {(mean + 2 * std).toFixed(2)} Mbps
                 </div>
-                <p className="text-[#a6b4c9] leading-relaxed">
-                  The standard NETPULSE operational boundary. Readings inside this interval are classified as <span className="text-[#34d399] font-semibold font-mono">NORMAL</span>.
+                <p className="text-[#9ca8b8] leading-relaxed">
+                  The standard NETPULSE operational boundary. Readings inside this interval are classified as <span className="text-[#35a875] font-semibold font-mono">NORMAL</span>.
                 </p>
-                <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] text-[11px] text-[#a6b4c9] font-mono">
+                <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545] text-[11px] text-[#9ca8b8] font-mono">
                   Z-Interval: [-2.0σ, +2.0σ]
                 </div>
               </div>
@@ -261,13 +261,13 @@ export default function DistributionExplorer() {
               icon={Info}
             >
               <div className="space-y-2 font-sans text-xs">
-                <div className="text-[#f87171] font-bold text-sm font-mono">
+                <div className="text-[#d95c5c] font-bold text-sm font-mono">
                   {Math.max(0, mean - 3 * std).toFixed(2)} Mbps – {(mean + 3 * std).toFixed(2)} Mbps
                 </div>
-                <p className="text-[#a6b4c9] leading-relaxed">
+                <p className="text-[#9ca8b8] leading-relaxed">
                   Occurs less than 0.27% of the time under normal conditions. Measurements outside this boundary represent critical anomalies requiring triage.
                 </p>
-                <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] text-[11px] text-[#a6b4c9] font-mono">
+                <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545] text-[11px] text-[#9ca8b8] font-mono">
                   Z-Interval: Outside [-3.0σ, +3.0σ]
                 </div>
               </div>

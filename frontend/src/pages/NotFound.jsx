@@ -6,39 +6,39 @@ import Panel from '../components/Panel'
 
 export default function NotFound() {
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn font-sans">
       <PageHeader
-        title="404 — Telemetry Route Not Found"
+        title="404 — Route Not Found"
         subtitle="The requested network path or telemetry endpoint does not exist on the NETPULSE platform."
         modeBadge="SYSTEM NAVIGATION"
       />
 
-      <Panel className="text-center py-12 sm:py-16 border-[#2C3D58] bg-[#14233D]">
-        <div className="w-14 h-14 rounded-full bg-amber-950/30 border border-amber-800/40 flex items-center justify-center text-amber-400 mx-auto mb-4">
+      <Panel className="text-center py-12 sm:py-16">
+        <div className="w-14 h-14 rounded-full bg-[#d9a441]/10 border border-[#d9a441]/30 flex items-center justify-center text-[#d9a441] mx-auto mb-4">
           <AlertTriangle className="w-7 h-7" aria-hidden="true" />
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-bold font-mono text-[#F4F7FC] mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#f3f4f6] mb-2">
           HTTP 404: Unmapped URL Route
         </h2>
-        <p className="text-sm text-[#A6B4C9] max-w-md mx-auto mb-6">
-          Please verify the URL in your browser address bar or use the navigation sidebar to return to an approved platform section.
+        <p className="text-sm text-[#9ca8b8] max-w-md mx-auto mb-6">
+          Please verify the URL in your browser address bar or use the navigation links to return to an active section.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-mono text-xs font-bold transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white text-xs font-medium transition-colors shadow-sm"
           >
             <Home className="w-4 h-4" />
-            <span>Return to Home Overview</span>
+            <span>Return to Overview</span>
           </Link>
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] text-[#F4F7FC] font-mono text-xs font-semibold border border-[#2C3D58] transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] text-xs font-medium border border-[#2b3545] transition-colors"
           >
             <LayoutDashboard className="w-4 h-4" />
-            <span>Open NOC Dashboard</span>
+            <span>Open Telemetry Monitor</span>
           </Link>
         </div>
       </Panel>

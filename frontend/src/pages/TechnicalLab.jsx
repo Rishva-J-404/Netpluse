@@ -41,7 +41,7 @@ export default function TechnicalLab() {
   const [saveMessage, setSaveMessage] = useState(null)
   const [saveError, setSaveError] = useState(null)
 
-  // Load dataset metadata (total records, baseline min/max)
+  // Load dataset metadata
   useEffect(() => {
     fetchDataset(selectedDataset)
       .then(data => setDatasetMeta(data))
@@ -98,19 +98,23 @@ export default function TechnicalLab() {
     setSaveError(null)
     try {
       const res = await saveAnalysisAuthoritative({
-        network_load: Number(analysis.current_load),
-        dataset: selectedDataset
+        dataset_name: selectedDataset,
+        current_load: analysis.current_load,
+        mean: analysis.mean,
+        variance: analysis.variance,
+        std_deviation: analysis.std_dev,
+        z_score: analysis.z_score,
+        probability: analysis.probability,
+        status: analysis.status,
+        health_score: analysis.health_score,
+        notes: `Analysis executed via Statistical Lab.`
       })
-      if (res && res.saved) {
-        let msg = `Snapshot saved to audit history (Record: ${res.history_id.substring(0, 8)})`
-        if (res.newly_unlocked_achievements && res.newly_unlocked_achievements.length > 0) {
-          msg += ` • Achievement Unlocked: ${res.newly_unlocked_achievements.map(a => a.name).join(', ')}!`
-        }
-        setSaveMessage(msg)
+      if (res && res.record) {
+        setSaveMessage('Telemetry analysis saved to persistent audit history.')
         if (refreshProfile) refreshProfile()
       }
     } catch (err) {
-      setSaveError(err.message || 'Failed to save analysis record.')
+      setSaveError(err.message || 'Failed to save analysis.')
     } finally {
       setSaving(false)
     }
@@ -119,41 +123,38 @@ export default function TechnicalLab() {
   return (
     <div className="space-y-6 sm:space-y-8 font-sans">
       <PageHeader
-        title="Technical Lab — Statistical Telemetry Workbench"
-        subtitle="Complete statistical telemetry pipeline powered by Python (NumPy, SciPy, Pandas). Calculates exact sample moments, standardized Z-scores, normal distribution cumulative probabilities, and empirical health scores."
-        modeBadge="STATISTICAL WORKBENCH"
+        title="Statistical Analysis Lab"
+        subtitle="Empirical Gaussian modeling, continuous probability integration, standardized Z-scores, and classification proofs."
         actions={
-          <button
-            onClick={handleReset}
-            title="Reset to 62.0 Mbps baseline"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] text-xs font-sans font-medium transition-colors cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-[#8cc8ff]" />
-            <span>Reset Baseline (62 Mbps)</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleReset}
+              className="px-3.5 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-xs font-sans text-[#f3f4f6] border border-[#2b3545] transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
+              <span>Reset Parameters</span>
+            </button>
+          </div>
         }
       />
 
-      {/* Active Scenario Telemetry Bridge */}
+      {/* Simulator Transfer Context (Golden Bridge) */}
       {bridgePayload && (
-        <div className="p-3.5 sm:p-4 rounded-xl bg-[#14233d] border border-[#8cc8ff]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#1b2b46] border border-[#2c3d58] flex items-center justify-center text-[#8cc8ff] shrink-0">
-              <Layers className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-semibold text-[#f4f7fc]">Scenario Telemetry Bridge: {bridgePayload.title}</span>
-              <p className="text-[#a6b4c9] mt-0.5">
-                Scenario load: <strong className="text-[#8cc8ff] font-mono tabular-nums">{bridgePayload.currentLoad} Mbps</strong> (Z = <span className="font-mono tabular-nums">{bridgePayload.zScore}σ</span>)
-              </p>
-            </div>
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#4f7cff]/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans">
+          <div className="space-y-0.5">
+            <span className="text-[10px] uppercase font-semibold text-[#4f7cff] tracking-wider block">
+              Active Simulator Observation
+            </span>
+            <p className="text-[#f3f4f6]">
+              Transferred from <strong className="text-[#4f7cff] font-mono">{bridgePayload.title}</strong>: Load = <strong className="text-[#f3f4f6] font-mono">{bridgePayload.currentLoad} Mbps</strong> (Z = {bridgePayload.zScore}σ)
+            </p>
           </div>
           <button
             onClick={() => {
               setInputLoad(bridgePayload.currentLoad)
               runAnalysis(bridgePayload.currentLoad)
             }}
-            className="px-3.5 py-1.5 rounded-lg bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-sans text-xs font-semibold transition-colors shrink-0 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-sans text-xs font-bold transition-colors shrink-0 cursor-pointer"
           >
             Load Into Workbench
           </button>
@@ -168,26 +169,26 @@ export default function TechnicalLab() {
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
           <div>
-            <label htmlFor="lab-dataset" className="block text-xs font-sans font-medium text-[#a6b4c9] mb-1.5 uppercase tracking-wider">
+            <label htmlFor="lab-dataset" className="block text-xs font-sans font-medium text-[#9ca8b8] mb-1.5 uppercase tracking-wider">
               Baseline Telemetry Dataset
             </label>
             <select
               id="lab-dataset"
               value={selectedDataset}
               onChange={e => setSelectedDataset(e.target.value)}
-              className="w-full bg-[#0b1426] border border-[#2c3d58] rounded-xl px-3 py-2 text-xs font-sans text-[#f4f7fc] focus:outline-none focus:border-[#8cc8ff]"
+              className="w-full bg-[#111827] border border-[#2b3545] rounded-lg px-3 py-2 text-xs font-sans text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff]"
             >
               <option value="campus_network">campus_network.csv (24-hr campus load)</option>
             </select>
             {datasetMeta && (
-              <span className="text-xs font-sans text-[#a6b4c9] mt-1.5 block">
+              <span className="text-xs font-sans text-[#9ca8b8] mt-1.5 block">
                 Records: {datasetMeta.total_records} observations (Min: {datasetMeta.min}M, Max: {datasetMeta.max}M)
               </span>
             )}
           </div>
 
           <div>
-            <label htmlFor="lab-load-input" className="block text-xs font-sans font-medium text-[#a6b4c9] mb-1.5 uppercase tracking-wider">
+            <label htmlFor="lab-load-input" className="block text-xs font-sans font-medium text-[#9ca8b8] mb-1.5 uppercase tracking-wider">
               Current Load Throughput (Mbps)
             </label>
             <div className="relative">
@@ -199,13 +200,13 @@ export default function TechnicalLab() {
                 value={inputLoad}
                 onChange={e => setInputLoad(e.target.value)}
                 placeholder="e.g. 62.0"
-                className="w-full bg-[#0b1426] border border-[#2c3d58] rounded-xl px-3 py-2 text-xs font-mono text-[#f4f7fc] focus:outline-none focus:border-[#8cc8ff] pr-14"
+                className="w-full bg-[#111827] border border-[#2b3545] rounded-lg px-3 py-2 text-xs font-mono text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff] pr-14"
               />
-              <span className="absolute right-3 top-2 text-xs font-sans text-[#a6b4c9] pointer-events-none">
+              <span className="absolute right-3 top-2 text-xs font-sans text-[#9ca8b8] pointer-events-none">
                 Mbps
               </span>
             </div>
-            <span className="text-xs font-sans text-[#a6b4c9] mt-1.5 block">
+            <span className="text-xs font-sans text-[#9ca8b8] mt-1.5 block">
               Default Golden Case: 62.0 Mbps
             </span>
           </div>
@@ -215,19 +216,19 @@ export default function TechnicalLab() {
               <button
                 onClick={() => runAnalysis(inputLoad)}
                 disabled={loading}
-                className="w-full px-4 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-sans text-xs font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+                className="w-full px-4 py-2 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-sans text-xs font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <Activity className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-                <span>{loading ? 'Executing on Backend...' : 'Run Statistical Analysis'}</span>
+                <span>{loading ? 'Evaluating...' : 'Run Statistical Analysis'}</span>
               </button>
               {analysis && (
                 <button
                   onClick={handleSaveAnalysis}
                   disabled={saving || loading}
-                  className="w-full px-3 py-1.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] font-sans text-[11px] font-semibold flex items-center justify-center gap-1.5 border border-[#2c3d58] hover:border-[#8cc8ff] transition-all cursor-pointer"
+                  className="w-full px-3 py-1.5 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] font-sans text-[11px] font-medium flex items-center justify-center gap-1.5 border border-[#2b3545] hover:border-[#4f7cff] transition-colors cursor-pointer"
                 >
                   <BookmarkPlus className={`w-3 h-3 ${saving ? 'animate-spin' : ''}`} />
-                  <span>{saving ? 'Persisting...' : 'Save to Audit History'}</span>
+                  <span>{saving ? 'Saving...' : 'Save to History'}</span>
                 </button>
               )}
             </div>
@@ -235,30 +236,30 @@ export default function TechnicalLab() {
         </div>
 
         {saveMessage && (
-          <div className="mt-3 p-2.5 rounded-xl bg-[#34d399]/10 border border-[#34d399]/30 text-xs font-sans text-[#34d399] flex items-center gap-2">
-            <Check className="w-4 h-4 text-[#34d399] shrink-0" />
+          <div className="mt-3 p-2.5 rounded-lg bg-[#35a875]/10 border border-[#35a875]/30 text-xs font-sans text-[#35a875] flex items-center gap-2">
+            <Check className="w-4 h-4 text-[#35a875] shrink-0" />
             <span>{saveMessage}</span>
           </div>
         )}
         {saveError && (
-          <div className="mt-3 p-2.5 rounded-xl bg-[#f87171]/10 border border-[#f87171]/30 text-xs font-sans text-[#f87171] flex items-center justify-between gap-2">
+          <div className="mt-3 p-2.5 rounded-lg bg-[#d95c5c]/10 border border-[#d95c5c]/30 text-xs font-sans text-[#d95c5c] flex items-center justify-between gap-2">
             <span>{saveError}</span>
-            <Link to="/login" className="underline text-[#8cc8ff] font-bold shrink-0">Sign In</Link>
+            <Link to="/login" className="underline text-[#4f7cff] font-bold shrink-0">Sign In</Link>
           </div>
         )}
       </Panel>
 
       {/* Loading & Error States */}
       {loading ? (
-        <LoadingState message="Executing NumPy and SciPy statistical pipeline on FastAPI backend..." />
+        <LoadingState message="Executing statistical pipeline on backend..." />
       ) : error ? (
         <ErrorState title="Analysis Failed" message={error} onRetry={() => runAnalysis(inputLoad)} />
       ) : analysis ? (
         <div className="space-y-6 sm:space-y-8">
           {/* 1. Primary Output Metrics */}
           <section className="space-y-3">
-            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#a6b4c9] flex items-center gap-2">
-              <Layers className="w-4 h-4 text-[#8cc8ff]" />
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#9ca8b8] flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#4f7cff]" />
               <span>Calculated Statistical Indicators</span>
             </h2>
 
@@ -284,7 +285,7 @@ export default function TechnicalLab() {
                 label="Exceedance Probability"
                 value={(analysis.exceedance_probability * 100).toFixed(2)}
                 unit="%"
-                subtext={`P(X ≥ ${analysis.current_load} Mbps) [SciPy norm.sf]`}
+                subtext={`P(X ≥ ${analysis.current_load} Mbps)`}
                 icon={Activity}
                 accent={analysis.exceedance_probability < 0.05 ? 'rose' : 'emerald'}
               />
@@ -302,9 +303,9 @@ export default function TechnicalLab() {
 
           {/* 2. Descriptive Statistics Moments */}
           <section className="space-y-3">
-            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#a6b4c9] flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#8cc8ff]" />
-              <span>Baseline Dataset Sample Moments</span>
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#9ca8b8] flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-[#4f7cff]" />
+              <span>Baseline Sample Moments</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -312,7 +313,7 @@ export default function TechnicalLab() {
                 label="Sample Size (n)"
                 value={datasetMeta?.total_records || 24}
                 unit="records"
-                subtext="24-hr hourly campus telemetry series"
+                subtext="Hourly observations"
                 icon={Database}
                 accent="blue"
               />
@@ -328,15 +329,15 @@ export default function TechnicalLab() {
                 label="Sample Variance (s²)"
                 value={analysis.variance}
                 unit="Mbps²"
-                subtext="s² with Bessel's correction (ddof=1)"
+                subtext="s² (ddof=1)"
                 icon={Cpu}
                 accent="blue"
               />
               <MetricCard
-                label="Sample Standard Dev (s)"
+                label="Sample Std Dev (s)"
                 value={analysis.std_dev}
                 unit="Mbps"
-                subtext="s = √(s²) (Dispersion scale)"
+                subtext="s = √(s²)"
                 icon={BarChart2}
                 accent="blue"
               />
@@ -346,26 +347,26 @@ export default function TechnicalLab() {
           {/* 3. Step-by-Step Mathematical Derivation */}
           <Panel
             title="Step-by-Step Mathematical Derivation"
-            subtitle="Deterministic educational explanation generated directly from calculated results"
+            subtitle="Deterministic statistical derivation generated directly from calculated parameters"
             icon={Activity}
           >
-            <div className="p-4 rounded-xl bg-[#0b1426] border border-[#2c3d58] text-xs font-mono text-[#f4f7fc] leading-relaxed whitespace-pre-line">
+            <div className="p-4 rounded-lg bg-[#111827] border border-[#2b3545] text-xs font-mono text-[#f3f4f6] leading-relaxed whitespace-pre-line">
               {analysis.explanation}
             </div>
 
             {analysis.formula_breakdown && (
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-                <div className="p-3.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1">
-                  <span className="text-[#a6b4c9] text-[10px] uppercase block font-sans">Mean Formula:</span>
-                  <code className="text-[#8cc8ff]">{analysis.formula_breakdown.mean_formula}</code>
+                <div className="p-3.5 rounded-lg bg-[#111827] border border-[#2b3545] space-y-1">
+                  <span className="text-[#9ca8b8] text-[10px] uppercase block font-sans">Mean Formula:</span>
+                  <code className="text-[#4f7cff]">{analysis.formula_breakdown.mean_formula}</code>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1">
-                  <span className="text-[#a6b4c9] text-[10px] uppercase block font-sans">Sample Variance:</span>
-                  <code className="text-[#8cc8ff]">{analysis.formula_breakdown.variance_formula}</code>
+                <div className="p-3.5 rounded-lg bg-[#111827] border border-[#2b3545] space-y-1">
+                  <span className="text-[#9ca8b8] text-[10px] uppercase block font-sans">Sample Variance:</span>
+                  <code className="text-[#4f7cff]">{analysis.formula_breakdown.variance_formula}</code>
                 </div>
-                <div className="p-3.5 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1">
-                  <span className="text-[#a6b4c9] text-[10px] uppercase block font-sans">Z-Score Normalization:</span>
-                  <code className="text-[#8cc8ff] font-bold">
+                <div className="p-3.5 rounded-lg bg-[#111827] border border-[#2b3545] space-y-1">
+                  <span className="text-[#9ca8b8] text-[10px] uppercase block font-sans">Z-Score Normalization:</span>
+                  <code className="text-[#4f7cff] font-bold">
                     {analysis.formula_breakdown.z_formula} = {analysis.formula_breakdown.z_result}
                   </code>
                 </div>
@@ -373,53 +374,53 @@ export default function TechnicalLab() {
             )}
           </Panel>
 
-          {/* 4. Cross-Navigation to Specialized Tools */}
+          {/* 4. Cross-Navigation */}
           <section className="space-y-3">
-            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#a6b4c9]">
-              Explore Active Load ({analysis.current_load} Mbps) Across Statistical Suites
+            <h2 className="text-xs font-sans font-semibold uppercase tracking-wider text-[#9ca8b8]">
+              Specialized Statistical Views
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Link
                 to="/distribution-explorer"
-                className="p-4 rounded-2xl bg-[#14233d] border border-[#2c3d58] hover:border-[#8cc8ff] transition-all flex items-start justify-between gap-3 group"
+                className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] hover:border-[#4f7cff] transition-colors flex items-start justify-between gap-3 group"
               >
                 <div>
-                  <LineChart className="w-5 h-5 text-[#8cc8ff] mb-2" />
-                  <h3 className="font-semibold text-[#f4f7fc] text-sm font-sans">Distribution Explorer</h3>
-                  <p className="text-xs text-[#a6b4c9] mt-1 font-sans">
+                  <LineChart className="w-5 h-5 text-[#4f7cff] mb-2" />
+                  <h3 className="font-semibold text-[#f3f4f6] text-sm font-sans">Distribution Explorer</h3>
+                  <p className="text-xs text-[#9ca8b8] mt-1 font-sans">
                     Plot {analysis.current_load} Mbps on the continuous Gaussian bell curve.
                   </p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-[#a6b4c9] group-hover:text-[#8cc8ff] group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                <ArrowRight className="w-4 h-4 text-[#9ca8b8] group-hover:text-[#4f7cff] transition-colors shrink-0 mt-1" />
               </Link>
 
               <Link
                 to="/zscore-analysis"
-                className="p-4 rounded-2xl bg-[#14233d] border border-[#2c3d58] hover:border-[#8cc8ff] transition-all flex items-start justify-between gap-3 group"
+                className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] hover:border-[#4f7cff] transition-colors flex items-start justify-between gap-3 group"
               >
                 <div>
-                  <Target className="w-5 h-5 text-[#8cc8ff] mb-2" />
-                  <h3 className="font-semibold text-[#f4f7fc] text-sm font-sans">Z-Score Analysis</h3>
-                  <p className="text-xs text-[#a6b4c9] mt-1 font-sans">
+                  <Target className="w-5 h-5 text-[#4f7cff] mb-2" />
+                  <h3 className="font-semibold text-[#f3f4f6] text-sm font-sans">Z-Score Analysis</h3>
+                  <p className="text-xs text-[#9ca8b8] mt-1 font-sans">
                     Examine Z = {analysis.z_score}σ on the horizontal threshold scale.
                   </p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-[#a6b4c9] group-hover:text-[#8cc8ff] group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                <ArrowRight className="w-4 h-4 text-[#9ca8b8] group-hover:text-[#4f7cff] transition-colors shrink-0 mt-1" />
               </Link>
 
               <Link
                 to="/what-if-simulator"
-                className="p-4 rounded-2xl bg-[#14233d] border border-[#2c3d58] hover:border-[#8cc8ff] transition-all flex items-start justify-between gap-3 group"
+                className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] hover:border-[#4f7cff] transition-colors flex items-start justify-between gap-3 group"
               >
                 <div>
-                  <Sliders className="w-5 h-5 text-[#8cc8ff] mb-2" />
-                  <h3 className="font-semibold text-[#f4f7fc] text-sm font-sans">What-If Simulator</h3>
-                  <p className="text-xs text-[#a6b4c9] mt-1 font-sans">
-                    Sweep bandwidth dynamically starting from {analysis.current_load} Mbps.
+                  <Sliders className="w-5 h-5 text-[#4f7cff] mb-2" />
+                  <h3 className="font-semibold text-[#f3f4f6] text-sm font-sans">What-If Simulator</h3>
+                  <p className="text-xs text-[#9ca8b8] mt-1 font-sans">
+                    Dynamically sweep load values starting from {analysis.current_load} Mbps.
                   </p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-[#a6b4c9] group-hover:text-[#8cc8ff] group-hover:translate-x-1 transition-all shrink-0 mt-1" />
+                <ArrowRight className="w-4 h-4 text-[#9ca8b8] group-hover:text-[#4f7cff] transition-colors shrink-0 mt-1" />
               </Link>
             </div>
           </section>

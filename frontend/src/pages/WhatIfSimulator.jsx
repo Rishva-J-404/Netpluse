@@ -213,9 +213,9 @@ export default function WhatIfSimulator() {
         actions={
           <button
             onClick={handleResetToBaseline}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] text-xs font-sans transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] hover:border-[#4f7cff] text-xs font-sans transition-colors cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-[#8cc8ff]" />
+            <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
             <span>Reset Baseline</span>
           </button>
         }
@@ -231,14 +231,14 @@ export default function WhatIfSimulator() {
           {/* Main Throughput Display & Sliders */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             {/* Load Big Value & Numeric Sync */}
-            <div className="lg:col-span-4 p-4 rounded-2xl bg-[#0b1426] border border-[#2c3d58] space-y-3">
+            <div className="lg:col-span-4 p-4 rounded-xl bg-[#111827] border border-[#2b3545] space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-sans text-[#8cc8ff] uppercase tracking-wider font-semibold">
+                <span className="text-xs font-sans text-[#4f7cff] uppercase tracking-wider font-semibold">
                   Observed Load (X)
                 </span>
                 {updating && (
-                  <span className="text-[10px] font-sans text-[#8cc8ff] animate-pulse flex items-center gap-1 font-medium">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#8cc8ff]"></span>
+                  <span className="text-[10px] font-sans text-[#4f7cff] animate-pulse flex items-center gap-1 font-medium">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#4f7cff]"></span>
                     Computing...
                   </span>
                 )}
@@ -252,12 +252,12 @@ export default function WhatIfSimulator() {
                   max="150"
                   value={load}
                   onChange={e => handleLoadChange(e.target.value)}
-                  className="w-36 text-3xl font-mono font-bold text-[#f4f7fc] bg-[#14233d] border border-[#2c3d58] rounded-xl px-3 py-1 focus:outline-none focus:border-[#8cc8ff]"
+                  className="w-36 text-3xl font-mono font-bold text-[#f3f4f6] bg-[#181f2b] border border-[#2b3545] rounded-xl px-3 py-1 focus:outline-none focus:border-[#4f7cff]"
                 />
-                <span className="text-sm text-[#a6b4c9] font-sans">Mbps</span>
+                <span className="text-sm text-[#9ca8b8] font-sans">Mbps</span>
               </div>
 
-              <p className="text-[11px] font-sans text-[#a6b4c9]">
+              <p className="text-[11px] font-sans text-[#9ca8b8]">
                 Range: 0.0 – 150.0 Mbps (Synced with slider)
               </p>
             </div>
@@ -266,8 +266,8 @@ export default function WhatIfSimulator() {
             <div className="lg:col-span-8 space-y-4">
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs font-sans">
-                  <span className="text-[#a6b4c9]">Continuous Throughput Sweeper</span>
-                  <span className="text-[#8cc8ff] font-bold font-mono">{load.toFixed(1)} Mbps</span>
+                  <span className="text-[#9ca8b8]">Continuous Throughput Sweeper</span>
+                  <span className="text-[#4f7cff] font-bold font-mono">{load.toFixed(1)} Mbps</span>
                 </div>
 
                 <input
@@ -277,46 +277,46 @@ export default function WhatIfSimulator() {
                   step="0.5"
                   value={Math.min(100, Math.max(10, load))}
                   onChange={e => handleLoadChange(e.target.value)}
-                  className="w-full h-3 bg-[#0b1426] rounded-lg appearance-none cursor-pointer accent-[#8cc8ff] focus:outline-none border border-[#2c3d58]"
+                  className="w-full h-3 bg-[#111827] rounded-lg appearance-none cursor-pointer accent-[#4f7cff] focus:outline-none border border-[#2b3545]"
                 />
 
-                <div className="flex justify-between text-[11px] font-sans text-[#a6b4c9]">
+                <div className="flex justify-between text-[11px] font-sans text-[#9ca8b8]">
                   <span>10.0 Mbps (Low Load)</span>
-                  <span className="text-[#f4f7fc]">Mean: {mean.toFixed(1)} Mbps</span>
+                  <span className="text-[#f3f4f6]">Mean: {mean.toFixed(1)} Mbps</span>
                   <span>100.0 Mbps (High Load)</span>
                 </div>
               </div>
 
               {/* Quick Scenario Preset Buttons */}
               <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-sans">
-                <span className="text-[#a6b4c9] text-[11px]">Presets:</span>
+                <span className="text-[#9ca8b8] text-[11px]">Presets:</span>
                 <button
                   onClick={() => handlePreset(mean)}
-                  className="px-2.5 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#8cc8ff] border border-[#2c3d58] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#4f7cff] border border-[#2b3545] transition-colors cursor-pointer"
                 >
                   Mean ({mean.toFixed(1)}M)
                 </button>
                 <button
                   onClick={() => handlePreset(BASELINE_LOAD)}
-                  className="px-2.5 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] transition-colors cursor-pointer font-semibold"
+                  className="px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] transition-colors cursor-pointer font-medium"
                 >
-                  Golden (62.0M)
+                  62.0 Mbps
                 </button>
                 <button
                   onClick={() => handlePreset(Number((mean + 2 * stdDev).toFixed(1)))}
-                  className="px-2.5 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#fbbf24] border border-[#2c3d58] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#d9a441] border border-[#2b3545] transition-colors cursor-pointer"
                 >
                   +2σ Bound ({Number((mean + 2 * stdDev).toFixed(1))}M)
                 </button>
                 <button
                   onClick={() => handlePreset(85.0)}
-                  className="px-2.5 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f87171] border border-[#2c3d58] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#d95c5c] border border-[#2b3545] transition-colors cursor-pointer"
                 >
                   Surge (85.0M)
                 </button>
                 <button
                   onClick={() => handlePreset(10.0)}
-                  className="px-2.5 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#8cc8ff] border border-[#2c3d58] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#4f7cff] border border-[#2b3545] transition-colors cursor-pointer"
                 >
                   Drop (10.0M)
                 </button>
@@ -325,42 +325,42 @@ export default function WhatIfSimulator() {
           </div>
 
           {/* Secondary Distribution Moment Adjusters */}
-          <div className="pt-4 border-t border-[#2c3d58] flex flex-wrap items-center justify-between gap-4 text-xs font-sans">
-            <div className="flex items-center gap-2 text-[#a6b4c9]">
-              <Info className="w-4 h-4 text-[#8cc8ff] shrink-0" />
+          <div className="pt-4 border-t border-[#2b3545] flex flex-wrap items-center justify-between gap-4 text-xs font-sans">
+            <div className="flex items-center gap-2 text-[#9ca8b8]">
+              <Info className="w-4 h-4 text-[#4f7cff] shrink-0" />
               <span>Gaussian Model Moments:</span>
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
-                <label className="text-[#a6b4c9]">Mean (μ):</label>
+                <label className="text-[#9ca8b8]">Mean (μ):</label>
                 <input
                   type="number"
                   step="0.5"
                   min="1"
                   value={mean}
                   onChange={e => handleMeanChange(e.target.value)}
-                  className="w-24 bg-[#0b1426] border border-[#2c3d58] rounded-lg px-2.5 py-1 text-[#f4f7fc] font-mono focus:outline-none focus:border-[#8cc8ff]"
+                  className="w-24 bg-[#111827] border border-[#2b3545] rounded-lg px-2.5 py-1 text-[#f3f4f6] font-mono focus:outline-none focus:border-[#4f7cff]"
                 />
-                <span className="text-[#a6b4c9]">Mbps</span>
+                <span className="text-[#9ca8b8]">Mbps</span>
               </div>
 
               <div className="flex items-center gap-2">
-                <label className="text-[#a6b4c9]">Std Dev (σ):</label>
+                <label className="text-[#9ca8b8]">Std Dev (σ):</label>
                 <input
                   type="number"
                   step="0.5"
                   min="0.5"
                   value={stdDev}
                   onChange={e => handleStdChange(e.target.value)}
-                  className="w-24 bg-[#0b1426] border border-[#2c3d58] rounded-lg px-2.5 py-1 text-[#f4f7fc] font-mono focus:outline-none focus:border-[#8cc8ff]"
+                  className="w-24 bg-[#111827] border border-[#2b3545] rounded-lg px-2.5 py-1 text-[#f3f4f6] font-mono focus:outline-none focus:border-[#4f7cff]"
                 />
-                <span className="text-[#a6b4c9]">Mbps</span>
+                <span className="text-[#9ca8b8]">Mbps</span>
               </div>
 
               <button
                 onClick={handleResetToBaseline}
-                className="px-3 py-1 rounded-lg bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] transition-colors cursor-pointer"
+                className="px-3 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] transition-colors cursor-pointer"
               >
                 Reset Moments
               </button>
@@ -371,7 +371,7 @@ export default function WhatIfSimulator() {
 
       {/* Dynamic Results Grid */}
       {loading ? (
-        <LoadingState message="Executing FastAPI /api/simulation calculations..." />
+        <LoadingState message="Executing simulation calculations..." />
       ) : error ? (
         <ErrorState
           title="Simulation Error"
@@ -450,31 +450,31 @@ export default function WhatIfSimulator() {
               >
                 <div className="space-y-4 font-sans text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-[#a6b4c9] uppercase text-[11px] font-medium">Assessment:</span>
+                    <span className="text-[#9ca8b8] uppercase text-[11px] font-medium">Assessment:</span>
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                         interpretation.badgeColor === 'rose'
-                          ? 'bg-[#f87171]/10 text-[#f87171] border border-[#f87171]/30'
+                          ? 'bg-[#d95c5c]/10 text-[#d95c5c] border border-[#d95c5c]/30'
                           : interpretation.badgeColor === 'amber'
-                          ? 'bg-[#fbbf24]/10 text-[#fbbf24] border border-[#fbbf24]/30'
+                          ? 'bg-[#d9a441]/10 text-[#d9a441] border border-[#d9a441]/30'
                           : interpretation.badgeColor === 'emerald'
-                          ? 'bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/30'
-                          : 'bg-[#8cc8ff]/10 text-[#8cc8ff] border border-[#8cc8ff]/30'
+                          ? 'bg-[#35a875]/10 text-[#35a875] border border-[#35a875]/30'
+                          : 'bg-[#4f7cff]/10 text-[#4f7cff] border border-[#4f7cff]/30'
                       }`}
                     >
                       {interpretation.level}
                     </span>
                   </div>
 
-                  <p className="text-[#f4f7fc] leading-relaxed text-sm">
+                  <p className="text-[#f3f4f6] leading-relaxed text-sm">
                     {interpretation.desc}
                   </p>
 
-                  <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1">
-                    <span className="text-[11px] text-[#8cc8ff] font-bold uppercase tracking-wide block">
+                  <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+                    <span className="text-[11px] text-[#4f7cff] font-bold uppercase tracking-wide block">
                       Recommended Action:
                     </span>
-                    <p className="text-[#a6b4c9]">
+                    <p className="text-[#9ca8b8]">
                       {interpretation.action}
                     </p>
                   </div>
@@ -489,33 +489,33 @@ export default function WhatIfSimulator() {
               icon={Activity}
             >
               <div className="space-y-4 font-sans text-xs">
-                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-                  <div className="text-[#8cc8ff] font-bold font-mono">
+                <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545]">
+                  <div className="text-[#4f7cff] font-bold font-mono">
                     H = max(0, min(100, 100 - 25 × max(0, |Z| - 1)))
                   </div>
-                  <div className="text-[11px] text-[#a6b4c9] mt-1">
+                  <div className="text-[11px] text-[#9ca8b8] mt-1">
                     * NETPULSE Application-Level Score — Designed for clear operational feedback.
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-                    <span className="text-[#34d399] font-bold font-mono">90 – 100:</span> Excellent (|Z| ≤ 1.4σ)
+                  <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545]">
+                    <span className="text-[#35a875] font-bold font-mono">90 – 100:</span> Excellent (|Z| ≤ 1.4σ)
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-                    <span className="text-[#8cc8ff] font-bold font-mono">70 – 89:</span> Healthy (|Z| ≤ 2.2σ)
+                  <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545]">
+                    <span className="text-[#4f7cff] font-bold font-mono">70 – 89:</span> Healthy (|Z| ≤ 2.2σ)
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-                    <span className="text-[#fbbf24] font-bold font-mono">50 – 69:</span> Warning (|Z| ≤ 3.0σ)
+                  <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545]">
+                    <span className="text-[#d9a441] font-bold font-mono">50 – 69:</span> Warning (|Z| ≤ 3.0σ)
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
-                    <span className="text-[#f87171] font-bold font-mono">0 – 49:</span> Critical (|Z| &gt; 3.0σ)
+                  <div className="p-2.5 rounded-xl bg-[#111827] border border-[#2b3545]">
+                    <span className="text-[#d95c5c] font-bold font-mono">0 – 49:</span> Critical (|Z| &gt; 3.0σ)
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-between items-center text-[11px] text-[#a6b4c9] border-t border-[#2c3d58]">
+                <div className="pt-2 flex justify-between items-center text-[11px] text-[#9ca8b8] border-t border-[#2b3545]">
                   <span>Current Calculated Health:</span>
-                  <span className="text-[#f4f7fc] font-bold text-sm font-mono">
+                  <span className="text-[#f3f4f6] font-bold text-sm font-mono">
                     {simData.health_score} / 100 ({simData.health_band})
                   </span>
                 </div>
@@ -524,21 +524,21 @@ export default function WhatIfSimulator() {
           </div>
 
           {/* Cross Navigation Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#14233d] border border-[#2c3d58] text-xs font-sans">
-            <span className="text-[#a6b4c9]">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] text-xs font-sans">
+            <span className="text-[#9ca8b8]">
               Ready to solve specific probability intervals or investigate standardized Z-scores?
             </span>
             <div className="flex items-center gap-3">
               <Link
                 to="/probability-lab"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] transition-colors"
               >
                 <span>Probability Lab</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#8cc8ff]" />
+                <ArrowRight className="w-3.5 h-3.5 text-[#4f7cff]" />
               </Link>
               <Link
                 to="/zscore-analysis"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white font-medium transition-colors shadow-sm"
               >
                 <span>Z-Score Analysis</span>
                 <ArrowRight className="w-3.5 h-3.5" />

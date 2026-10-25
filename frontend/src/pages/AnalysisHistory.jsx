@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   History,
-  Database,
   FlaskConical,
-  ArrowRight,
   ShieldAlert,
   LogIn,
   RefreshCw,
-  Clock,
-  Activity,
   ExternalLink
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
@@ -102,7 +98,7 @@ export default function AnalysisHistory() {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn font-sans">
       <PageHeader
         title="Analysis History & Telemetry Audit Trail"
         subtitle="Historical statistical records, calculation snapshots, and reload-into-lab parameters."
@@ -115,21 +111,20 @@ export default function AnalysisHistory() {
           title="Guest Session Notice — Authentication Required for Private Audit Logs"
           subtitle="Row-Level Security (RLS) protects user telemetry records"
           icon={ShieldAlert}
-          className="border-[#2C3D58] bg-[#14233D]"
         >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-[#A6B4C9]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-sans text-[#9ca8b8]">
             <div className="space-y-1">
               <p>
-                You are currently in <strong className="text-amber-300">Guest Analyst Mode</strong>. Under NETPULSE security policies, private analysis history records require an authenticated user identity (<code className="text-[#8CC8FF] font-bold">auth.uid()</code>).
+                You are currently in <strong className="text-[#d9a441]">Guest Mode</strong>. Under security policies, private analysis history records require an authenticated user identity (<code className="text-[#4f7cff] font-mono">auth.uid()</code>).
               </p>
-              <p className="text-[#A6B4C9]/80">
+              <p className="text-[#9ca8b8]/80">
                 Please sign in to save and review historical calculation snapshots.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-bold transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white font-medium transition-colors shadow-sm"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Go to Login</span>
@@ -142,14 +137,14 @@ export default function AnalysisHistory() {
       {/* Audit Log Table */}
       <Panel
         title="Persisted Telemetry Evaluations"
-        subtitle={isAuthenticated ? `Audit log for authenticated operator: ${user?.username || 'Student'}` : 'Historical execution log (Sign in to view)'}
+        subtitle={isAuthenticated ? `Audit log for authenticated operator: ${user?.username || 'User'}` : 'Historical execution log (Sign in to view)'}
         icon={History}
         actions={
           isAuthenticated ? (
             <button
               onClick={loadHistory}
               disabled={loading}
-              className="flex items-center gap-1.5 text-xs font-mono text-[#A6B4C9] hover:text-[#8CC8FF] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-sans text-[#9ca8b8] hover:text-[#4f7cff] transition-colors cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -163,12 +158,12 @@ export default function AnalysisHistory() {
             <LoadingState message="Retrieving private analysis history..." compact />
           </div>
         ) : errorMsg ? (
-          <div className="p-8 text-center text-xs font-mono text-[#F87171]">
+          <div className="p-8 text-center text-xs font-mono text-[#d95c5c]">
             {errorMsg}
           </div>
         ) : (
-          <table className="w-full text-left font-mono text-xs">
-            <thead className="bg-[#101A2D] border-b border-[#2C3D58] text-[#A6B4C9] uppercase text-[10px] tracking-wider">
+          <table className="w-full text-left font-sans text-xs">
+            <thead className="bg-[#111827] border-b border-[#2b3545] text-[#9ca8b8] uppercase text-[10px] tracking-wider">
               <tr>
                 <th className="py-3 px-5">Timestamp</th>
                 <th className="py-3 px-5">Dataset</th>
@@ -181,7 +176,7 @@ export default function AnalysisHistory() {
                 <th className="py-3 px-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2C3D58]/60">
+            <tbody className="divide-y divide-[#2b3545]/60">
               {historyRecords.length === 0 ? (
                 <tr>
                   <td colSpan="9" className="p-8">
@@ -196,7 +191,7 @@ export default function AnalysisHistory() {
                       action={
                         <Link
                           to="/technical-lab"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-mono text-xs font-semibold transition-colors shadow-sm"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white font-sans text-xs font-medium transition-colors shadow-sm"
                         >
                           <FlaskConical className="w-3.5 h-3.5" />
                           <span>Launch Technical Lab</span>
@@ -207,37 +202,37 @@ export default function AnalysisHistory() {
                 </tr>
               ) : (
                 historyRecords.map((rec) => (
-                  <tr key={rec.id} className="hover:bg-[#1B2B46]/40 transition-colors">
-                    <td className="py-3 px-5 text-[#A6B4C9]">
+                  <tr key={rec.id} className="hover:bg-[#202938]/40 transition-colors">
+                    <td className="py-3 px-5 text-[#9ca8b8]">
                       {new Date(rec.created_at).toLocaleString()}
                     </td>
-                    <td className="py-3 px-5 text-[#F4F7FC] font-bold">
+                    <td className="py-3 px-5 text-[#f3f4f6] font-medium">
                       {rec.dataset_name}
                     </td>
-                    <td className="py-3 px-5 text-[#F4F7FC]">
+                    <td className="py-3 px-5 text-[#f3f4f6] font-mono">
                       {rec.current_load} Mbps
                     </td>
-                    <td className="py-3 px-5 text-[#8CC8FF]">
+                    <td className="py-3 px-5 text-[#4f7cff] font-mono">
                       {rec.mean} Mbps
                     </td>
-                    <td className="py-3 px-5 text-[#8CC8FF] font-bold">
+                    <td className="py-3 px-5 text-[#4f7cff] font-mono font-bold">
                       {rec.z_score > 0 ? `+${rec.z_score}` : rec.z_score}σ
                     </td>
-                    <td className="py-3 px-5 text-[#A6B4C9]">
+                    <td className="py-3 px-5 text-[#9ca8b8] font-mono">
                       {(rec.probability * 100).toFixed(2)}%
                     </td>
                     <td className="py-3 px-5">
                       <StatusBadge status={rec.status} size="sm" />
                     </td>
-                    <td className="py-3 px-5 font-bold">
-                      <span className={rec.health_score >= 70 ? 'text-[#34D399]' : rec.health_score >= 50 ? 'text-[#FBBF24]' : 'text-[#F87171]'}>
+                    <td className="py-3 px-5 font-bold font-mono">
+                      <span className={rec.health_score >= 70 ? 'text-[#35a875]' : rec.health_score >= 50 ? 'text-[#d9a441]' : 'text-[#d95c5c]'}>
                         {rec.health_score} / 100
                       </span>
                     </td>
                     <td className="py-3 px-5 text-right">
                       <button
                         onClick={() => handleLoadIntoLab(rec)}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] hover:text-[#8CC8FF] border border-[#2C3D58] text-[#F4F7FC] text-[11px] font-semibold transition-all"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#202938] hover:bg-[#2b3545] hover:text-[#4f7cff] border border-[#2b3545] text-[#f3f4f6] text-[11px] font-medium transition-all cursor-pointer"
                       >
                         <ExternalLink className="w-3 h-3" />
                         <span>Load Lab</span>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  LayoutDashboard,
   Activity,
   AlertTriangle,
   RefreshCw,
@@ -66,26 +65,25 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 sm:space-y-8 font-sans">
       <PageHeader
-        title="NOC Command Dashboard"
-        subtitle="Live campus gateway telemetry, continuous statistical surveillance, and empirical anomaly triage."
-        modeBadge="OVERVIEW"
+        title="Network Telemetry Monitor"
+        subtitle="Gateway throughput observation, normal distribution baseline comparison, and statistical anomaly triage."
         actions={
           <button
             onClick={loadData}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] text-xs font-sans font-medium transition-colors disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] hover:border-[#4f7cff] text-xs font-sans font-medium transition-colors disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span>Poll Telemetry</span>
+            <span>Refresh Feed</span>
           </button>
         }
       />
 
       {loading ? (
-        <LoadingState message="Connecting to NOC gateway telemetry stream..." />
+        <LoadingState message="Connecting to telemetry stream..." />
       ) : error ? (
         <ErrorState
-          title="NOC Telemetry Feed Offline"
+          title="Telemetry Feed Offline"
           message={error}
           onRetry={loadData}
         />
@@ -94,164 +92,105 @@ export default function Dashboard() {
           {/* Top Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <MetricCard
-              label="Fleet Mean Throughput"
+              label="Mean Throughput (μ)"
               value={dataset.mean}
               unit="Mbps"
-              subtext="Sample Mean (μ)"
-              icon={TrendingUp}
-              accent="blue"
-            />
-            <MetricCard
-              label="Standard Deviation"
-              value={dataset.std_dev}
-              unit="Mbps"
-              subtext="Dispersion spread (s)"
+              subtext="Sample Mean"
               icon={Activity}
               accent="blue"
             />
             <MetricCard
-              label="Peak Recorded Load"
-              value={dataset.max}
+              label="Standard Deviation (σ)"
+              value={dataset.std_dev}
               unit="Mbps"
-              subtext={`Min: ${dataset.min} Mbps`}
-              icon={BarChart2}
-              accent={dataset.max > dataset.mean + 2 * dataset.std_dev ? 'rose' : 'emerald'}
+              subtext="Volatility Benchmark"
+              icon={TrendingUp}
+              accent="blue"
             />
             <MetricCard
-              label="Statistical Anomalies"
+              label="Detected Anomalies"
               value={anomalies.length}
-              unit="Outliers"
-              subtext="Readings exceeding |Z| > 2σ"
+              subtext="Observations |Z| > 2.0"
               icon={AlertTriangle}
               accent={anomalies.length > 0 ? 'amber' : 'emerald'}
-              badge={anomalies.length > 0 ? <StatusBadge status="WARNING" size="sm" /> : <StatusBadge status="NORMAL" size="sm" />}
+            />
+            <MetricCard
+              label="Normal Operating Band"
+              value="±2.0σ"
+              subtext="95.45% Confidence Bound"
+              icon={ShieldCheck}
+              accent="slate"
             />
           </div>
 
-          {/* Time Series Telemetry Trend */}
+          {/* Real-time Time Series Telemetry */}
           <Panel
-            title="Gateway Traffic Bandwidth Over Time"
-            subtitle={`Showing ${dataset.total_records} hourly telemetry records with Gaussian bounds`}
+            title="Gateway Telemetry Feed"
+            subtitle="Continuous throughput monitoring with empirical 2-sigma thresholds"
             icon={Activity}
-            actions={
-              <Link
-                to="/technical-lab"
-                className="inline-flex items-center gap-1 text-xs font-sans text-[#8cc8ff] hover:text-[#a3d5ff]"
-              >
-                <span>Full Lab Workbench</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            }
           >
             <NetworkTrendChart
-              data={dataset.data}
+              data={dataset.data || []}
               mean={dataset.mean}
               stdDev={dataset.std_dev}
               height={300}
             />
           </Panel>
 
-          {/* Bottom Grid: Anomalies Triage & Recent Telemetry Table */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Real Anomalies Panel */}
-            <Panel
-              title="Empirical Outlier Triage"
-              subtitle="Observations where |Z| > 2.0"
-              icon={AlertTriangle}
-              className="lg:col-span-1"
-            >
-              {anomalies.length > 0 ? (
-                <div className="space-y-3">
-                  {anomalies.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1 font-mono text-xs"
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#a6b4c9] font-semibold">{item.timestamp}</span>
-                        <StatusBadge status={item.status} size="sm" />
-                      </div>
-                      <div className="flex items-baseline justify-between pt-1">
-                        <span className="text-[#f4f7fc] font-bold text-sm">
-                          {item.network_load} <span className="text-xs text-[#a6b4c9] font-normal">Mbps</span>
-                        </span>
-                        <span className="text-[#fbbf24] font-bold">
-                          Z = {item.z_score > 0 ? `+${item.z_score}` : item.z_score}σ
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#a6b4c9] pt-1">
-                        Traffic exceeds 2 standard deviations from campus baseline mean.
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-xs font-sans text-[#a6b4c9] space-y-2">
-                  <CheckCircle2 className="w-8 h-8 text-[#34d399] mx-auto" />
-                  <p className="text-[#f4f7fc] font-medium">All telemetry points within 2σ normal band.</p>
-                  <p className="text-[11px] text-[#a6b4c9]">No active outliers detected in this sample.</p>
-                </div>
-              )}
-            </Panel>
-
-            {/* Telemetry Stream Log Table */}
-            <Panel
-              title="Campus Telemetry Hourly Records"
-              subtitle={`Complete time-series sample stream (n = ${dataset.total_records})`}
-              icon={Clock}
-              className="lg:col-span-2"
-              bodyClassName="p-0 overflow-x-auto"
-            >
-              <div className="max-h-[360px] overflow-y-auto">
-                <table className="w-full text-left font-mono text-xs">
-                  <thead className="bg-[#1b2b46] sticky top-0 border-b border-[#2c3d58] text-[#a6b4c9] uppercase text-[10px] tracking-wider font-sans">
-                    <tr>
-                      <th className="py-2.5 px-4">Timestamp</th>
-                      <th className="py-2.5 px-4">Observed Load</th>
-                      <th className="py-2.5 px-4">Standardized Z</th>
-                      <th className="py-2.5 px-4">Classification</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#2c3d58] text-[#a6b4c9]">
-                    {dataset.data.map((row, idx) => {
-                      const z = Number(((row.network_load - dataset.mean) / dataset.std_dev).toFixed(2))
-                      const status = z > 2.0 ? 'UNUSUALLY HIGH' : z < -2.0 ? 'UNUSUALLY LOW' : 'NORMAL'
-
-                      return (
-                        <tr key={idx} className="hover:bg-[#1b2b46]/40 transition-colors">
-                          <td className="py-2.5 px-4 text-[#a6b4c9] font-semibold">{row.timestamp}</td>
-                          <td className="py-2.5 px-4 font-bold text-[#f4f7fc]">{row.network_load} Mbps</td>
-                          <td className="py-2.5 px-4 text-[#f4f7fc]">
-                            <span className={z > 2 ? 'text-[#f87171] font-bold' : z < -2 ? 'text-[#8cc8ff] font-bold' : 'text-[#f4f7fc]'}>
-                              {z > 0 ? `+${z}` : z}σ
-                            </span>
-                          </td>
-                          <td className="py-2.5 px-4">
-                            <StatusBadge status={status} size="sm" />
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
+          {/* Anomaly Triage Table */}
+          <Panel
+            title="Statistical Anomaly Log"
+            subtitle="Telemetry records exceeding ±2.0 standard deviations from the baseline mean"
+            icon={AlertTriangle}
+            bodyClassName="p-0 overflow-x-auto"
+          >
+            {anomalies.length === 0 ? (
+              <div className="p-8">
+                <EmptyState
+                  title="No Anomalous Telemetry Detected"
+                  message="All observed traffic readings operate strictly within the nominal ±2.0 standard deviation interval."
+                  icon={CheckCircle2}
+                />
               </div>
-            </Panel>
-          </div>
+            ) : (
+              <table className="w-full text-left font-mono text-xs">
+                <thead className="bg-[#111827] border-b border-[#2b3545] text-[#9ca8b8] uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="py-3 px-5">Timestamp</th>
+                    <th className="py-3 px-5">Throughput</th>
+                    <th className="py-3 px-5">Standardized Z-Score</th>
+                    <th className="py-3 px-5">Classification</th>
+                    <th className="py-3 px-5 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#2b3545]/60">
+                  {anomalies.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-[#202938]/40 transition-colors">
+                      <td className="py-3 px-5 text-[#9ca8b8]">{item.timestamp}</td>
+                      <td className="py-3 px-5 text-[#f3f4f6] font-bold">{item.network_load} Mbps</td>
+                      <td className="py-3 px-5 text-[#4f7cff] font-bold">
+                        {item.z_score > 0 ? `+${item.z_score}` : item.z_score}σ
+                      </td>
+                      <td className="py-3 px-5">
+                        <StatusBadge status={item.status} size="sm" />
+                      </td>
+                      <td className="py-3 px-5 text-right">
+                        <Link
+                          to="/technical-lab"
+                          className="inline-flex items-center gap-1 text-[#4f7cff] hover:underline"
+                        >
+                          <span>Analyze</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </Panel>
         </>
-      ) : (
-        <EmptyState
-          title="Telemetry Data Unavailable"
-          message="No active campus network load dataset loaded from the server."
-          action={
-            <button
-              onClick={loadData}
-              className="px-4 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-semibold text-xs transition cursor-pointer"
-            >
-              Load Baseline Dataset
-            </button>
-          }
-        />
-      )}
+      ) : null}
     </div>
   )
 }

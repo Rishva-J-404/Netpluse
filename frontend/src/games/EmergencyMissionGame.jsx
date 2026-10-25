@@ -59,26 +59,26 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
   if (viewMode === 'simulator') {
     return (
       <div className="space-y-4 max-w-5xl mx-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-[#2C3D58]">
+        <div className="flex items-center justify-between pb-3 border-b border-[#2b3545]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#8CC8FF] uppercase tracking-wider font-bold">
+            <span className="text-xs font-mono text-[#4f7cff] uppercase tracking-wider font-bold">
               GAME 5 — NETWORK EMERGENCY MISSION
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#1B2B46] text-[#34D399] border border-[#2C3D58] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#202938] text-[#35a875] border border-[#2b3545] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#35a875] animate-pulse"></span>
               3D SIMULATOR ACTIVE
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('classic')}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3.5 py-1.5 rounded-xl bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Classic Multi-Step Mode
             </button>
             <button
               onClick={onLeave}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3.5 py-1.5 rounded-xl bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Exit to Lobby
             </button>
@@ -227,7 +227,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 1
-              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
+              ? 'bg-[#181f2b] border-blue-500 text-white font-bold'
               : step1Result?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -240,7 +240,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 2
-              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
+              ? 'bg-[#181f2b] border-blue-500 text-white font-bold'
               : step2Result?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -253,7 +253,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 3
-              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
+              ? 'bg-[#181f2b] border-blue-500 text-white font-bold'
               : finalResult?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -372,7 +372,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
                     onClick={() => setStep2Choice(opt)}
                     className={`p-3 rounded-xl border text-center font-mono text-xs transition-all ${
                       step2Choice === opt
-                        ? 'bg-[#161f30] border-blue-500 text-white font-bold ring-1 ring-blue-500/40'
+                        ? 'bg-[#181f2b] border-blue-500 text-white font-bold ring-1 ring-blue-500/40'
                         : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                     }`}
                   >

@@ -30,17 +30,17 @@ function GaussianTooltip({ active, payload, mean, stdDev }) {
     }
 
     return (
-      <div className="rounded-xl bg-[#14233d] border border-[#2c3d58] p-3 shadow-xl text-xs font-mono space-y-1">
-        <p className="text-[#a6b4c9] font-semibold">Throughput: <span className="text-[#f4f7fc] font-bold">{x.toFixed(2)} Mbps</span></p>
-        <p className="text-[#8cc8ff]">Density f(x): <span className="font-bold">{pdf.toFixed(6)}</span></p>
+      <div className="rounded-xl bg-[#181f2b] border border-[#2b3545] p-3 shadow-xl text-xs font-mono space-y-1">
+        <p className="text-[#9ca8b8]">Throughput: <span className="text-[#f3f4f6] font-bold">{x.toFixed(2)} Mbps</span></p>
+        <p className="text-[#4f7cff]">Density f(x): <span className="font-bold">{pdf.toFixed(6)}</span></p>
         {z !== null && (
-          <p className="text-[#a6b4c9]">
-            Z-Distance: <span className={Math.abs(Number(z)) > 2 ? 'text-[#f87171] font-bold' : 'text-[#34d399]'}>
+          <p className="text-[#9ca8b8]">
+            Z-Distance: <span className={Math.abs(Number(z)) > 2 ? 'text-[#d95c5c] font-bold' : 'text-[#35a875]'}>
               {Number(z) > 0 ? `+${z}` : z}σ
             </span>
           </p>
         )}
-        <p className="text-[10px] text-[#a6b4c9] pt-1 border-t border-[#2c3d58]">{regionLabel}</p>
+        <p className="text-[10px] text-[#9ca8b8] pt-1 border-t border-[#2b3545]">{regionLabel}</p>
       </div>
     )
   }
@@ -48,8 +48,7 @@ function GaussianTooltip({ active, payload, mean, stdDev }) {
 }
 
 /**
- * GaussianBellChart - Reusable interactive normal distribution visualizer.
- * Renders discrete (x, pdf) coordinates returned by the Python FastAPI engine.
+ * GaussianBellChart - Interactive normal distribution visualizer.
  */
 export default function GaussianBellChart({
   curvePoints = [],
@@ -63,7 +62,7 @@ export default function GaussianBellChart({
 }) {
   if (!curvePoints || curvePoints.length === 0) {
     return (
-      <div className="h-[220px] flex items-center justify-center text-xs font-mono text-[#a6b4c9]">
+      <div className="h-[220px] flex items-center justify-center text-xs font-mono text-[#9ca8b8]">
         No Gaussian distribution coordinates returned from backend.
       </div>
     )
@@ -89,16 +88,16 @@ export default function GaussianBellChart({
           >
             <defs>
               <linearGradient id="bellGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8cc8ff" stopOpacity={0.35} />
-                <stop offset="95%" stopColor="#8cc8ff" stopOpacity={0.02} />
+                <stop offset="5%" stopColor="#4f7cff" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#4f7cff" stopOpacity={0.02} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" stroke="#2c3d58" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#2b3545" vertical={false} />
 
             <XAxis
               dataKey="x"
-              stroke="#a6b4c9"
+              stroke="#9ca8b8"
               fontSize={11}
               tickLine={false}
               fontFamily="ui-monospace, monospace"
@@ -107,7 +106,7 @@ export default function GaussianBellChart({
 
             <YAxis
               dataKey="pdf"
-              stroke="#a6b4c9"
+              stroke="#9ca8b8"
               fontSize={11}
               tickLine={false}
               fontFamily="ui-monospace, monospace"
@@ -122,11 +121,11 @@ export default function GaussianBellChart({
             {showMarkers && mMean !== undefined && mMean !== null && (
               <ReferenceLine
                 x={mMean}
-                stroke="#8cc8ff"
+                stroke="#4f7cff"
                 strokeWidth={2}
                 label={{
                   value: `μ = ${mMean}`,
-                  fill: '#8cc8ff',
+                  fill: '#4f7cff',
                   fontSize: 10,
                   position: 'top',
                   fontFamily: 'ui-monospace'
@@ -138,17 +137,17 @@ export default function GaussianBellChart({
             {showMarkers && mP1 !== null && (
               <ReferenceLine
                 x={mP1}
-                stroke="#34d399"
+                stroke="#35a875"
                 strokeDasharray="4 4"
-                label={{ value: '+1σ', fill: '#34d399', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '+1σ', fill: '#35a875', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
             {showMarkers && mM1 !== null && (
               <ReferenceLine
                 x={mM1}
-                stroke="#34d399"
+                stroke="#35a875"
                 strokeDasharray="4 4"
-                label={{ value: '-1σ', fill: '#34d399', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '-1σ', fill: '#35a875', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
 
@@ -156,19 +155,19 @@ export default function GaussianBellChart({
             {showMarkers && mP2 !== null && (
               <ReferenceLine
                 x={mP2}
-                stroke="#fbbf24"
+                stroke="#d9a441"
                 strokeDasharray="4 4"
                 strokeWidth={1.5}
-                label={{ value: '+2σ', fill: '#fbbf24', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '+2σ', fill: '#d9a441', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
             {showMarkers && mM2 !== null && (
               <ReferenceLine
                 x={mM2}
-                stroke="#fbbf24"
+                stroke="#d9a441"
                 strokeDasharray="4 4"
                 strokeWidth={1.5}
-                label={{ value: '-2σ', fill: '#fbbf24', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '-2σ', fill: '#d9a441', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
 
@@ -176,17 +175,17 @@ export default function GaussianBellChart({
             {showMarkers && mP3 !== null && (
               <ReferenceLine
                 x={mP3}
-                stroke="#f87171"
+                stroke="#d95c5c"
                 strokeDasharray="2 2"
-                label={{ value: '+3σ', fill: '#f87171', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '+3σ', fill: '#d95c5c', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
             {showMarkers && mM3 !== null && (
               <ReferenceLine
                 x={mM3}
-                stroke="#f87171"
+                stroke="#d95c5c"
                 strokeDasharray="2 2"
-                label={{ value: '-3σ', fill: '#f87171', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
+                label={{ value: '-3σ', fill: '#d95c5c', fontSize: 10, position: 'top', fontFamily: 'ui-monospace' }}
               />
             )}
 
@@ -194,11 +193,11 @@ export default function GaussianBellChart({
             {mCurrent !== null && (
               <ReferenceLine
                 x={mCurrent}
-                stroke="#f4f7fc"
+                stroke="#f3f4f6"
                 strokeWidth={2.5}
                 label={{
                   value: `Load: ${mCurrent.toFixed(1)}M`,
-                  fill: '#f4f7fc',
+                  fill: '#f3f4f6',
                   fontSize: 11,
                   position: 'top',
                   fontFamily: 'ui-monospace',
@@ -210,7 +209,7 @@ export default function GaussianBellChart({
             <Area
               type="monotone"
               dataKey="pdf"
-              stroke="#8cc8ff"
+              stroke="#4f7cff"
               strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#bellGrad)"
@@ -220,28 +219,28 @@ export default function GaussianBellChart({
         </ResponsiveContainer>
       </div>
 
-      {/* Educational Color Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-mono text-[#a6b4c9] pt-2 border-t border-[#2c3d58]">
+      {/* Color Legend */}
+      <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-mono text-[#9ca8b8] pt-2 border-t border-[#2b3545]">
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#8cc8ff]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#4f7cff]" />
           <span>Mean (μ)</span>
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#34d399]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#35a875]" />
           <span>±1σ (68.27% Nominal)</span>
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#d9a441]" />
           <span>±2σ (95.45% Threshold)</span>
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#f87171]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#d95c5c]" />
           <span>±3σ (99.73% Extreme)</span>
         </span>
         {mCurrent !== null && (
           <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#f4f7fc]" />
-            <span className="text-[#f4f7fc] font-bold">Observed Load ({mCurrent} Mbps)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#f3f4f6]" />
+            <span className="text-[#f3f4f6] font-bold">Observed Load ({mCurrent} Mbps)</span>
           </span>
         )}
       </div>

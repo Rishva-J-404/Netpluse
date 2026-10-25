@@ -1,32 +1,19 @@
 import React, { useState } from 'react'
-import {
-  Radio,
-  Activity,
-  AlertTriangle,
-  Send,
-  Info,
-  Clock,
-  ArrowRight,
-  TrendingUp,
-  RotateCcw,
-  Gauge
-} from 'lucide-react'
+import { Radio, Send, Gauge, Info } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
-import Panel from '../components/Panel'
-import StatusBadge from '../components/StatusBadge'
-import LoadingState from '../components/LoadingState'
-import ErrorState from '../components/ErrorState'
 import GameResultCard from './GameResultCard'
 import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
+import Panel from '../components/Panel'
 
 export default function TrafficControllerGame({ scenario, onLeave }) {
-  const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
-  const [viewMode, setViewMode] = useState('simulator')
+  const { submitAnswer, submitting, lastResult, clearResult, completeGame } = useGame()
   const [selectedOption, setSelectedOption] = useState('')
+  const [submissionError, setSubmissionError] = useState(null)
+  const [viewMode, setViewMode] = useState('simulator') // 'simulator' | 'classic'
 
-  // Scenario fallback if not supplied
+  // Default scenario fallback
   const sc = scenario || {
-    id: 'traffic_controller_01',
+    id: 'campus_rush',
     game: 'traffic_controller',
     title: 'Campus Registration Rush',
     description: 'Network load is rapidly escalating during online course registration.',
@@ -46,27 +33,27 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
   // 3D Simulator Mode (Default)
   if (viewMode === 'simulator') {
     return (
-      <div className="space-y-4 max-w-5xl mx-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-[#2C3D58]">
+      <div className="space-y-4 max-w-5xl mx-auto font-sans">
+        <div className="flex items-center justify-between pb-3 border-b border-[#2b3545]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#8CC8FF] uppercase tracking-wider font-bold">
+            <span className="text-xs font-mono text-[#4f7cff] uppercase tracking-wider font-bold">
               GAME 1 — TRAFFIC CONTROLLER
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#1B2B46] text-[#34D399] border border-[#2C3D58] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#202938] text-[#35a875] border border-[#2b3545] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#35a875] animate-pulse"></span>
               3D SIMULATOR ACTIVE
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('classic')}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Classic Workbench Mode
             </button>
             <button
               onClick={onLeave}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Exit to Lobby
             </button>
@@ -119,28 +106,28 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto font-sans">
       {/* Game Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#26354d]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2b3545]">
         <div>
-          <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider block font-bold">
+          <span className="text-xs font-mono text-[#4f7cff] uppercase tracking-wider block font-bold">
             GAME 1 — TRAFFIC CONTROLLER (CLASSIC WORKBENCH)
           </span>
-          <h2 className="text-2xl font-bold font-mono text-[#f9fafb] mt-1">
+          <h2 className="text-2xl font-bold font-sans text-[#f3f4f6] mt-1">
             {sc.title}
           </h2>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode('simulator')}
-            className="px-3 py-1.5 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-mono font-bold transition flex items-center gap-1.5 shadow"
+            className="px-3.5 py-1.5 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white text-xs font-sans font-medium transition flex items-center gap-1.5 shadow cursor-pointer"
           >
             <Gauge className="w-3.5 h-3.5" />
             Switch to 3D Simulator
           </button>
           <button
             onClick={onLeave}
-            className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] text-xs font-mono border border-[#26354d] transition-colors"
+            className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-[#181f2b] hover:bg-[#202938] text-[#9ca8b8] text-xs font-sans border border-[#2b3545] transition-colors cursor-pointer"
           >
             Exit to Lobby
           </button>
@@ -148,54 +135,54 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
       </div>
 
       {/* Narrative Context Card */}
-      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-300 space-y-2">
-        <div className="flex items-center gap-2 text-blue-400 font-bold">
+      <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] text-xs font-sans text-[#9ca8b8] space-y-2">
+        <div className="flex items-center gap-2 text-[#4f7cff] font-bold">
           <Info className="w-4 h-4 shrink-0" />
           <span>Operational Situation Report:</span>
         </div>
-        <p className="font-sans text-sm text-slate-300 leading-relaxed">
+        <p className="font-sans text-sm text-[#f3f4f6] leading-relaxed">
           {sc.description}
         </p>
-        <p className="text-[11px] text-slate-500 font-sans">
-          Notice: Telemetry spikes indicate statistical anomalies under normal distribution assumptions. They provide empirical evidence for incident triage, but do not inherently prove a specific cyberattack.
+        <p className="text-[11px] text-[#9ca8b8] font-sans">
+          Notice: Telemetry spikes indicate statistical anomalies under normal distribution assumptions. They provide empirical evidence for incident triage, but do not inherently prove a specific attack.
         </p>
       </div>
 
       {/* Telemetry Stream & History */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Baseline Parameters */}
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
-          <span className="text-slate-500 uppercase text-[10px] block">Baseline Parameters</span>
-          <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-            <span className="text-slate-400">Baseline Mean (μ):</span>
-            <span className="text-white font-bold">{sc.baseline_mean || sc.mean || 50.0} Mbps</span>
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-2 text-xs font-sans">
+          <span className="text-[#9ca8b8] uppercase text-[10px] block font-medium">Baseline Parameters</span>
+          <div className="flex justify-between items-center py-1 border-b border-[#2b3545]/60 font-mono">
+            <span className="text-[#9ca8b8] font-sans">Baseline Mean (μ):</span>
+            <span className="text-[#f3f4f6] font-bold">{sc.baseline_mean || sc.mean || 50.0} Mbps</span>
           </div>
-          <div className="flex justify-between items-center py-1 border-b border-slate-800/60">
-            <span className="text-slate-400">Std Dev (σ):</span>
-            <span className="text-white font-bold">{sc.baseline_std || sc.std_dev || 5.0} Mbps</span>
+          <div className="flex justify-between items-center py-1 border-b border-[#2b3545]/60 font-mono">
+            <span className="text-[#9ca8b8] font-sans">Std Dev (σ):</span>
+            <span className="text-[#f3f4f6] font-bold">{sc.baseline_std || sc.std_dev || 5.0} Mbps</span>
           </div>
-          <div className="flex justify-between items-center py-1 text-rose-400">
-            <span>Current Telemetry:</span>
+          <div className="flex justify-between items-center py-1 text-[#d95c5c] font-mono">
+            <span className="font-sans">Current Telemetry:</span>
             <span className="font-bold text-base">{sc.current_load} Mbps</span>
           </div>
         </div>
 
         {/* Hourly Trend Series */}
-        <div className="md:col-span-2 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
-          <span className="text-slate-500 uppercase text-[10px] block">Recent Hourly Telemetry Log</span>
+        <div className="md:col-span-2 p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-2 text-xs font-sans">
+          <span className="text-[#9ca8b8] uppercase text-[10px] block font-medium">Recent Hourly Telemetry Log</span>
           <div className="grid grid-cols-5 gap-2 pt-1">
             {(sc.history || []).map((pt, i) => {
               const isLatest = i === (sc.history.length - 1)
               return (
                 <div
                   key={pt.time}
-                  className={`p-2 rounded text-center border ${
+                  className={`p-2 rounded-xl text-center border font-mono ${
                     isLatest
-                      ? 'bg-rose-950/40 border-rose-600/60 text-rose-300 font-bold'
-                      : 'bg-slate-900 border-slate-800 text-slate-400'
+                      ? 'bg-[#d95c5c]/10 border-[#d95c5c]/40 text-[#d95c5c] font-bold'
+                      : 'bg-[#111827] border-[#2b3545] text-[#9ca8b8]'
                   }`}
                 >
-                  <div className="text-[10px] text-slate-500">{pt.time}</div>
+                  <div className="text-[10px] text-[#9ca8b8]">{pt.time}</div>
                   <div className="text-xs sm:text-sm mt-0.5">{pt.load}M</div>
                 </div>
               )
@@ -209,12 +196,12 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
         <form onSubmit={handleSubmit} className="space-y-6">
           <Panel
             title="Operator Decision Triage"
-            subtitle="Evaluate current throughput against baseline distribution parameters and choose the appropriate NOC protocol"
+            subtitle="Evaluate current throughput against baseline distribution parameters and choose the appropriate routing protocol"
             icon={Radio}
           >
             <div className="space-y-4">
-              <label className="block text-xs font-mono text-slate-400">
-                Select Network Operations Response:
+              <label className="block text-xs font-sans text-[#9ca8b8] font-medium uppercase tracking-wider">
+                Select Network Response:
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -225,23 +212,23 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
                       type="button"
                       key={opt}
                       onClick={() => setSelectedOption(opt)}
-                      className={`p-4 rounded-xl border text-left transition-all font-mono text-xs ${
+                      className={`p-4 rounded-xl border text-left transition-all font-sans text-xs cursor-pointer ${
                         isSelected
-                          ? 'bg-emerald-950/60 border-emerald-500 text-white ring-1 ring-emerald-500/50 shadow-lg shadow-emerald-950/30'
-                          : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60'
+                          ? 'bg-[#202938] border-[#4f7cff] text-[#f3f4f6] ring-1 ring-[#4f7cff]'
+                          : 'bg-[#111827] border-[#2b3545] text-[#9ca8b8] hover:border-[#4f7cff]/50 hover:bg-[#202938]/60'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="font-bold text-sm text-white">{opt}</span>
+                        <span className="font-semibold text-sm text-[#f3f4f6]">{opt}</span>
                         <span
                           className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
-                            isSelected ? 'border-emerald-400 bg-emerald-500' : 'border-slate-600'
+                            isSelected ? 'border-[#4f7cff] bg-[#4f7cff]' : 'border-[#2b3545]'
                           }`}
                         >
-                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-slate-950" />}
+                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
                         </span>
                       </div>
-                      <span className="text-[11px] text-slate-400 block font-sans">
+                      <span className="text-[11px] text-[#9ca8b8] block font-sans">
                         {opt === 'Continue Monitoring' && 'No anomaly suspected. Keep observation routine.'}
                         {opt === 'Investigate' && 'Moderate variance detected (1σ to 2σ). Audit routing tables.'}
                         {opt === 'Emergency Response' && 'Extreme anomaly (> 3σ). Activate bandwidth mitigations.'}
@@ -252,23 +239,23 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
               </div>
 
               {submissionError && (
-                <div className="p-3 rounded-lg bg-rose-950/50 border border-rose-800 text-xs font-mono text-rose-300">
+                <div className="p-3 rounded-xl bg-[#d95c5c]/10 border border-[#d95c5c]/30 text-xs font-sans text-[#d95c5c]">
                   {submissionError}
                 </div>
               )}
 
               <div className="pt-2 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-slate-500">
-                  Answers are validated authoritatively by the FastAPI Python statistical engine.
+                <span className="text-[11px] font-sans text-[#9ca8b8]">
+                  Answers are validated authoritatively by the statistical engine.
                 </span>
 
                 <button
                   type="submit"
                   disabled={!selectedOption || submitting}
-                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-sans font-medium transition-all ${
                     selectedOption && !submitting
-                      ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-950/50 cursor-pointer'
-                      : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                      ? 'bg-[#4f7cff] hover:bg-[#688fff] text-white cursor-pointer shadow-sm'
+                      : 'bg-[#202938] text-[#9ca8b8]/50 border border-[#2b3545] cursor-not-allowed'
                   }`}
                 >
                   <Send className="w-3.5 h-3.5" />

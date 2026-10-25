@@ -386,7 +386,7 @@ export default function NetworkHighwayEngine({
   }
 
   return (
-    <div className="relative w-full h-[620px] sm:h-[720px] rounded-2xl overflow-hidden bg-[#0B1426] border border-[#2C3D58] shadow-2xl flex flex-col">
+    <div className="relative w-full h-[620px] sm:h-[720px] rounded-xl overflow-hidden bg-[#111827] border border-[#2b3545] shadow-lg flex flex-col">
       
       {/* 3D / Fallback Canvas Viewport */}
       <div ref={containerRef} className="relative flex-1 w-full h-full overflow-hidden" />

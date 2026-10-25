@@ -1,45 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  /* NETPULSE Professional Navy & Light-Blue Design Tokens */
-  --color-brand-bg: #0b1426;
-  --color-brand-card: #14233d;
-  --color-brand-elevated: #1b2b46;
-  --color-brand-accent: #8cc8ff;
-  --color-brand-accent-hover: #a3d5ff;
-  --color-brand-text: #f4f7fc;
-  --color-brand-secondary: #a6b4c9;
-  --color-brand-border: #2c3d58;
+  /* NETPULSE Professional Design Tokens */
+  --color-brand-bg: #111827;
+  --color-brand-card: #181f2b;
+  --color-brand-elevated: #202938;
+  --color-brand-accent: #4f7cff;
+  --color-brand-accent-hover: #6b93ff;
+  --color-brand-text: #f3f4f6;
+  --color-brand-secondary: #9ca8b8;
+  --color-brand-border: #2b3545;
 
   /* Semantic State Colors (Restrained) */
-  --color-status-green: #34d399;
-  --color-status-amber: #fbbf24;
-  --color-status-red: #f87171;
+  --color-status-green: #35a875;
+  --color-status-amber: #d9a441;
+  --color-status-red: #d95c5c;
 
-  /* Aliases for Full Backward Compatibility Across Components */
-  --color-noc-950: #0b1426;
-  --color-noc-900: #14233d;
-  --color-noc-850: #1b2b46;
-  --color-noc-800: #1b2b46;
-  --color-noc-750: #233554;
-  --color-noc-700: #2c3d58;
-  --color-noc-border: #2c3d58;
-  --color-noc-cyan: #8cc8ff;
-  --color-noc-blue: #8cc8ff;
-  --color-noc-emerald: #34d399;
-  --color-noc-amber: #fbbf24;
-  --color-noc-rose: #f87171;
+  /* Backward Compatibility Aliases */
+  --color-noc-950: #111827;
+  --color-noc-900: #181f2b;
+  --color-noc-850: #202938;
+  --color-noc-800: #202938;
+  --color-noc-750: #263143;
+  --color-noc-700: #2b3545;
+  --color-noc-border: #2b3545;
+  --color-noc-cyan: #4f7cff;
+  --color-noc-blue: #4f7cff;
+  --color-noc-emerald: #35a875;
+  --color-noc-amber: #d9a441;
+  --color-noc-rose: #d95c5c;
 
-  --color-graphite-950: #0b1426;
-  --color-graphite-900: #14233d;
-  --color-graphite-850: #1b2b46;
-  --color-graphite-800: #1b2b46;
-  --color-graphite-700: #2c3d58;
-  --color-graphite-border: #2c3d58;
+  --color-graphite-950: #111827;
+  --color-graphite-900: #181f2b;
+  --color-graphite-850: #202938;
+  --color-graphite-800: #202938;
+  --color-graphite-700: #2b3545;
+  --color-graphite-border: #2b3545;
 
-  --color-accent-blue: #8cc8ff;
-  --color-accent-blue-hover: #a3d5ff;
-  --color-accent-teal: #8cc8ff;
+  --color-accent-blue: #4f7cff;
+  --color-accent-blue-hover: #6b93ff;
+  --color-accent-teal: #4f7cff;
 
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -50,8 +50,8 @@
 
 body {
   margin: 0;
-  background-color: #0b1426;
-  color: #f4f7fc;
+  background-color: #111827;
+  color: #f3f4f6;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -63,12 +63,10 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Professional Navy Surface Panel */
+/* Professional Surface Panel */
 .glass-panel {
-  background: rgba(20, 35, 61, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #2c3d58;
+  background: #181f2b;
+  border: 1px solid #2b3545;
 }
 
 /* Custom Scrollbars */
@@ -78,14 +76,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b1426;
+  background: #111827;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2c3d58;
+  background: #2b3545;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3d5172;
+  background: #39465a;
 }

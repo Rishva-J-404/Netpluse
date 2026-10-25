@@ -7,10 +7,6 @@ import {
   ArrowRight,
   RotateCcw,
   FlaskConical,
-  Activity,
-  Target,
-  ShieldAlert,
-  Info,
   Award
 } from 'lucide-react'
 import { useStats } from '../contexts/StatsContext'
@@ -56,59 +52,59 @@ export default function GameResultCard({
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn font-sans">
       {/* Result Status Banner */}
       <div
-        className={`p-5 rounded-2xl border ${
+        className={`p-5 rounded-xl border ${
           isCorrect
-            ? 'bg-[#14233D] border-[#34D399]/50 text-[#F4F7FC]'
-            : 'bg-[#14233D] border-[#F87171]/50 text-[#F4F7FC]'
+            ? 'bg-[#181f2b] border-[#35a875]/50 text-[#f3f4f6]'
+            : 'bg-[#181f2b] border-[#d95c5c]/50 text-[#f3f4f6]'
         } space-y-3`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
             {isCorrect ? (
-              <div className="w-12 h-12 rounded-xl bg-[#1B2B46] border border-[#34D399]/40 flex items-center justify-center text-[#34D399] shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-[#202938] border border-[#35a875]/40 flex items-center justify-center text-[#35a875] shrink-0">
                 <CheckCircle2 className="w-7 h-7" />
               </div>
             ) : (
-              <div className="w-12 h-12 rounded-xl bg-[#1B2B46] border border-[#F87171]/40 flex items-center justify-center text-[#F87171] shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-[#202938] border border-[#d95c5c]/40 flex items-center justify-center text-[#d95c5c] shrink-0">
                 <XCircle className="w-7 h-7" />
               </div>
             )}
             <div>
-              <span className="text-xs font-mono tracking-widest uppercase text-[#A6B4C9]">
-                Backend Authority Verdict
+              <span className="text-xs font-mono tracking-widest uppercase text-[#9ca8b8]">
+                Authority Verdict
               </span>
-              <h3 className="text-xl font-bold font-mono text-[#F4F7FC]">
+              <h3 className="text-xl font-bold font-sans text-[#f3f4f6]">
                 {isCorrect ? 'DECISION VERIFIED CORRECT' : 'DECISION INCORRECT'}
               </h3>
             </div>
           </div>
 
           <div className="text-right">
-            <span className="text-xs font-mono text-[#A6B4C9] block">
+            <span className="text-xs font-sans text-[#9ca8b8] block">
               {result.total_xp !== undefined ? 'Verified XP Reward' : 'Session Reward'}
             </span>
             <span
               className={`text-xl font-mono font-bold ${
-                isCorrect ? 'text-[#34D399]' : 'text-[#FBBF24]'
+                isCorrect ? 'text-[#35a875]' : 'text-[#d9a441]'
               }`}
             >
               +{result.xp_awarded} XP
             </span>
             {result.total_xp !== undefined && (
-              <span className="text-[10px] font-mono text-[#8CC8FF] block">
+              <span className="text-[10px] font-mono text-[#4f7cff] block">
                 Total XP: {result.total_xp} • Level {result.level}
               </span>
             )}
             {result.already_completed && (
-              <span className="text-[10px] font-mono text-[#A6B4C9] block">
+              <span className="text-[10px] font-sans text-[#9ca8b8] block">
                 (Previously recorded)
               </span>
             )}
             {result.alreadyEvaluated && !result.already_completed && (
-              <span className="text-[10px] font-mono text-[#A6B4C9] block">
+              <span className="text-[10px] font-sans text-[#9ca8b8] block">
                 (Previously evaluated)
               </span>
             )}
@@ -116,17 +112,17 @@ export default function GameResultCard({
         </div>
 
         {/* Expected Answer */}
-        <div className="p-3 rounded-lg bg-[#0B1426] border border-[#2C3D58] text-xs font-mono flex flex-wrap items-center justify-between gap-2">
-          <span className="text-[#A6B4C9]">Authoritative Correct Answer:</span>
-          <span className="text-[#F4F7FC] font-bold bg-[#1B2B46] px-2.5 py-0.5 rounded border border-[#2C3D58]">
+        <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] text-xs font-sans flex flex-wrap items-center justify-between gap-2">
+          <span className="text-[#9ca8b8]">Authoritative Correct Answer:</span>
+          <span className="text-[#f3f4f6] font-medium bg-[#202938] px-2.5 py-0.5 rounded border border-[#2b3545]">
             {result.correct_answer}
           </span>
         </div>
 
         {/* Natural Language Explanation from Backend */}
         {result.explanation && (
-          <div className="p-3 rounded-lg bg-[#0B1426] border border-[#2C3D58] text-xs font-sans text-[#A6B4C9] leading-relaxed">
-            <span className="text-[10px] font-mono uppercase text-[#8CC8FF] block font-bold mb-1">
+          <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] text-xs font-sans text-[#9ca8b8] leading-relaxed">
+            <span className="text-[10px] font-mono uppercase text-[#4f7cff] block font-bold mb-1">
               Statistical Evidence & Reasoning:
             </span>
             {result.explanation}
@@ -135,11 +131,11 @@ export default function GameResultCard({
 
         {/* Ground Truth Telemetry Snapshot */}
         {groundTruth && Object.keys(groundTruth).length > 0 && (
-          <div className="pt-2 border-t border-[#2C3D58] grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-[#A6B4C9]">
+          <div className="pt-2 border-t border-[#2b3545] grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono text-[#9ca8b8]">
             {groundTruth.calculated_z !== undefined && (
               <div>
                 Z-Score:{' '}
-                <strong className="text-[#8CC8FF]">
+                <strong className="text-[#4f7cff]">
                   {groundTruth.calculated_z > 0
                     ? `+${groundTruth.calculated_z}`
                     : groundTruth.calculated_z}
@@ -149,17 +145,17 @@ export default function GameResultCard({
             )}
             {groundTruth.status && (
               <div>
-                Anomaly State: <strong className="text-[#F4F7FC]">{groundTruth.status}</strong>
+                Anomaly State: <strong className="text-[#f3f4f6] font-sans">{groundTruth.status}</strong>
               </div>
             )}
             {groundTruth.current_load !== undefined && (
               <div>
-                Throughput: <strong className="text-[#F4F7FC]">{groundTruth.current_load} Mbps</strong>
+                Throughput: <strong className="text-[#f3f4f6]">{groundTruth.current_load} Mbps</strong>
               </div>
             )}
             {groundTruth.mean !== undefined && (
               <div>
-                Baseline Mean: <strong className="text-[#A6B4C9]">{groundTruth.mean} Mbps</strong>
+                Baseline Mean: <strong className="text-[#9ca8b8]">{groundTruth.mean} Mbps</strong>
               </div>
             )}
           </div>
@@ -168,19 +164,19 @@ export default function GameResultCard({
 
       {/* Newly Unlocked Achievements Banner */}
       {result.newly_unlocked_achievements && result.newly_unlocked_achievements.length > 0 && (
-        <div className="p-4 rounded-xl bg-[#14233D] border border-[#FBBF24]/50 flex items-center justify-between gap-4 animate-fadeIn">
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#d9a441]/50 flex items-center justify-between gap-4 animate-fadeIn">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#1B2B46] border border-[#FBBF24]/40 flex items-center justify-center text-[#FBBF24] shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#202938] border border-[#d9a441]/40 flex items-center justify-center text-[#d9a441] shrink-0">
               <Award className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-mono tracking-widest uppercase text-[#FBBF24] font-bold block">
+              <span className="text-[10px] font-mono tracking-widest uppercase text-[#d9a441] font-bold block">
                 Milestone Achievement Unlocked
               </span>
-              <div className="text-sm font-bold text-[#F4F7FC]">
+              <div className="text-sm font-bold text-[#f3f4f6]">
                 {result.newly_unlocked_achievements.map(a => a.name).join(', ')}
               </div>
-              <p className="text-xs text-[#A6B4C9]">
+              <p className="text-xs text-[#9ca8b8]">
                 {result.newly_unlocked_achievements.map(a => `+${a.xp_reward} XP Bonus awarded`).join(' • ')}
               </p>
             </div>
@@ -194,21 +190,20 @@ export default function GameResultCard({
           title="Scenario Telemetry Transition"
           subtitle="Inspect the full Gaussian probability density curve and formula substitution for this scenario."
           icon={Sparkles}
-          className="border-[#2C3D58] bg-[#14233D]"
         >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono">
-            <div className="space-y-1 text-[#A6B4C9]">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-sans">
+            <div className="space-y-1 text-[#9ca8b8]">
               <p>
-                Transfer scenario load <strong className="text-[#8CC8FF]">{bridgeData.current_load} Mbps</strong> (Z = {bridgeData.z_score}σ, CDF = {(bridgeData.probability_below * 100).toFixed(2)}%) to the Technical Lab.
+                Transfer scenario load <strong className="text-[#4f7cff] font-mono">{bridgeData.current_load} Mbps</strong> (Z = {bridgeData.z_score}σ, CDF = {(bridgeData.probability_below * 100).toFixed(2)}%) to the Technical Lab.
               </p>
-              <p className="text-[11px] text-[#A6B4C9]/70">
-                Formula: <code className="text-[#F4F7FC]">{bridgeData.z_formula}</code>
+              <p className="text-[11px] text-[#9ca8b8]/70 font-mono">
+                Formula: <code className="text-[#f3f4f6]">{bridgeData.z_formula}</code>
               </p>
             </div>
 
             <button
               onClick={handleOpenTechnicalLab}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-bold transition-all shadow-sm shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white font-medium transition-all shadow-sm shrink-0 cursor-pointer"
             >
               <FlaskConical className="w-4 h-4" />
               <span>View Technical Analysis</span>
@@ -219,11 +214,11 @@ export default function GameResultCard({
       )}
 
       {/* Action Footer */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs font-sans">
         {onReset && (
           <button
             onClick={onReset}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] text-[#F4F7FC] border border-[#2C3D58] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Try Scenario Again</span>
@@ -233,7 +228,7 @@ export default function GameResultCard({
         {onLeave && (
           <button
             onClick={onLeave}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] text-[#F4F7FC] border border-[#2C3D58] font-medium transition-colors ml-auto"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] font-medium transition-colors ml-auto cursor-pointer"
           >
             <span>{nextGameLabel}</span>
             <ArrowRight className="w-3.5 h-3.5" />

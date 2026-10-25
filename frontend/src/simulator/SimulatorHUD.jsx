@@ -3,9 +3,6 @@ import {
   Activity,
   Pause,
   Gauge,
-  Compass,
-  ArrowUp,
-  ArrowDown,
   ArrowLeft,
   ArrowRight
 } from 'lucide-react'
@@ -26,14 +23,14 @@ export default function SimulatorHUD({
   missionTitle,
   objectiveText,
   checkpointIndex = 1,
-  totalCheckpoints = 3,
+  totalCheckpoints = 1,
   speedKmh = 0,
-  distanceMeters = 400,
+  distanceMeters = 350,
   telemetry = {
-    current_load: 62.0,
+    current_load: 58.0,
     mean: 50.0,
     std_dev: 5.0,
-    z_score: 2.4,
+    z_score: 1.6,
     status: 'NORMAL'
   },
   onPause,
@@ -52,25 +49,25 @@ export default function SimulatorHUD({
       <div className="flex items-center justify-between gap-3">
         
         {/* 1. Small NETPULSE Logo + 2. Short Mission Objective */}
-        <div className="bg-[#14233d]/90 backdrop-blur-md border border-[#2c3d58] px-3.5 py-2 rounded-xl pointer-events-auto shadow-lg flex items-center gap-2.5 max-w-sm sm:max-w-md">
-          <div className="flex items-center gap-1.5 shrink-0 pr-2 border-r border-[#2c3d58]">
-            <Activity className="w-4 h-4 text-[#8cc8ff]" />
-            <span className="text-xs font-bold tracking-tight text-[#f4f7fc]">NETPULSE</span>
+        <div className="bg-[#181f2b]/95 border border-[#2b3545] px-3.5 py-2 rounded-lg pointer-events-auto shadow-sm flex items-center gap-2.5 max-w-sm sm:max-w-md">
+          <div className="flex items-center gap-1.5 shrink-0 pr-2 border-r border-[#2b3545]">
+            <Activity className="w-4 h-4 text-[#4f7cff]" />
+            <span className="text-xs font-bold tracking-tight text-[#f3f4f6]">NETPULSE</span>
           </div>
-          <p className="text-xs text-[#a6b4c9] truncate font-sans">
-            {objectiveText || missionTitle || 'Navigate highway to next telemetry checkpoint.'}
+          <p className="text-xs text-[#9ca8b8] truncate font-sans">
+            {objectiveText || missionTitle || 'Travel to telemetry checkpoint.'}
           </p>
         </div>
 
         {/* 6. Compact Progress Indicator */}
-        <div className="hidden sm:flex items-center gap-2.5 bg-[#14233d]/90 backdrop-blur-md border border-[#2c3d58] px-3.5 py-2 rounded-xl pointer-events-auto shadow-lg">
-          <div className="flex items-center gap-1.5 text-xs text-[#a6b4c9]">
-            <span className="font-sans">Gate</span>
-            <strong className="text-[#f4f7fc] font-mono tabular-nums">{checkpointIndex}/{totalCheckpoints}</strong>
+        <div className="hidden sm:flex items-center gap-2.5 bg-[#181f2b]/95 border border-[#2b3545] px-3.5 py-2 rounded-lg pointer-events-auto shadow-sm">
+          <div className="flex items-center gap-1.5 text-xs text-[#9ca8b8]">
+            <span>Checkpoint</span>
+            <strong className="text-[#f3f4f6] font-mono tabular-nums">{checkpointIndex}/{totalCheckpoints}</strong>
           </div>
-          <div className="w-16 bg-[#1b2b46] h-1.5 rounded-full overflow-hidden border border-[#2c3d58]">
+          <div className="w-16 bg-[#202938] h-1.5 rounded-full overflow-hidden border border-[#2b3545]">
             <div
-              className="h-full bg-[#8cc8ff] transition-all duration-300"
+              className="h-full bg-[#4f7cff] transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -79,10 +76,10 @@ export default function SimulatorHUD({
         {/* 3. Pause Control */}
         <button
           onClick={onPause}
-          className="bg-[#14233d]/90 hover:bg-[#1b2b46] backdrop-blur-md border border-[#2c3d58] hover:border-[#8cc8ff] px-3 py-2 rounded-xl text-xs font-sans text-[#f4f7fc] flex items-center gap-1.5 pointer-events-auto transition-colors shadow-lg cursor-pointer"
+          className="bg-[#181f2b]/95 hover:bg-[#202938] border border-[#2b3545] hover:border-[#4f7cff] px-3 py-2 rounded-lg text-xs font-sans text-[#f3f4f6] flex items-center gap-1.5 pointer-events-auto transition-colors shadow-sm cursor-pointer"
           title="Pause Simulation (P or Esc)"
         >
-          <Pause className="w-3.5 h-3.5 text-[#8cc8ff]" />
+          <Pause className="w-3.5 h-3.5 text-[#4f7cff]" />
           <span className="hidden sm:inline">Pause</span>
         </button>
 
@@ -92,75 +89,52 @@ export default function SimulatorHUD({
       <div className="flex items-end justify-between gap-3">
         
         {/* 4. Vehicle Speed */}
-        <div className="bg-[#14233d]/90 backdrop-blur-md border border-[#2c3d58] px-4 py-2.5 rounded-xl pointer-events-auto shadow-lg flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#1b2b46] border border-[#2c3d58] flex items-center justify-center text-[#8cc8ff] shrink-0">
-            <Gauge className="w-4 h-4" />
+        <div className="bg-[#181f2b]/95 border border-[#2b3545] px-3.5 py-2 rounded-lg pointer-events-auto shadow-sm flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-md bg-[#202938] border border-[#2b3545] flex items-center justify-center text-[#4f7cff] shrink-0">
+            <Gauge className="w-3.5 h-3.5" />
           </div>
           <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl font-bold font-mono text-[#f4f7fc] tabular-nums tracking-tight">
+            <span className="text-xl font-bold font-mono text-[#f3f4f6] tabular-nums tracking-tight">
               {speedKmh}
             </span>
-            <span className="text-[11px] font-sans font-medium text-[#a6b4c9]">KM/H</span>
+            <span className="text-[10px] font-sans font-medium text-[#9ca8b8]">KM/H</span>
           </div>
         </div>
 
-        {/* Mobile Touch Steering (Small screen touch only, hidden on desktop) */}
+        {/* 5. Next Telemetry Checkpoint (Distance & Measurement Target) */}
+        <div className="bg-[#181f2b]/95 border border-[#2b3545] px-3.5 py-2 rounded-lg pointer-events-auto shadow-sm flex items-center gap-3">
+          <div className="space-y-0.5">
+            <span className="text-[10px] text-[#9ca8b8] uppercase tracking-wider block font-semibold">
+              Checkpoint Ahead
+            </span>
+            <div className="text-sm font-bold text-[#f3f4f6] font-mono tabular-nums flex items-center gap-1.5">
+              <span>{Math.max(0, distanceMeters)} m</span>
+              <span className="text-[#9ca8b8] font-normal text-xs">·</span>
+              <span className="text-[#4f7cff]">{telemetry.current_load?.toFixed(1) || '58.0'} Mbps</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Touch Controls */}
         <div className="pointer-events-auto flex sm:hidden items-center gap-2">
           <button
             onMouseDown={() => onSteerLeft && onSteerLeft()}
             onMouseUp={() => onReleaseInput && onReleaseInput('left')}
             onTouchStart={() => onSteerLeft && onSteerLeft()}
             onTouchEnd={() => onReleaseInput && onReleaseInput('left')}
-            className="w-11 h-11 rounded-xl bg-[#14233d]/90 border border-[#2c3d58] active:bg-[#8cc8ff] active:text-[#0b1426] flex items-center justify-center text-[#f4f7fc]"
+            className="w-10 h-10 rounded-lg bg-[#181f2b] border border-[#2b3545] active:bg-[#4f7cff] active:text-[#111827] flex items-center justify-center text-[#f3f4f6]"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </button>
           <button
             onMouseDown={() => onSteerRight && onSteerRight()}
             onMouseUp={() => onReleaseInput && onReleaseInput('right')}
             onTouchStart={() => onSteerRight && onSteerRight()}
             onTouchEnd={() => onReleaseInput && onReleaseInput('right')}
-            className="w-11 h-11 rounded-xl bg-[#14233d]/90 border border-[#2c3d58] active:bg-[#8cc8ff] active:text-[#0b1426] flex items-center justify-center text-[#f4f7fc]"
+            className="w-10 h-10 rounded-lg bg-[#181f2b] border border-[#2b3545] active:bg-[#4f7cff] active:text-[#111827] flex items-center justify-center text-[#f3f4f6]"
           >
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 h-4" />
           </button>
-          <button
-            onMouseDown={() => onGas && onGas()}
-            onMouseUp={() => onReleaseInput && onReleaseInput('forward')}
-            onTouchStart={() => onGas && onGas()}
-            onTouchEnd={() => onReleaseInput && onReleaseInput('forward')}
-            className="w-11 h-11 rounded-xl bg-[#1b2b46] border border-[#2c3d58] active:bg-[#8cc8ff] active:text-[#0b1426] flex items-center justify-center text-[#8cc8ff]"
-          >
-            <ArrowUp className="w-5 h-5" />
-          </button>
-          <button
-            onMouseDown={() => onBrake && onBrake()}
-            onMouseUp={() => onReleaseInput && onReleaseInput('backward')}
-            onTouchStart={() => onBrake && onBrake()}
-            onTouchEnd={() => onReleaseInput && onReleaseInput('backward')}
-            className="w-11 h-11 rounded-xl bg-[#1b2b46] border border-[#2c3d58] active:bg-[#f87171] active:text-white flex items-center justify-center text-[#f87171]"
-          >
-            <ArrowDown className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* 5. Next Checkpoint & Relevant Network Measurement */}
-        <div className="bg-[#14233d]/90 backdrop-blur-md border border-[#2c3d58] px-4 py-2.5 rounded-xl pointer-events-auto shadow-lg flex items-center gap-4 text-xs font-sans">
-          <div>
-            <span className="text-[10px] uppercase tracking-wider text-[#a6b4c9] block font-medium">Observed Load</span>
-            <span className="text-sm font-bold font-mono text-[#8cc8ff] tabular-nums">
-              {telemetry?.current_load !== undefined ? telemetry.current_load.toFixed(1) : '62.0'} <span className="text-[10px] font-sans text-[#a6b4c9] font-normal">Mbps</span>
-            </span>
-          </div>
-
-          <div className="w-[1px] h-6 bg-[#2c3d58]"></div>
-
-          <div>
-            <span className="text-[10px] uppercase tracking-wider text-[#a6b4c9] block font-medium">Next Gate</span>
-            <span className="text-sm font-bold font-mono text-[#f4f7fc] tabular-nums">
-              {distanceMeters} <span className="text-[10px] font-sans text-[#a6b4c9] font-normal">m</span>
-            </span>
-          </div>
         </div>
 
       </div>

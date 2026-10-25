@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import {
   User,
   LogOut,
@@ -9,12 +8,11 @@ import {
   Mail,
   Calendar,
   Shield,
-  GraduationCap,
+  Layers,
   Sparkles,
   Zap,
   Activity,
-  CheckCircle2,
-  AlertTriangle
+  CheckCircle2
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { updateCurrentProfile } from '../services/profileService'
@@ -24,7 +22,7 @@ import Panel from '../components/Panel'
 
 const LEVEL_TITLES = {
   1: 'Analyst Intern',
-  2: 'Junior NOC Operator',
+  2: 'Network Analyst',
   3: 'Telemetry Specialist',
   4: 'Senior Systems Analyst',
   5: 'Chief Infrastructure Architect'
@@ -100,16 +98,16 @@ export default function Profile() {
     : null
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn font-sans">
       <PageHeader
-        title="Student Analyst Profile"
-        subtitle="Manage student operator credentials, academic affiliations, and laboratory session records."
+        title="Analyst Profile"
+        subtitle="Manage account credentials, progression badges, and telemetry session records."
         modeBadge="ACCOUNT"
         actions={
           isAuthenticated ? (
             <button
               onClick={signOut}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-[#F87171] border border-rose-800/60 text-xs font-mono transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#d95c5c]/10 hover:bg-[#d95c5c]/20 text-[#d95c5c] border border-[#d95c5c]/30 text-xs font-sans transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
@@ -120,29 +118,28 @@ export default function Profile() {
 
       {/* Identity Banner */}
       <Panel
-        title="NOC Operator Credentials"
-        subtitle={isAuthenticated ? 'Verified Supabase Student Account' : 'Guest Analyst Session'}
+        title="Account Details"
+        subtitle={isAuthenticated ? 'Verified Supabase Account' : 'Guest Analyst Session'}
         icon={Shield}
-        className="border-[#2C3D58] bg-[#14233D]"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             {/* Avatar Badge */}
-            <div className="w-16 h-16 rounded-2xl bg-[#1B2B46] border border-[#2C3D58] flex items-center justify-center text-[#8CC8FF] font-mono text-2xl font-bold shadow-sm shrink-0">
-              {profile?.username ? profile.username.substring(0, 2).toUpperCase() : 'CA'}
+            <div className="w-16 h-16 rounded-2xl bg-[#202938] border border-[#2b3545] flex items-center justify-center text-[#4f7cff] font-mono text-2xl font-bold shadow-sm shrink-0">
+              {profile?.username ? profile.username.substring(0, 2).toUpperCase() : 'NA'}
             </div>
 
             <div className="space-y-1">
               {!isEditing ? (
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl font-bold font-mono text-[#F4F7FC]">
+                  <h2 className="text-xl font-bold text-[#f3f4f6]">
                     {profile?.username || 'Guest Analyst'}
                   </h2>
                   {isAuthenticated && (
                     <button
                       onClick={handleStartEdit}
-                      className="p-1 rounded-lg text-[#A6B4C9] hover:text-[#8CC8FF] hover:bg-[#1B2B46] transition-colors"
-                      title="Edit student callsign"
+                      className="p-1 rounded-lg text-[#9ca8b8] hover:text-[#4f7cff] hover:bg-[#202938] transition-colors cursor-pointer"
+                      title="Edit callsign"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
@@ -154,14 +151,14 @@ export default function Profile() {
                     type="text"
                     value={editUsername}
                     onChange={(e) => setEditUsername(e.target.value)}
-                    className="bg-[#0B1426] border border-[#8CC8FF] rounded-lg px-2.5 py-1 text-sm font-mono text-[#F4F7FC] focus:outline-none"
+                    className="bg-[#111827] border border-[#4f7cff] rounded-xl px-2.5 py-1 text-sm font-sans text-[#f3f4f6] focus:outline-none"
                     placeholder="Enter new username"
                     autoFocus
                   />
                   <button
                     type="submit"
                     disabled={isSaving}
-                    className="p-1.5 rounded-lg bg-[#34D399] hover:bg-[#34D399]/90 text-[#0B1426] font-bold"
+                    className="p-1.5 rounded-lg bg-[#35a875] hover:bg-[#35a875]/90 text-white font-bold cursor-pointer"
                     title="Save callsign"
                   >
                     <Check className="w-3.5 h-3.5" />
@@ -169,7 +166,7 @@ export default function Profile() {
                   <button
                     type="button"
                     onClick={handleCancelEdit}
-                    className="p-1.5 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] text-[#A6B4C9]"
+                    className="p-1.5 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#9ca8b8] cursor-pointer"
                     title="Cancel"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -177,17 +174,17 @@ export default function Profile() {
                 </form>
               )}
 
-              <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-[#A6B4C9]">
+              <div className="flex flex-wrap items-center gap-3 text-xs font-sans text-[#9ca8b8]">
                 {user?.email && (
-                  <span className="flex items-center gap-1 text-[#F4F7FC]">
-                    <Mail className="w-3 h-3 text-[#A6B4C9]" />
+                  <span className="flex items-center gap-1 text-[#f3f4f6]">
+                    <Mail className="w-3 h-3 text-[#9ca8b8]" />
                     <span>{user.email}</span>
                   </span>
                 )}
                 {createdAtFormatted && (
-                  <span className="flex items-center gap-1 text-[#A6B4C9]">
-                    <Calendar className="w-3 h-3 text-[#A6B4C9]" />
-                    <span>Enrolled: {createdAtFormatted}</span>
+                  <span className="flex items-center gap-1 text-[#9ca8b8]">
+                    <Calendar className="w-3 h-3 text-[#9ca8b8]" />
+                    <span>Active Since: {createdAtFormatted}</span>
                   </span>
                 )}
               </div>
@@ -196,16 +193,16 @@ export default function Profile() {
 
           {/* Real Progression Stats */}
           <div className="flex items-center gap-3 font-mono text-xs w-full sm:w-auto justify-end">
-            <div className="p-3 rounded-xl bg-[#0B1426] border border-[#2C3D58] text-center min-w-[80px]">
-              <span className="text-[10px] text-[#A6B4C9] uppercase block">Rank Tier</span>
-              <span className="text-[#8CC8FF] font-bold text-base">
+            <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] text-center min-w-[80px]">
+              <span className="text-[10px] text-[#9ca8b8] uppercase block font-sans">Rank Tier</span>
+              <span className="text-[#4f7cff] font-bold text-base">
                 Lvl {profile?.level || 1}
               </span>
             </div>
 
-            <div className="p-3 rounded-xl bg-[#0B1426] border border-[#2C3D58] text-center min-w-[90px]">
-              <span className="text-[10px] text-[#A6B4C9] uppercase block">Total XP</span>
-              <span className="text-[#34D399] font-bold text-base">
+            <div className="p-3 rounded-xl bg-[#111827] border border-[#2b3545] text-center min-w-[90px]">
+              <span className="text-[10px] text-[#9ca8b8] uppercase block font-sans">Total XP</span>
+              <span className="text-[#35a875] font-bold text-base">
                 {profile?.total_xp || 0} XP
               </span>
             </div>
@@ -214,15 +211,15 @@ export default function Profile() {
 
         {/* Success Banner */}
         {saveSuccess && (
-          <div className="mt-4 p-3 rounded-lg bg-[#1B2B46] border border-[#34D399]/60 text-[#34D399] text-xs font-mono flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#34D399] shrink-0" />
-            <span>Profile callsign successfully updated in database.</span>
+          <div className="mt-4 p-3 rounded-xl bg-[#35a875]/10 border border-[#35a875]/40 text-[#35a875] text-xs font-sans flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#35a875] shrink-0" />
+            <span>Profile callsign successfully updated.</span>
           </div>
         )}
 
         {/* Error Banner */}
         {errorMessage && (
-          <div className="mt-4 p-3 rounded-lg bg-rose-950/40 border border-rose-800/60 text-[#F87171] text-xs font-mono">
+          <div className="mt-4 p-3 rounded-xl bg-[#d95c5c]/10 border border-[#d95c5c]/40 text-[#d95c5c] text-xs font-sans">
             {errorMessage}
           </div>
         )}
@@ -233,81 +230,79 @@ export default function Profile() {
         title="Verified Laboratory Progression"
         subtitle={`Current Rank Tier: ${LEVEL_TITLES[profile?.level || 1] || 'Analyst'}`}
         icon={Zap}
-        className="border-[#2C3D58] bg-[#14233D]"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
-          <div className="p-4 rounded-xl bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Missions Resolved</span>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans text-xs">
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Missions Resolved</span>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-bold text-[#F4F7FC]">
+              <span className="text-xl font-bold font-mono text-[#f3f4f6]">
                 {progStats?.games_completed_count ?? 0}
               </span>
-              <Activity className="w-4 h-4 text-[#8CC8FF]" />
+              <Activity className="w-4 h-4 text-[#4f7cff]" />
             </div>
-            <span className="text-[10px] text-[#A6B4C9] block">Verified incident runs</span>
+            <span className="text-[10px] text-[#9ca8b8] block">Verified simulator runs</span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Milestones Unlocked</span>
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Milestones Unlocked</span>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-bold text-[#FBBF24]">
+              <span className="text-xl font-bold font-mono text-[#d9a441]">
                 {progStats?.achievements_count ?? 0} / 7
               </span>
-              <Sparkles className="w-4 h-4 text-[#FBBF24]" />
+              <Sparkles className="w-4 h-4 text-[#d9a441]" />
             </div>
-            <span className="text-[10px] text-[#A6B4C9] block">Curriculum badges</span>
+            <span className="text-[10px] text-[#9ca8b8] block">Curriculum badges</span>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Audit Snapshots</span>
+          <div className="p-4 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Audit Snapshots</span>
             <div className="flex items-center justify-between">
-              <span className="text-xl font-bold text-[#34D399]">
+              <span className="text-xl font-bold font-mono text-[#35a875]">
                 {progStats?.analyses_count ?? 0}
               </span>
-              <Shield className="w-4 h-4 text-[#34D399]" />
+              <Shield className="w-4 h-4 text-[#35a875]" />
             </div>
-            <span className="text-[10px] text-[#A6B4C9] block">Saved telemetry analyses</span>
+            <span className="text-[10px] text-[#9ca8b8] block">Saved telemetry analyses</span>
           </div>
         </div>
       </Panel>
 
-      {/* Academic Affiliation Card */}
+      {/* System Specifications Card */}
       <Panel
-        title="Academic Course Information"
-        subtitle="Project metadata for course evaluation"
-        icon={GraduationCap}
-        className="border-[#2C3D58] bg-[#14233D]"
+        title="System Specifications & Metadata"
+        subtitle="Application runtime and statistical configuration"
+        icon={Layers}
         bodyClassName="space-y-4"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-mono text-xs">
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Course Name:</span>
-            <span className="text-[#F4F7FC] font-semibold">Probability & Statistics for CS</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 font-sans text-xs">
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Application:</span>
+            <span className="text-[#f3f4f6] font-semibold">NETPULSE Simulator</span>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Course Code:</span>
-            <span className="text-[#8CC8FF] font-bold">25CS203</span>
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Environment:</span>
+            <span className="text-[#4f7cff] font-bold font-mono">3D WebGL + 2D Engine</span>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Level / Year:</span>
-            <span className="text-[#F4F7FC] font-semibold">2nd Year B.Tech CSE</span>
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Vehicle Chassis:</span>
+            <span className="text-[#f3f4f6] font-semibold">Titanium Technical Interceptor</span>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Department:</span>
-            <span className="text-[#F4F7FC] font-semibold">Computer Science & Engineering</span>
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Statistical Core:</span>
+            <span className="text-[#f3f4f6] font-semibold">Gaussian Normal Distribution</span>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Statistical Core:</span>
-            <span className="text-[#F4F7FC] font-semibold">Gaussian Distribution (Normal)</span>
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Backend Engine:</span>
+            <span className="text-[#35a875] font-bold font-mono">FastAPI + NumPy / SciPy</span>
           </div>
 
-          <div className="p-3.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] space-y-1">
-            <span className="text-[10px] text-[#A6B4C9] uppercase block">Backend Engine:</span>
-            <span className="text-[#34D399] font-bold">FastAPI + NumPy / SciPy</span>
+          <div className="p-3.5 rounded-xl bg-[#111827] border border-[#2b3545] space-y-1">
+            <span className="text-[10px] text-[#9ca8b8] uppercase block">Persistence:</span>
+            <span className="text-[#4f7cff] font-semibold">Supabase PostgreSQL</span>
           </div>
         </div>
       </Panel>

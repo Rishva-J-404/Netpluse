@@ -2,10 +2,10 @@ import React from 'react'
 import { Activity } from 'lucide-react'
 
 /**
- * LoadingState - Accessible dark NOC loader with subtle pulse
+ * LoadingState - Accessible restrained loader
  */
 export default function LoadingState({
-  message = 'Retrieving network telemetry from FastAPI statistical engine...',
+  message = 'Connecting to statistical telemetry engine...',
   compact = false,
   className = ''
 }) {
@@ -14,7 +14,7 @@ export default function LoadingState({
       <div
         role="status"
         aria-live="polite"
-        className={`flex items-center gap-2 text-xs font-sans text-[#00f0ff] ${className}`}
+        className={`flex items-center gap-2 text-xs font-sans text-[#4f7cff] ${className}`}
       >
         <Activity className="w-4 h-4 animate-spin shrink-0" />
         <span>{message}</span>
@@ -26,17 +26,14 @@ export default function LoadingState({
     <div
       role="status"
       aria-live="polite"
-      className={`min-h-[220px] flex flex-col items-center justify-center p-6 text-center rounded-2xl bg-[#0d1422] border border-slate-800/80 shadow-xl font-sans ${className}`}
+      className={`min-h-[200px] flex flex-col items-center justify-center p-6 text-center rounded-xl bg-[#181f2b] border border-[#2b3545] font-sans ${className}`}
     >
-      <div className="relative mb-4 flex items-center justify-center">
-        <div className="w-12 h-12 rounded-full border-2 border-blue-500/20 border-t-[#00f0ff] animate-spin" />
-        <Activity className="w-5 h-5 text-[#00f0ff] absolute" aria-hidden="true" />
+      <div className="relative mb-3 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-full border-2 border-[#2b3545] border-t-[#4f7cff] animate-spin" />
+        <Activity className="w-4 h-4 text-[#4f7cff] absolute" aria-hidden="true" />
       </div>
-      <p className="text-sm font-sans text-slate-200 font-medium">
+      <p className="text-sm font-sans text-[#f3f4f6] font-medium">
         {message}
-      </p>
-      <p className="mt-1 text-xs text-slate-500 font-mono">
-        Connecting to http://127.0.0.1:8000
       </p>
     </div>
   )

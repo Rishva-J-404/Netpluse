@@ -11,7 +11,7 @@ import {
 } from 'recharts'
 
 /**
- * Custom NOC Tooltip for Network Telemetry
+ * Custom Tooltip for Network Telemetry
  */
 function CustomTooltip({ active, payload, label, mean, stdDev }) {
   if (active && payload && payload.length) {
@@ -19,14 +19,14 @@ function CustomTooltip({ active, payload, label, mean, stdDev }) {
     const zScore = (mean !== undefined && stdDev) ? ((load - mean) / stdDev).toFixed(2) : null
     
     return (
-      <div className="rounded-xl bg-[#14233d] border border-[#2c3d58] p-3 shadow-xl text-xs font-mono">
-        <p className="text-[#a6b4c9] font-semibold mb-1">Time: {label}</p>
-        <p className="text-[#8cc8ff] text-sm font-bold">
-          Load: {load} <span className="text-[10px] text-[#a6b4c9] font-normal">Mbps</span>
+      <div className="rounded-xl bg-[#181f2b] border border-[#2b3545] p-3 shadow-xl text-xs font-mono">
+        <p className="text-[#9ca8b8] font-semibold mb-1">Time: {label}</p>
+        <p className="text-[#4f7cff] text-sm font-bold">
+          Load: {load} <span className="text-[10px] text-[#9ca8b8] font-normal">Mbps</span>
         </p>
         {zScore !== null && (
-          <p className="text-[#a6b4c9] mt-1">
-            Z-Score: <span className={Number(zScore) > 2 ? 'text-[#f87171] font-bold' : Number(zScore) < -2 ? 'text-[#8cc8ff]' : 'text-[#34d399]'}>{Number(zScore) > 0 ? `+${zScore}` : zScore}σ</span>
+          <p className="text-[#9ca8b8] mt-1">
+            Z-Score: <span className={Number(zScore) > 2 ? 'text-[#d95c5c] font-bold' : Number(zScore) < -2 ? 'text-[#d9a441]' : 'text-[#35a875]'}>{Number(zScore) > 0 ? `+${zScore}` : zScore}σ</span>
           </p>
         )}
       </div>
@@ -47,7 +47,7 @@ export default function NetworkTrendChart({
 }) {
   if (!data || data.length === 0) {
     return (
-      <div className="h-[200px] flex items-center justify-center text-xs font-mono text-[#a6b4c9]">
+      <div className="h-[200px] flex items-center justify-center text-xs font-mono text-[#9ca8b8]">
         No telemetry time-series points to plot.
       </div>
     )
@@ -64,24 +64,24 @@ export default function NetworkTrendChart({
           margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
         >
           <defs>
-            <linearGradient id="nocLoadGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8cc8ff" stopOpacity={0.35} />
-              <stop offset="95%" stopColor="#8cc8ff" stopOpacity={0.0} />
+            <linearGradient id="networkLoadGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#4f7cff" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="#4f7cff" stopOpacity={0.0} />
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" stroke="#2c3d58" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#2b3545" vertical={false} />
 
           <XAxis
             dataKey="timestamp"
-            stroke="#a6b4c9"
+            stroke="#9ca8b8"
             fontSize={11}
             tickLine={false}
             fontFamily="ui-monospace, monospace"
           />
 
           <YAxis
-            stroke="#a6b4c9"
+            stroke="#9ca8b8"
             fontSize={11}
             tickLine={false}
             fontFamily="ui-monospace, monospace"
@@ -96,11 +96,11 @@ export default function NetworkTrendChart({
           {mean !== undefined && (
             <ReferenceLine
               y={mean}
-              stroke="#8cc8ff"
+              stroke="#4f7cff"
               strokeDasharray="4 4"
               label={{
                 value: `μ = ${mean}M`,
-                fill: '#8cc8ff',
+                fill: '#4f7cff',
                 fontSize: 10,
                 position: 'right',
                 fontFamily: 'ui-monospace'
@@ -111,11 +111,11 @@ export default function NetworkTrendChart({
           {upperAnomaly !== null && (
             <ReferenceLine
               y={upperAnomaly}
-              stroke="#fbbf24"
+              stroke="#d9a441"
               strokeDasharray="2 2"
               label={{
-                value: `+2σ Threshold (${upperAnomaly}M)`,
-                fill: '#fbbf24',
+                value: `+2σ (${upperAnomaly}M)`,
+                fill: '#d9a441',
                 fontSize: 10,
                 position: 'insideTopRight',
                 fontFamily: 'ui-monospace'
@@ -126,11 +126,11 @@ export default function NetworkTrendChart({
           {lowerAnomaly !== null && (
             <ReferenceLine
               y={lowerAnomaly}
-              stroke="#fbbf24"
+              stroke="#d9a441"
               strokeDasharray="2 2"
               label={{
-                value: `-2σ Threshold (${lowerAnomaly}M)`,
-                fill: '#fbbf24',
+                value: `-2σ (${lowerAnomaly}M)`,
+                fill: '#d9a441',
                 fontSize: 10,
                 position: 'insideBottomRight',
                 fontFamily: 'ui-monospace'
@@ -141,10 +141,10 @@ export default function NetworkTrendChart({
           <Area
             type="monotone"
             dataKey="network_load"
-            stroke="#8cc8ff"
+            stroke="#4f7cff"
             strokeWidth={2}
             fillOpacity={1}
-            fill="url(#nocLoadGradient)"
+            fill="url(#networkLoadGradient)"
             isAnimationActive={false}
           />
         </AreaChart>

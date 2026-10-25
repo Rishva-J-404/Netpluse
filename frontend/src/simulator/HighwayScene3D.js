@@ -105,8 +105,8 @@ export class HighwayScene3D {
 
     // 1. Scene & Clean Atmospheric Fog
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(0x0b1426)
-    this.scene.fog = new THREE.FogExp2(0x0b1426, 0.005)
+    this.scene.background = new THREE.Color(0x111827)
+    this.scene.fog = new THREE.FogExp2(0x111827, 0.005)
 
     // 2. Camera Setup (55 deg FOV for realistic driving perspective)
     this.camera = new THREE.PerspectiveCamera(55, width / height, 0.5, 380)
@@ -127,7 +127,7 @@ export class HighwayScene3D {
     this.scene.add(ambientLight)
 
     // Hemisphere light: cool navy sky dome + dark road bounce
-    const hemiLight = new THREE.HemisphereLight(0x8cc8ff, 0x0b1426, 0.5)
+    const hemiLight = new THREE.HemisphereLight(0x4f7cff, 0x111827, 0.5)
     hemiLight.position.set(0, 50, 0)
     this.scene.add(hemiLight)
 
@@ -193,7 +193,7 @@ export class HighwayScene3D {
       // 1. Asphalt Highway Surface
       const asphaltGeo = new THREE.PlaneGeometry(this.roadWidth, this.roadSegmentLength)
       const asphaltMat = new THREE.MeshStandardMaterial({
-        color: 0x101a2d, // Dark navy charcoal highway
+        color: 0x181f2b, // Dark charcoal highway
         roughness: 0.85,
         metalness: 0.15
       })
@@ -204,7 +204,7 @@ export class HighwayScene3D {
 
       // 2. Concrete Highway Shoulders
       const shoulderGeo = new THREE.BoxGeometry(1.6, 0.15, this.roadSegmentLength)
-      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x14233d, roughness: 0.9 })
+      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x141b26, roughness: 0.9 })
 
       const leftShoulder = new THREE.Mesh(shoulderGeo, shoulderMat)
       leftShoulder.position.set(-this.roadWidth / 2 - 0.8, 0.075, 0)
@@ -217,7 +217,7 @@ export class HighwayScene3D {
       // 3. Realistic Steel Crash Barriers
       const barrierGeo = new THREE.BoxGeometry(0.35, 0.65, this.roadSegmentLength)
       const barrierMat = new THREE.MeshStandardMaterial({
-        color: 0x1b2b46,
+        color: 0x202938,
         roughness: 0.5,
         metalness: 0.6
       })
@@ -232,7 +232,7 @@ export class HighwayScene3D {
 
       // 4. Subtle Light Blue Retroreflective Safety Markers on Barrier Tops
       const markerGeo = new THREE.BoxGeometry(0.08, 0.1, 0.25)
-      const markerMat = new THREE.MeshBasicMaterial({ color: 0x8cc8ff })
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0x4f7cff })
 
       for (let z = -this.roadSegmentLength / 2 + 6; z < this.roadSegmentLength / 2; z += 14) {
         const leftMarker = new THREE.Mesh(markerGeo, markerMat)
@@ -246,7 +246,7 @@ export class HighwayScene3D {
 
       // 5. Solid White Highway Edge Lines
       const edgeLineGeo = new THREE.PlaneGeometry(0.18, this.roadSegmentLength)
-      const whiteLineMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
+      const whiteLineMat = new THREE.MeshBasicMaterial({ color: 0xf3f4f6 })
 
       const leftEdgeLine = new THREE.Mesh(edgeLineGeo, whiteLineMat)
       leftEdgeLine.rotation.x = -Math.PI / 2
@@ -325,15 +325,15 @@ export class HighwayScene3D {
     // 1. Core Materials
     // Elevated Navy Hull (#1B2B46)
     const titaniumMat = new THREE.MeshStandardMaterial({
-      color: 0x1b2b46,
+      color: 0x1f2937,
       roughness: 0.32,
       metalness: 0.75
     })
 
     // Primary Light Blue Accent (#8CC8FF)
     const sapphireMat = new THREE.MeshStandardMaterial({
-      color: 0x8cc8ff,
-      emissive: 0x4a9be0,
+      color: 0x4f7cff,
+      emissive: 0x3b66df,
       emissiveIntensity: 0.35,
       roughness: 0.2,
       metalness: 0.8
@@ -341,23 +341,23 @@ export class HighwayScene3D {
 
     // Dark Divider Trim (#14233D)
     const carbonMat = new THREE.MeshStandardMaterial({
-      color: 0x14233d,
+      color: 0x181f2b,
       roughness: 0.5,
       metalness: 0.5
     })
 
     // Tinted Greenhouse Canopy Glass
     const glassMat = new THREE.MeshStandardMaterial({
-      color: 0x070c14,
+      color: 0x0f172a,
       roughness: 0.08,
       metalness: 0.95
     })
 
     // Front Integrated LED Headlights
-    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf3f4f6 })
 
     // Full-Width Red LED Taillight Bar
-    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xf87171 })
+    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xd95c5c })
 
     // 2. Sculpted Chassis Panels
     // Lower Chassis Floor & Carbon Side Skirts (y: 0.16 to 0.42)
@@ -514,7 +514,7 @@ export class HighwayScene3D {
    */
   buildCampusSkyline() {
     const buildingMat = new THREE.MeshStandardMaterial({
-      color: 0x14233d,
+      color: 0x181f2b,
       roughness: 0.45,
       metalness: 0.6
     })
@@ -699,46 +699,37 @@ export class HighwayScene3D {
     this.telemetryPackets.forEach(p => this.scene.remove(p.mesh))
     this.telemetryPackets = []
 
-    const packetMat = new THREE.MeshStandardMaterial({
-      color: 0x8cc8ff,
-      emissive: 0x38bdf8,
-      emissiveIntensity: 0.65,
-      roughness: 0.2,
-      metalness: 0.8
+    const sensorPadMat = new THREE.MeshStandardMaterial({
+      color: 0x202938,
+      roughness: 0.8
     })
 
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x8cc8ff, transparent: true, opacity: 0.5 })
+    const beaconMat = new THREE.MeshBasicMaterial({
+      color: 0x4f7cff
+    })
 
     for (let i = 0; i < 5; i++) {
       const lane = (i * 2 + 1) % 4
       const pGroup = new THREE.Group()
 
-      // Compact Luminous Telemetry Data Module (0.35m x 0.35m x 0.12m)
-      const dataModule = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.14, 0.38), packetMat)
-      pGroup.add(dataModule)
+      // Flush pavement sensor pad (0.5m x 0.02m x 0.5m) flush on road
+      const padMesh = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.02, 0.5), sensorPadMat)
+      pGroup.add(padMesh)
 
-      // Thin Horizontal Telemetry Signal Ring (Radius 0.45m)
-      const ringGeo = new THREE.RingGeometry(0.42, 0.46, 24)
-      ringGeo.rotateX(Math.PI / 2)
-      const ringMesh = new THREE.Mesh(ringGeo, ringMat)
-      pGroup.add(ringMesh)
+      // Center optical data node
+      const beaconMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.03, 0.18), beaconMat)
+      beaconMesh.position.y = 0.01
+      pGroup.add(beaconMesh)
 
-      // Soft road bounce light
-      const pLight = new THREE.PointLight(0x8cc8ff, 1.0, 3.0, 1.2)
-      pLight.position.y = 0.1
-      pGroup.add(pLight)
-
-      // Hovering smoothly just above road surface at y = 0.45m
       const spawnZ = this.vehicle.z - 30 - i * 40
-      pGroup.position.set(this.laneX[lane], 0.45, spawnZ)
+      pGroup.position.set(this.laneX[lane], 0.015, spawnZ)
       this.scene.add(pGroup)
 
       this.telemetryPackets.push({
         mesh: pGroup,
-        module: dataModule,
-        ring: ringMesh,
-        active: true,
-        rotSpeed: 0.035 + i * 0.005
+        module: padMesh,
+        beacon: beaconMesh,
+        active: true
       })
     }
   }
@@ -760,7 +751,7 @@ export class HighwayScene3D {
     const gantry = new THREE.Group()
 
     // Structural Steel Lattice Truss (Realistic Intelligent Highway Gantry)
-    const steelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.8 })
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x202938, roughness: 0.5, metalness: 0.7 })
 
     // Left Column
     const colL = new THREE.Mesh(new THREE.BoxGeometry(0.7, 6.2, 0.7), steelMat)
@@ -799,22 +790,22 @@ export class HighwayScene3D {
       canvas.height = 128
       const ctx = canvas.getContext('2d')
 
-      ctx.fillStyle = '#0b111e'
+      ctx.fillStyle = '#111827'
       ctx.fillRect(0, 0, 256, 128)
 
-      // Sapphire Blue Inner Border
-      ctx.strokeStyle = '#0284c7'
-      ctx.lineWidth = 4
+      // Restrained Blue Inner Border
+      ctx.strokeStyle = '#4f7cff'
+      ctx.lineWidth = 3
       ctx.strokeRect(4, 4, 248, 120)
 
       // Gate Label
-      ctx.fillStyle = '#38bdf8'
-      ctx.font = 'bold 20px sans-serif'
+      ctx.fillStyle = '#9ca8b8'
+      ctx.font = 'bold 18px sans-serif'
       ctx.textAlign = 'center'
       ctx.fillText(`GATE ${String.fromCharCode(65 + l)}`, 128, 36)
 
       // Statistical Value
-      ctx.fillStyle = '#ffffff'
+      ctx.fillStyle = '#f3f4f6'
       ctx.font = 'bold 36px monospace'
       const optText = this.checkpointOptions[l] !== undefined ? String(this.checkpointOptions[l]) : '—'
       ctx.fillText(optText, 128, 88)
@@ -1010,9 +1001,6 @@ export class HighwayScene3D {
     // 9. Update Telemetry Data Packets
     this.telemetryPackets.forEach(p => {
       if (p.active) {
-        p.module.rotation.y += p.rotSpeed
-        p.ring.rotation.z += p.rotSpeed * 1.4
-
         // Pickup collision
         const dx = Math.abs(this.vehicle.x - p.mesh.position.x)
         const dz = Math.abs(this.vehicle.z - p.mesh.position.z)

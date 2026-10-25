@@ -19,7 +19,7 @@ const DEFAULT_CATALOG = [
   {
     id: 'first_analysis',
     name: 'First Telemetry Analysis',
-    description: 'Execute your first network load statistical analysis through the FastAPI statistical engine.',
+    description: 'Execute your first network load statistical analysis through the statistical engine.',
     xp_reward: 50
   },
   {
@@ -37,7 +37,7 @@ const DEFAULT_CATALOG = [
   {
     id: 'anomaly_hunter',
     name: 'Outlier Sentinel',
-    description: 'Identify and isolate empirical burst anomalies (|Z| > 2.0) in raw campus telemetry.',
+    description: 'Identify and isolate empirical burst anomalies (|Z| > 2.0) in raw telemetry.',
     xp_reward: 100
   },
   {
@@ -48,14 +48,14 @@ const DEFAULT_CATALOG = [
   },
   {
     id: 'traffic_controller',
-    name: 'Campus Traffic Controller',
+    name: 'Traffic Controller',
     description: 'Successfully resolve escalating congestion events in the Highway Simulator.',
     xp_reward: 100
   },
   {
     id: 'network_analyst',
-    name: 'Senior NOC Analyst',
-    description: 'Maintain a healthy campus network with >90 health score across consecutive observation periods.',
+    name: 'Senior Telemetry Analyst',
+    description: 'Maintain a healthy network with >90 health score across consecutive observation periods.',
     xp_reward: 150
   }
 ]
@@ -122,35 +122,35 @@ export default function Achievements() {
   return (
     <div className="space-y-6 sm:space-y-8 font-sans">
       <PageHeader
-        title="Student Achievements Catalog"
-        subtitle="Curriculum milestone rewards and progression badges unlocked via laboratory exercises and gaming simulations."
+        title="Achievements Catalog"
+        subtitle="Curriculum milestone rewards and progression badges unlocked via laboratory exercises and driving missions."
         modeBadge="PROGRESSION"
       />
 
       {/* Engine Architecture & Status */}
       <Panel
         title="Achievement Engine Architecture"
-        subtitle="Supabase PostgreSQL catalog with Row-Level Security"
+        subtitle="Catalog with Row-Level Security verification"
         icon={Sparkles}
       >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans text-[#a6b4c9]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans text-[#9ca8b8]">
           <div className="space-y-1">
             <p>
-              Catalog Source: <strong className={isFromDb ? 'text-[#34d399]' : 'text-[#8cc8ff]'}>
-                {isFromDb ? 'Supabase public.achievements (Live PostgreSQL)' : 'Curriculum Definition Catalog'}
+              Catalog Source: <strong className={isFromDb ? 'text-[#35a875]' : 'text-[#4f7cff]'}>
+                {isFromDb ? 'Supabase public.achievements (Live PostgreSQL)' : 'Standard Definition Catalog'}
               </strong>
             </p>
-            <p className="text-[#a6b4c9]">
-              Badge unlocks are persisted to student profiles upon achieving statistical goals in the lab or driving missions.
+            <p className="text-[#9ca8b8]">
+              Badge unlocks are persisted upon achieving statistical goals in the lab or driving missions.
             </p>
           </div>
 
           {configured && (
             <button
               onClick={loadAchievements}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] transition-colors shrink-0 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] hover:border-[#4f7cff] transition-colors shrink-0 cursor-pointer"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-[#8cc8ff]" />
+              <RefreshCw className="w-3.5 h-3.5 text-[#4f7cff]" />
               <span>Refresh Catalog</span>
             </button>
           )}
@@ -159,7 +159,7 @@ export default function Achievements() {
 
       {/* Achievement Cards Grid */}
       {loading ? (
-        <LoadingState message="Loading achievement catalog from Supabase..." />
+        <LoadingState message="Loading achievement catalog..." />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {catalog.map(item => {
@@ -168,50 +168,50 @@ export default function Achievements() {
             return (
               <div
                 key={item.id}
-                className={`p-5 rounded-2xl border space-y-3 transition-colors ${
+                className={`p-5 rounded-xl border space-y-3 transition-colors ${
                   isUnlocked
-                    ? 'bg-[#1b2b46] border-[#8cc8ff]/50'
-                    : 'bg-[#14233d] border-[#2c3d58] hover:border-[#2c3d58]'
+                    ? 'bg-[#202938] border-[#4f7cff]/50'
+                    : 'bg-[#181f2b] border-[#2b3545]'
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div
                     className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${
                       isUnlocked
-                        ? 'bg-[#14233d] border-[#8cc8ff]/40 text-[#8cc8ff]'
-                        : 'bg-[#0b1426] border-[#2c3d58] text-[#a6b4c9]'
+                        ? 'bg-[#181f2b] border-[#4f7cff]/40 text-[#4f7cff]'
+                        : 'bg-[#111827] border-[#2b3545] text-[#9ca8b8]'
                     }`}
                   >
                     {isUnlocked ? (
-                      <Award className="w-5 h-5 text-[#8cc8ff]" />
+                      <Award className="w-5 h-5 text-[#4f7cff]" />
                     ) : (
-                      <Lock className="w-4 h-4 text-[#a6b4c9]" />
+                      <Lock className="w-4 h-4 text-[#9ca8b8]" />
                     )}
                   </div>
-                  <div className="flex items-center gap-1 text-xs font-mono font-bold text-[#8cc8ff] bg-[#0b1426] border border-[#2c3d58] px-2 py-0.5 rounded-lg">
+                  <div className="flex items-center gap-1 text-xs font-mono font-bold text-[#4f7cff] bg-[#111827] border border-[#2b3545] px-2 py-0.5 rounded-lg">
                     <Zap className="w-3 h-3" />
                     <span>+{item.xp_reward || item.xp || 50} XP</span>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-[#f4f7fc] text-sm font-sans">
+                  <h3 className="font-semibold text-[#f3f4f6] text-sm font-sans">
                     {item.name}
                   </h3>
-                  <p className="text-xs text-[#a6b4c9] mt-1 leading-relaxed font-sans">
+                  <p className="text-xs text-[#9ca8b8] mt-1 leading-relaxed font-sans">
                     {item.description || item.desc}
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-[#2c3d58] flex items-center justify-between text-[11px] font-sans">
-                  <span className="text-[#a6b4c9]">Status:</span>
+                <div className="pt-2 border-t border-[#2b3545] flex items-center justify-between text-[11px] font-sans">
+                  <span className="text-[#9ca8b8]">Status:</span>
                   {isUnlocked ? (
-                    <span className="text-[#34d399] font-bold flex items-center gap-1">
+                    <span className="text-[#35a875] font-bold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Unlocked</span>
                     </span>
                   ) : (
-                    <span className="text-[#a6b4c9]">
+                    <span className="text-[#9ca8b8]">
                       Locked · Complete curriculum goals
                     </span>
                   )}

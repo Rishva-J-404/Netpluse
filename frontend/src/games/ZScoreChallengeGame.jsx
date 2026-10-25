@@ -1,64 +1,56 @@
 import React, { useState } from 'react'
-import {
-  Target,
-  Calculator,
-  Send,
-  Info,
-  RotateCcw,
-  Sparkles,
-  HelpCircle,
-  Gauge
-} from 'lucide-react'
+import { Calculator, Send, Gauge, HelpCircle } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
-import Panel from '../components/Panel'
 import GameResultCard from './GameResultCard'
 import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
+import Panel from '../components/Panel'
 
 export default function ZScoreChallengeGame({ scenario, onLeave }) {
-  const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
+  const { submitAnswer, submitting, lastResult, clearResult, completeGame } = useGame()
+  const [inputVal, setInputVal] = useState('')
+  const [submissionError, setSubmissionError] = useState(null)
   const [viewMode, setViewMode] = useState('simulator') // 'simulator' | 'classic'
 
+  // Default scenario fallback
   const sc = scenario || {
-    id: 'zscore_challenge_01',
+    id: 'zscore_calc_basic',
     game: 'zscore_challenge',
-    title: 'Afternoon Peak Load',
-    description: 'Calculate the standardized Z-score for the peak afternoon lecture streaming.',
+    title: 'Standardizing Highway Traffic',
+    description: 'Calculate the Z-score for an observed load of 62 Mbps on a baseline distribution.',
     mean: 50.0,
     std_dev: 5.0,
     current_load: 62.0,
-    question: 'What is the Z-score for a network load of 62.0 Mbps?',
     options: ['1.2', '2.4', '3.2', '0.8'],
-    formula: 'Z = (X - μ) / σ'
+    question: 'Calculate the Z-score: Z = (X - μ) / σ'
   }
 
-  const [inputVal, setInputVal] = useState('')
   const [selectedPreset, setSelectedPreset] = useState('')
   const [showFormulaHint, setShowFormulaHint] = useState(false)
 
   // 3D Simulator Mode (Default)
   if (viewMode === 'simulator') {
     return (
-      <div className="space-y-4 max-w-5xl mx-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-[#2C3D58]">
+      <div className="space-y-4 max-w-5xl mx-auto font-sans">
+        <div className="flex items-center justify-between pb-3 border-b border-[#2b3545]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#8CC8FF] uppercase tracking-wider font-bold">
+            <span className="text-xs font-mono text-[#4f7cff] uppercase tracking-wider font-bold">
               GAME 2 — Z-SCORE CHALLENGE
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#1B2B46] text-[#34D399] border border-[#2C3D58] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#202938] text-[#35a875] border border-[#2b3545] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#35a875] animate-pulse"></span>
               3D SIMULATOR ACTIVE
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('classic')}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Classic Workbench Mode
             </button>
             <button
               onClick={onLeave}
-              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#181f2b] hover:bg-[#202938] text-xs font-sans text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition cursor-pointer"
             >
               Exit to Lobby
             </button>
@@ -92,21 +84,20 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const num = parseFloat(inputVal)
-    if (isNaN(num) || submitting) return
+    if (!inputVal || submitting) return
 
+    setSubmissionError(null)
     try {
       const res = await submitAnswer({
         gameId: 'zscore_challenge',
         scenarioId: sc.id,
-        userDecision: inputVal.trim(),
-        userZScore: num
+        userDecision: inputVal.toString()
       })
       if (res && res.is_correct) {
         completeGame('zscore_challenge', res.xp_awarded)
       }
     } catch {
-      // Handled via context
+      // Error handled via GameContext state
     }
   }
 
@@ -117,28 +108,28 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto font-sans">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#26354d]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#2b3545]">
         <div>
-          <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider block font-bold">
+          <span className="text-xs font-mono text-[#4f7cff] uppercase tracking-wider block font-bold">
             GAME 2 — Z-SCORE CHALLENGE (CLASSIC WORKBENCH)
           </span>
-          <h2 className="text-2xl font-bold font-mono text-[#f9fafb] mt-1">
+          <h2 className="text-2xl font-bold font-sans text-[#f3f4f6] mt-1">
             {sc.title}
           </h2>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode('simulator')}
-            className="px-3 py-1.5 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-mono font-bold transition flex items-center gap-1.5 shadow"
+            className="px-3.5 py-1.5 rounded-xl bg-[#4f7cff] hover:bg-[#688fff] text-white text-xs font-sans font-medium transition flex items-center gap-1.5 shadow cursor-pointer"
           >
             <Gauge className="w-3.5 h-3.5" />
             Switch to 3D Simulator
           </button>
           <button
             onClick={onLeave}
-            className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] text-xs font-mono border border-[#26354d] transition-colors"
+            className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-[#181f2b] hover:bg-[#202938] text-[#9ca8b8] text-xs font-sans border border-[#2b3545] transition-colors cursor-pointer"
           >
             Exit to Lobby
           </button>
@@ -147,22 +138,22 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
 
       {/* Scenario Telemetry Data */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 text-xs font-mono">
-          <span className="text-slate-500 uppercase text-[10px]">Observed Load (X)</span>
-          <div className="text-2xl font-bold text-white">{sc.current_load} <span className="text-xs text-slate-400 font-normal">Mbps</span></div>
-          <span className="text-[11px] text-slate-400">Current network observation</span>
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-1 text-xs font-sans">
+          <span className="text-[#9ca8b8] uppercase text-[10px] font-medium">Observed Load (X)</span>
+          <div className="text-2xl font-bold font-mono text-[#f3f4f6]">{sc.current_load} <span className="text-xs text-[#9ca8b8] font-normal">Mbps</span></div>
+          <span className="text-[11px] text-[#9ca8b8]">Current network observation</span>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 text-xs font-mono">
-          <span className="text-slate-500 uppercase text-[10px]">Baseline Mean (μ)</span>
-          <div className="text-2xl font-bold text-blue-400">{sc.mean} <span className="text-xs text-slate-400 font-normal">Mbps</span></div>
-          <span className="text-[11px] text-slate-400">Distribution center of mass</span>
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-1 text-xs font-sans">
+          <span className="text-[#9ca8b8] uppercase text-[10px] font-medium">Baseline Mean (μ)</span>
+          <div className="text-2xl font-bold font-mono text-[#4f7cff]">{sc.mean} <span className="text-xs text-[#9ca8b8] font-normal">Mbps</span></div>
+          <span className="text-[11px] text-[#9ca8b8]">Distribution center of mass</span>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1 text-xs font-mono">
-          <span className="text-slate-500 uppercase text-[10px]">Std Deviation (σ)</span>
-          <div className="text-2xl font-bold text-emerald-400">{sc.std_dev} <span className="text-xs text-slate-400 font-normal">Mbps</span></div>
-          <span className="text-[11px] text-slate-400">Dispersion unit of scale</span>
+        <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-1 text-xs font-sans">
+          <span className="text-[#9ca8b8] uppercase text-[10px] font-medium">Std Deviation (σ)</span>
+          <div className="text-2xl font-bold font-mono text-[#35a875]">{sc.std_dev} <span className="text-xs text-[#9ca8b8] font-normal">Mbps</span></div>
+          <span className="text-[11px] text-[#9ca8b8]">Dispersion unit of scale</span>
         </div>
       </div>
 
@@ -174,15 +165,15 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
             icon={Calculator}
           >
             <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-2">
+              <div className="p-4 rounded-xl bg-[#111827] border border-[#2b3545] space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-slate-300 font-bold">
+                  <span className="text-xs font-sans text-[#f3f4f6] font-semibold">
                     {sc.question || 'What is the Z-score for this observation?'}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowFormulaHint(!showFormulaHint)}
-                    className="text-[11px] font-mono text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                    className="text-[11px] font-sans text-[#4f7cff] hover:text-[#688fff] flex items-center gap-1 cursor-pointer"
                   >
                     <HelpCircle className="w-3.5 h-3.5" />
                     <span>{showFormulaHint ? 'Hide Formula' : 'Formula Hint'}</span>
@@ -190,10 +181,10 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
                 </div>
 
                 {showFormulaHint && (
-                  <div className="p-3 rounded-lg bg-blue-950/30 border border-blue-800/40 text-xs font-mono text-blue-400 space-y-1">
+                  <div className="p-3 rounded-xl bg-[#202938] border border-[#2b3545] text-xs font-mono text-[#4f7cff] space-y-1">
                     <p className="font-bold">Standardization Formula:</p>
                     <code>Z = (X - μ) / σ</code>
-                    <p className="text-[11px] text-slate-400 font-sans pt-1">
+                    <p className="text-[11px] text-[#9ca8b8] font-sans pt-1">
                       Subtract the mean from observed throughput, then divide by standard deviation.
                     </p>
                   </div>
@@ -202,7 +193,7 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
 
               {/* Quick Option Buttons */}
               <div className="space-y-2">
-                <label className="block text-xs font-mono text-slate-400">
+                <label className="block text-xs font-sans text-[#9ca8b8] font-medium uppercase tracking-wider">
                   Select a Candidate Answer:
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -211,10 +202,10 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
                       type="button"
                       key={opt}
                       onClick={() => handleSelectPreset(opt)}
-                      className={`p-3 rounded-xl border font-mono text-center text-sm transition-all ${
+                      className={`p-3 rounded-xl border font-mono text-center text-sm transition-all cursor-pointer ${
                         selectedPreset === opt
-                          ? 'bg-[#161f30] border-blue-500 text-white font-bold ring-1 ring-blue-500/40'
-                          : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                          ? 'bg-[#202938] border-[#4f7cff] text-[#4f7cff] font-bold ring-1 ring-[#4f7cff]'
+                          : 'bg-[#111827] border-[#2b3545] text-[#9ca8b8] hover:border-[#4f7cff]/50'
                       }`}
                     >
                       Z = {opt}σ
@@ -224,8 +215,8 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
               </div>
 
               {/* Or Manual Custom Numeric Input */}
-              <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                <label htmlFor="custom-z-input" className="block text-xs font-mono text-slate-400">
+              <div className="space-y-2 pt-2 border-t border-[#2b3545]">
+                <label htmlFor="custom-z-input" className="block text-xs font-sans text-[#9ca8b8] font-medium uppercase tracking-wider">
                   Or Enter Calculated Decimal Value (supports negative):
                 </label>
                 <div className="relative max-w-xs">
@@ -236,32 +227,32 @@ export default function ZScoreChallengeGame({ scenario, onLeave }) {
                     placeholder="e.g. 2.40"
                     value={inputVal}
                     onChange={handleCustomInput}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-blue-500 pr-10"
+                    className="w-full bg-[#111827] border border-[#2b3545] rounded-xl px-3 py-2 text-sm font-mono text-[#f3f4f6] focus:outline-none focus:border-[#4f7cff] pr-10"
                   />
-                  <span className="absolute right-3 top-2.5 text-xs font-mono text-slate-500 pointer-events-none">
+                  <span className="absolute right-3 top-2.5 text-xs font-mono text-[#9ca8b8] pointer-events-none">
                     σ
                   </span>
                 </div>
               </div>
 
               {submissionError && (
-                <div className="p-3 rounded-lg bg-rose-950/50 border border-rose-800 text-xs font-mono text-rose-300">
+                <div className="p-3 rounded-xl bg-[#d95c5c]/10 border border-[#d95c5c]/30 text-xs font-sans text-[#d95c5c]">
                   {submissionError}
                 </div>
               )}
 
               <div className="pt-2 flex items-center justify-between">
-                <span className="text-[11px] font-mono text-slate-500">
-                  Tolerance: ±0.05σ validated by FastAPI statistical engine.
+                <span className="text-[11px] font-sans text-[#9ca8b8]">
+                  Tolerance: ±0.05σ validated by statistical engine.
                 </span>
 
                 <button
                   type="submit"
                   disabled={!inputVal || submitting}
-                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-sans font-medium transition-all ${
                     inputVal && !submitting
-                      ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-950/40 cursor-pointer'
-                      : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                      ? 'bg-[#4f7cff] hover:bg-[#688fff] text-white cursor-pointer shadow-sm'
+                      : 'bg-[#202938] text-[#9ca8b8]/50 border border-[#2b3545] cursor-not-allowed'
                   }`}
                 >
                   <Send className="w-3.5 h-3.5" />
