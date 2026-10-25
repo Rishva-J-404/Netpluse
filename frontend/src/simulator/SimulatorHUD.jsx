@@ -13,7 +13,8 @@ import {
   ArrowUp,
   ArrowDown,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
+  Trophy
 } from 'lucide-react'
 
 export default function SimulatorHUD({
@@ -38,7 +39,9 @@ export default function SimulatorHUD({
   },
   cameraMode = 'CHASE',
   soundEnabled = true,
+  isScoreboardOpen = false,
   onToggleSound,
+  onToggleScoreboard,
   onCycleCamera,
   onPause,
   onSteerLeft,
@@ -102,6 +105,18 @@ export default function SimulatorHUD({
 
         {/* Top-Right: Game Utility Controls */}
         <div className="flex items-center gap-2 pointer-events-auto">
+          <button
+            onClick={onToggleScoreboard}
+            className={`backdrop-blur-md border px-2.5 py-2 rounded-xl text-xs font-mono flex items-center gap-1.5 transition shadow ${
+              isScoreboardOpen
+                ? 'bg-[#161f30] border-[#3b82f6] text-[#3b82f6]'
+                : 'bg-[#111827]/90 hover:bg-[#1e293b] border-[#26354d] text-[#f9fafb]'
+            }`}
+            title="Toggle Scoreboard (Tab)"
+          >
+            <Trophy className="w-3.5 h-3.5 text-[#f59e0b]" />
+            <span className="hidden sm:inline font-bold">SCORE</span>
+          </button>
           <button
             onClick={onCycleCamera}
             className="bg-[#111827]/90 hover:bg-[#1e293b] backdrop-blur-md border border-[#26354d] px-2.5 py-2 rounded-xl text-xs font-mono text-[#f9fafb] flex items-center gap-1.5 transition shadow"
@@ -209,11 +224,13 @@ export default function SimulatorHUD({
           </div>
 
           {/* Desktop Keyboard Hints */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#111827]/80 backdrop-blur-sm border border-[#26354d] rounded-lg text-[10px] font-mono text-[#94a3b8]">
-            <span className="px-1 py-0.5 rounded bg-[#1e293b] text-white">[W] Accelerate</span>
-            <span className="px-1 py-0.5 rounded bg-[#1e293b] text-white">[A][D] Steer</span>
-            <span className="px-1 py-0.5 rounded bg-[#1e293b] text-white">[S] Brake</span>
-            <span className="px-1 py-0.5 rounded bg-[#1e293b] text-white">[Space] Handbrake</span>
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#111827]/85 backdrop-blur-sm border border-[#26354d] rounded-lg text-[10px] font-mono text-[#94a3b8]">
+            <span className="px-1.5 py-0.5 rounded bg-[#1e293b] text-white">[A / ←] Steer Left</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#1e293b] text-white">[D / →] Steer Right</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#1e293b] text-white">[W / ↑] Gas</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#1e293b] text-white">[S / ↓] Brake</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#1e293b] text-white">[Space] Boost</span>
+            <span className="px-1.5 py-0.5 rounded bg-[#161f30] text-[#3b82f6] border border-[#26354d] font-semibold">[TAB] Scoreboard</span>
           </div>
         </div>
 

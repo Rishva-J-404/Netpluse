@@ -5,18 +5,24 @@ import {
   Volume2,
   VolumeX,
   Keyboard,
+  ArrowLeftRight,
   LogOut,
   X
 } from 'lucide-react'
 
 export default function PauseMenu({
+  isOpen = true,
   missionTitle,
   soundEnabled = true,
+  invertSteering = false,
   onResume,
   onRestart,
   onToggleSound,
+  onToggleInvertSteering,
   onExit
 }) {
+  if (isOpen === false) return null
+
   return (
     <div className="absolute inset-0 bg-[#0b0f17]/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn">
       <div className="bg-[#111827] border border-[#26354d] rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
@@ -47,6 +53,28 @@ export default function PauseMenu({
           >
             <RotateCcw className="w-4 h-4 text-[#3b82f6]" />
             RESTART MISSION
+          </button>
+
+          {/* Steering Inversion Toggle */}
+          <button
+            type="button"
+            onClick={onToggleInvertSteering}
+            disabled={!onToggleInvertSteering}
+            className="w-full py-2.5 px-4 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] flex items-center justify-between gap-2 transition"
+          >
+            <div className="flex items-center gap-2">
+              <ArrowLeftRight className={`w-4 h-4 transition ${invertSteering ? 'text-[#f59e0b]' : 'text-[#3b82f6]'}`} />
+              <span>STEERING:</span>
+            </div>
+            <span
+              className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider ${
+                invertSteering
+                  ? 'bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/40'
+                  : 'bg-[#3b82f6]/20 text-[#3b82f6] border border-[#3b82f6]/40'
+              }`}
+            >
+              {invertSteering ? 'INVERTED' : 'STANDARD'}
+            </span>
           </button>
 
           {onToggleSound && (

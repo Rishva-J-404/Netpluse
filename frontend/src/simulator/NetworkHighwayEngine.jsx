@@ -6,6 +6,7 @@ import { createBridgePayload } from '../utils/bridge'
 import { HighwayScene3D, isWebGLAvailable } from './HighwayScene3D'
 import { HighwayCanvasFallback } from './HighwayCanvasFallback'
 import SimulatorHUD from './SimulatorHUD'
+import ScoreboardOverlay from './ScoreboardOverlay'
 import CheckpointModal from './CheckpointModal'
 import MissionBriefing from './MissionBriefing'
 import PauseMenu from './PauseMenu'
@@ -33,6 +34,33 @@ export default function NetworkHighwayEngine({
   const [stage, setStage] = useState('BRIEFING')
   const [cameraMode, setCameraMode] = useState('CHASE')
   const [soundEnabled, setSoundEnabled] = useState(true)
+  const [invertSteering, setInvertSteering] = useState(() => {
+    try {
+      return localStorage.getItem('netpulse_invert_steering') === 'true'
+    } catch {
+      return false
+    }
+  })
+  const [isScoreboardOpen, setIsScoreboardOpen] = useState(false)
+  const [highScore, setHighScore] = useState(() => {
+    try {
+      return Number(localStorage.getItem(`netpulse_highscore_${missionId}`)) || 2500
+    } catch {
+      return 2500
+    }
+  })
+  const [streak, setStreak] = useState(3)
+  const [multiplier, setMultiplier] = useState(1.5)
+
+  const handleToggleInvertSteering = () => {
+    setInvertSteering(prev => {
+      const next = !prev
+      try {
+        localStorage.setItem('netpulse_invert_steering', String(next))
+      } catch {}
+      return next
+    })
+  }
 
   // Live Vehicle Dynamics & Game HUD state
   const [telemetryState, setTelemetryState] = useState({
@@ -156,6 +184,12 @@ export default function NetworkHighwayEngine({
         return
       }
 
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        setIsScoreboardOpen(prev => !prev)
+        return
+      }
+
       if (stage !== 'DRIVING' || !engineRef.current) return
 
       if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') {
@@ -163,9 +197,9 @@ export default function NetworkHighwayEngine({
       } else if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
         engineRef.current.setInput('backward', true)
       } else if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
-        engineRef.current.setInput('left', true)
+        engineRef.current.setInput(invertSteering ? 'right' : 'left', true)
       } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
-        engineRef.current.setInput('right', true)
+        engineRef.current.setInput(invertSteering ? 'left' : 'right', true)
       } else if (e.key === ' ' || e.code === 'Space') {
         engineRef.current.setInput('handbrake', true)
       }
@@ -178,9 +212,9 @@ export default function NetworkHighwayEngine({
       } else if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
         engineRef.current.setInput('backward', false)
       } else if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
-        engineRef.current.setInput('left', false)
+        engineRef.current.setInput(invertSteering ? 'right' : 'left', false)
       } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
-        engineRef.current.setInput('right', false)
+        engineRef.current.setInput(invertSteering ? 'left' : 'right', false)
       } else if (e.key === ' ' || e.code === 'Space') {
         engineRef.current.setInput('handbrake', false)
       }
@@ -380,8 +414,10 @@ export default function NetworkHighwayEngine({
           onToggleSound={() => setSoundEnabled(prev => !prev)}
           onCycleCamera={handleCycleCamera}
           onPause={handlePause}
-          onSteerLeft={() => engineRef.current && engineRef.current.setInput('left', true)}
-          onSteerRight={() => engineRef.current && engineRef.current.setInput('right', true)}
+          isScoreboardOpen={isScoreboardOpen}
+          onToggleScoreboard={() => setIsScoreboardOpen(prev => !prev)}
+          onSteerLeft={() => engineRef.current && engineRef.current.setInput(invertSteering ? 'right' : 'left', true)}
+          onSteerRight={() => engineRef.current && engineRef.current.setInput(invertSteering ? 'left' : 'right', true)}
           onGas={() => engineRef.current && engineRef.current.setInput('forward', true)}
           onBrake={() => engineRef.current && engineRef.current.setInput('backward', true)}
           onReleaseInput={(key) => engineRef.current && engineRef.current.setInput(key, false)}
@@ -429,12 +465,26 @@ export default function NetworkHighwayEngine({
         <PauseMenu
           missionTitle={missionTitle}
           soundEnabled={soundEnabled}
+          invertSteering={invertSteering}
           onResume={handleResume}
           onRestart={handleRestart}
           onToggleSound={() => setSoundEnabled(prev => !prev)}
+          onToggleInvertSteering={handleToggleInvertSteering}
           onExit={onLeave}
         />
       )}
+
+      {/* In-Game Scoreboard Modal */}
+      <ScoreboardOverlay
+        isOpen={isScoreboardOpen}
+        onClose={() => setIsScoreboardOpen(false)}
+        currentScore={totalScore}
+        highScore={highScore}
+        packetsCollected={telemetryState.packetsCollected}
+        accuracyPercentage={evaluationResult?.is_correct ? 100 : (stage === 'DRIVING' ? 95 : 85)}
+        multiplier={multiplier}
+        streak={streak}
+      />
 
       {stage === 'RESULTS' && (
         <MissionResults

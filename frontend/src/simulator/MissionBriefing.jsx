@@ -94,15 +94,17 @@ export default function MissionBriefing({
 
         {/* Controls Quick Reference */}
         <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-[#0b0f17] border border-[#1e293b] text-[11px] font-mono text-[#94a3b8]">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center flex-wrap gap-1.5">
             <Keyboard className="w-3.5 h-3.5 text-[#3b82f6]" />
-            <span>[W]/[↑] Accel</span>
+            <span className="text-white font-semibold">[A / ←] Steer Left</span>
             <span>•</span>
-            <span>[A]/[D] Steer</span>
+            <span className="text-white font-semibold">[D / →] Steer Right</span>
             <span>•</span>
-            <span>[S]/[↓] Brake</span>
+            <span>[W / ↑] Gas</span>
             <span>•</span>
-            <span>[Space] Handbrake</span>
+            <span>[S / ↓] Brake</span>
+            <span>•</span>
+            <span className="text-[#3b82f6] font-semibold">[TAB] Scoreboard</span>
             <span>•</span>
             <span>[C] Cam</span>
           </div>
