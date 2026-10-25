@@ -23,7 +23,7 @@ export default function MissionBriefing({
   onBack
 }) {
   return (
-    <div className="absolute inset-0 bg-[#060a15]/85 backdrop-blur-md flex items-center justify-center p-4 z-40 animate-fadeIn font-sans">
+    <div className="absolute inset-0 bg-[#060a15]/85 backdrop-blur-md flex items-center justify-center p-4 z-40 animate-fadeIn font-sans pointer-events-auto">
       <div className="bg-[#0d1422] border border-[#1e293b] rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl space-y-5">
         
         {/* Header */}
@@ -95,20 +95,29 @@ export default function MissionBriefing({
           </div>
         </div>
 
-        {/* Learning Outcomes */}
-        {learningOutcomes && learningOutcomes.length > 0 && (
+        {/* Learning Outcomes (safely handles both Array and String) */}
+        {learningOutcomes && (
           <div className="space-y-1.5">
             <span className="text-[11px] font-sans uppercase text-slate-400 font-semibold tracking-wider block">
               Learning Objectives
             </span>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-300 font-sans">
-              {learningOutcomes.map((outcome, idx) => (
-                <li key={idx} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff]"></span>
-                  <span>{outcome}</span>
-                </li>
-              ))}
-            </ul>
+            <div className="text-xs text-slate-300 font-sans">
+              {Array.isArray(learningOutcomes) ? (
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {learningOutcomes.map((outcome, idx) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] shrink-0"></span>
+                      <span>{outcome}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] mt-1.5 shrink-0"></span>
+                  <span className="leading-relaxed">{String(learningOutcomes)}</span>
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -116,7 +125,7 @@ export default function MissionBriefing({
         <div className="pt-2">
           <button
             onClick={onStartEngine}
-            className="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-[#00f0ff] hover:opacity-95 text-slate-950 font-bold font-sans text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25"
+            className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-[#00f0ff] hover:opacity-95 active:scale-[0.99] text-slate-950 font-bold font-sans text-sm tracking-wide flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 cursor-pointer"
           >
             <Play className="w-4 h-4 fill-slate-950" />
             <span>Launch Simulation & Drive</span>

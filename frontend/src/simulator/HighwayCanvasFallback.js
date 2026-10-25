@@ -52,6 +52,7 @@ export class HighwayCanvasFallback {
     }
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
+    this.render()
   }
 
   setupCheckpointGantry(options = [], distanceMeters = 400) {
@@ -125,6 +126,12 @@ export class HighwayCanvasFallback {
     if (!w || !h) return
     const ctx = this.ctx
 
+    const horizonY = h * 0.42
+    const roadTopWidth = w * 0.14
+    const roadBottomWidth = w * 0.86
+    const roadTopX = (w - roadTopWidth) / 2
+    const roadBottomX = (w - roadBottomWidth) / 2
+
     // Vibrant Cyber Sky
     const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY)
     skyGrad.addColorStop(0, '#060a15')
@@ -163,11 +170,7 @@ export class HighwayCanvasFallback {
       }
     }
 
-    const horizonY = h * 0.42
-    const roadTopWidth = w * 0.14
-    const roadBottomWidth = w * 0.86
-    const roadTopX = (w - roadTopWidth) / 2
-    const roadBottomX = (w - roadBottomWidth) / 2
+
 
     // Road surface
     ctx.beginPath()

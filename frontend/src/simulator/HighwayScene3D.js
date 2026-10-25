@@ -51,7 +51,7 @@ export class HighwayScene3D {
       z: 0,
       vx: 0,
       vz: 0,
-      speedKmh: 0,
+      speedKmh: 85,
       targetSpeedKmh: 90,
       maxSpeedKmh: 180,
       acceleration: 48,
@@ -150,6 +150,7 @@ export class HighwayScene3D {
       }
     }
     window.addEventListener('resize', this.handleResize)
+    this.renderer.render(this.scene, this.camera)
   }
 
   buildStarfield() {
@@ -837,19 +838,27 @@ export class HighwayScene3D {
       )
     } else if (this.inputs.backward) {
       this.vehicle.speedKmh = Math.max(
-        0,
+        25,
         this.vehicle.speedKmh - this.vehicle.braking * delta
       )
     } else if (this.inputs.handbrake) {
       this.vehicle.speedKmh = Math.max(
-        0,
+        15,
         this.vehicle.speedKmh - this.vehicle.braking * 2.2 * delta
       )
     } else {
-      this.vehicle.speedKmh = Math.max(
-        0,
-        this.vehicle.speedKmh - 12 * delta
-      )
+      // Natural highway cruising: smoothly converges to targetSpeedKmh (90 km/h)
+      if (this.vehicle.speedKmh < this.vehicle.targetSpeedKmh) {
+        this.vehicle.speedKmh = Math.min(
+          this.vehicle.targetSpeedKmh,
+          this.vehicle.speedKmh + this.vehicle.acceleration * 0.7 * delta
+        )
+      } else if (this.vehicle.speedKmh > this.vehicle.targetSpeedKmh) {
+        this.vehicle.speedKmh = Math.max(
+          this.vehicle.targetSpeedKmh,
+          this.vehicle.speedKmh - 16 * delta
+        )
+      }
     }
 
     // Convert km/h to units per second (1 unit ~= 1 meter)

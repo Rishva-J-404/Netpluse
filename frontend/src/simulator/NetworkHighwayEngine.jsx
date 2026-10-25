@@ -41,6 +41,10 @@ export default function NetworkHighwayEngine({
       return false
     }
   })
+  const invertSteeringRef = useRef(invertSteering)
+  useEffect(() => {
+    invertSteeringRef.current = invertSteering
+  }, [invertSteering])
   const [isScoreboardOpen, setIsScoreboardOpen] = useState(false)
   const [highScore, setHighScore] = useState(() => {
     try {
@@ -197,9 +201,9 @@ export default function NetworkHighwayEngine({
       } else if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
         engineRef.current.setInput('backward', true)
       } else if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
-        engineRef.current.setInput(invertSteering ? 'right' : 'left', true)
+        engineRef.current.setInput(invertSteeringRef.current ? 'right' : 'left', true)
       } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
-        engineRef.current.setInput(invertSteering ? 'left' : 'right', true)
+        engineRef.current.setInput(invertSteeringRef.current ? 'left' : 'right', true)
       } else if (e.key === ' ' || e.code === 'Space') {
         engineRef.current.setInput('handbrake', true)
       }
@@ -212,9 +216,9 @@ export default function NetworkHighwayEngine({
       } else if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
         engineRef.current.setInput('backward', false)
       } else if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
-        engineRef.current.setInput(invertSteering ? 'right' : 'left', false)
+        engineRef.current.setInput(invertSteeringRef.current ? 'right' : 'left', false)
       } else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
-        engineRef.current.setInput(invertSteering ? 'left' : 'right', false)
+        engineRef.current.setInput(invertSteeringRef.current ? 'left' : 'right', false)
       } else if (e.key === ' ' || e.code === 'Space') {
         engineRef.current.setInput('handbrake', false)
       }

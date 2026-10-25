@@ -34,6 +34,10 @@ export default function CheckpointModal({
     explanation = 'Calculate distance from baseline in standard deviation units.'
   } = checkpointData
 
+  const safeOptions = Array.isArray(options) && options.length > 0
+    ? options
+    : ['1.2', '2.4', '3.2', '0.8']
+
   const handleSelect = (opt) => {
     if (hasSubmitted || evaluationResult) return
     setSelectedOption(opt)
@@ -50,7 +54,7 @@ export default function CheckpointModal({
   const isCorrect = evaluationResult?.is_correct
 
   return (
-    <div className="absolute inset-0 bg-[#060a15]/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn font-sans">
+    <div className="absolute inset-0 bg-[#060a15]/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fadeIn font-sans pointer-events-auto">
       <div className="bg-[#0d1422] border border-[#1e293b] rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-2xl space-y-4">
         
         {/* Checkpoint Header */}
@@ -100,7 +104,7 @@ export default function CheckpointModal({
           <div className="space-y-3">
             <label className="text-xs font-sans text-slate-300 font-medium block">Select your decision or calculation:</label>
             <div className="grid grid-cols-2 gap-2.5">
-              {options.map((opt, idx) => (
+              {safeOptions.map((opt, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSelect(opt)}
