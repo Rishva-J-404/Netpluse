@@ -45,34 +45,34 @@ export default function Navbar({ onToggleSidebar }) {
   const displayName = profile?.username || user?.email?.split('@')[0] || 'Student_Analyst'
 
   return (
-    <header className="h-16 border-b border-slate-800 bg-[#0b0f19]/95 backdrop-blur px-4 sm:px-6 flex items-center justify-between sticky top-0 z-40">
+    <header className="h-16 border-b border-[#26354d] bg-[#0b0f17]/95 backdrop-blur px-4 sm:px-6 flex items-center justify-between sticky top-0 z-40">
       {/* Left: Hamburger + Logo */}
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleSidebar}
           aria-label="Toggle navigation sidebar"
-          className="lg:hidden p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+          className="lg:hidden p-2 rounded-xl bg-[#111827] border border-[#26354d] text-[#94a3b8] hover:text-[#f9fafb] hover:border-[#3b82f6] transition-colors focus:outline-none"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <Link
           to="/"
-          className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 rounded-lg pr-1"
+          className="flex items-center gap-2.5 focus:outline-none rounded-lg pr-1"
         >
-          <div className="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/50 flex items-center justify-center text-cyan-400 shadow-sm shadow-cyan-950">
+          <div className="w-9 h-9 rounded-xl bg-[#161f30] border border-[#26354d] flex items-center justify-center text-[#3b82f6] shadow-sm">
             <Activity className="w-5 h-5 animate-pulse" aria-hidden="true" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="font-bold tracking-wider text-base sm:text-lg text-white font-mono">
+              <span className="font-bold tracking-wider text-base sm:text-lg text-[#f9fafb] font-mono">
                 NETPULSE
               </span>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/50">
+              <span className="text-[10px] font-mono text-[#3b82f6] bg-[#161f30] px-1.5 py-0.5 rounded border border-[#26354d]">
                 25CS203
               </span>
             </div>
-            <span className="text-[10px] font-mono text-slate-400 hidden sm:inline">
+            <span className="text-[10px] font-mono text-[#94a3b8] hidden sm:inline">
               Network Operations Center
             </span>
           </div>
@@ -87,19 +87,19 @@ export default function Navbar({ onToggleSidebar }) {
           title="Click to re-probe backend service status"
           className={`flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-full border text-[11px] font-mono transition-colors ${
             healthStatus === 'online'
-              ? 'bg-emerald-950/60 border-emerald-800/60 text-emerald-300 hover:bg-emerald-900/40'
+              ? 'bg-[#10b981]/10 border-[#10b981]/40 text-[#10b981] hover:bg-[#10b981]/20'
               : healthStatus === 'offline'
-              ? 'bg-rose-950/60 border-rose-800/60 text-rose-300 hover:bg-rose-900/40'
-              : 'bg-amber-950/60 border-amber-800/60 text-amber-300 hover:bg-amber-900/40'
+              ? 'bg-[#ef4444]/10 border-[#ef4444]/40 text-[#ef4444] hover:bg-[#ef4444]/20'
+              : 'bg-[#f59e0b]/10 border-[#f59e0b]/40 text-[#f59e0b] hover:bg-[#f59e0b]/20'
           }`}
         >
           <span
             className={`w-2 h-2 rounded-full shrink-0 ${
               healthStatus === 'online'
-                ? 'bg-emerald-400'
+                ? 'bg-[#10b981]'
                 : healthStatus === 'offline'
-                ? 'bg-rose-400 animate-pulse'
-                : 'bg-amber-400 animate-ping'
+                ? 'bg-[#ef4444] animate-pulse'
+                : 'bg-[#f59e0b] animate-ping'
             }`}
             aria-hidden="true"
           />
@@ -121,10 +121,10 @@ export default function Navbar({ onToggleSidebar }) {
           <div className="flex items-center gap-2">
             <Link
               to="/profile"
-              className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-xs font-mono text-slate-200 hover:border-cyan-500/50 hover:text-white transition-colors"
+              className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#111827] border border-[#26354d] text-xs font-mono text-slate-200 hover:border-blue-500/50 hover:text-white transition-colors"
               title="View student profile"
             >
-              <div className="w-5 h-5 rounded bg-cyan-950 border border-cyan-500/50 flex items-center justify-center text-cyan-400 text-[10px] font-bold">
+              <div className="w-5 h-5 rounded bg-[#161f30] border border-[#26354d] flex items-center justify-center text-[#3b82f6] text-[10px] font-bold">
                 {displayName.substring(0, 1).toUpperCase()}
               </div>
               <span className="hidden sm:inline font-medium max-w-[120px] truncate">
@@ -135,26 +135,26 @@ export default function Navbar({ onToggleSidebar }) {
             <button
               onClick={signOut}
               title="Sign Out"
-              className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-rose-400 hover:border-rose-800/60 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg bg-[#111827] border border-[#26354d] text-slate-400 hover:text-rose-400 hover:border-rose-800/60 transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         ) : (
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-slate-900 border border-slate-800 text-slate-400">
+            <span className="hidden lg:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono bg-[#111827] border border-[#26354d] text-slate-400">
               Guest Analyst
             </span>
             <Link
               to="/login"
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-200 text-xs font-mono transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#111827] border border-[#26354d] hover:border-blue-500/50 text-slate-200 text-xs font-mono transition-colors"
             >
-              <LogIn className="w-3.5 h-3.5 text-cyan-400" />
+              <LogIn className="w-3.5 h-3.5 text-blue-400" />
               <span>Login</span>
             </Link>
             <Link
               to="/register"
-              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-mono font-medium transition-colors shadow-sm shadow-cyan-950"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-medium transition-colors shadow-sm shadow-blue-950/50"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>Register</span>

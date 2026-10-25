@@ -14,7 +14,7 @@ export default function LoadingState({
       <div
         role="status"
         aria-live="polite"
-        className={`flex items-center gap-2 text-xs font-mono text-cyan-400 ${className}`}
+        className={`flex items-center gap-2 text-xs font-mono text-[#3b82f6] ${className}`}
       >
         <Activity className="w-4 h-4 animate-spin shrink-0" />
         <span>{message}</span>
@@ -26,11 +26,11 @@ export default function LoadingState({
     <div
       role="status"
       aria-live="polite"
-      className={`min-h-[220px] flex flex-col items-center justify-center p-6 text-center rounded-xl bg-slate-900/40 border border-slate-800/80 ${className}`}
+      className={`min-h-[220px] flex flex-col items-center justify-center p-6 text-center rounded-2xl bg-[#111827] border border-[#26354d] ${className}`}
     >
       <div className="relative mb-4 flex items-center justify-center">
-        <div className="w-12 h-12 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin" />
-        <Activity className="w-5 h-5 text-cyan-400 absolute" aria-hidden="true" />
+        <div className="w-12 h-12 rounded-full border-2 border-blue-500/20 border-t-blue-500 animate-spin" />
+        <Activity className="w-5 h-5 text-[#3b82f6] absolute" aria-hidden="true" />
       </div>
       <p className="text-sm font-mono text-slate-300 font-medium">
         {message}

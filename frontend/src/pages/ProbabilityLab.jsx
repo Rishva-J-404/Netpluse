@@ -146,12 +146,12 @@ export default function ProbabilityLab() {
                 onClick={() => handleCalculate('below')}
                 className={`p-3 rounded-lg border text-left font-mono text-xs transition-all ${
                   calcType === 'below'
-                    ? 'bg-cyan-950/70 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/60 font-semibold'
+                    ? 'bg-[#161f30] border-blue-500 text-blue-300 shadow-md shadow-blue-950/40 font-semibold'
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                 }`}
               >
                 <div className="text-white font-bold mb-0.5">A. Lower-Tail Probability</div>
-                <div className="text-[11px] text-cyan-400">P(X ≤ x) — Cumulative CDF</div>
+                <div className="text-[11px] text-blue-400">P(X ≤ x) — Cumulative CDF</div>
               </button>
 
               <button
@@ -159,12 +159,12 @@ export default function ProbabilityLab() {
                 onClick={() => handleCalculate('above')}
                 className={`p-3 rounded-lg border text-left font-mono text-xs transition-all ${
                   calcType === 'above'
-                    ? 'bg-cyan-950/70 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/60 font-semibold'
+                    ? 'bg-[#161f30] border-blue-500 text-blue-300 shadow-md shadow-blue-950/40 font-semibold'
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                 }`}
               >
                 <div className="text-white font-bold mb-0.5">B. Upper-Tail Probability</div>
-                <div className="text-[11px] text-cyan-400">P(X ≥ x) — Exceedance Risk</div>
+                <div className="text-[11px] text-blue-400">P(X ≥ x) — Exceedance Risk</div>
               </button>
 
               <button
@@ -172,12 +172,12 @@ export default function ProbabilityLab() {
                 onClick={() => handleCalculate('between')}
                 className={`p-3 rounded-lg border text-left font-mono text-xs transition-all ${
                   calcType === 'between'
-                    ? 'bg-cyan-950/70 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/60 font-semibold'
+                    ? 'bg-[#161f30] border-blue-500 text-blue-300 shadow-md shadow-blue-950/40 font-semibold'
                     : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                 }`}
               >
                 <div className="text-white font-bold mb-0.5">C. Interval Probability</div>
-                <div className="text-[11px] text-cyan-400">P(a ≤ X ≤ b) — Bounded Slice</div>
+                <div className="text-[11px] text-blue-400">P(a ≤ X ≤ b) — Bounded Slice</div>
               </button>
             </div>
           </div>
@@ -194,7 +194,7 @@ export default function ProbabilityLab() {
                 step="0.1"
                 value={mean}
                 onChange={e => setMean(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -209,7 +209,7 @@ export default function ProbabilityLab() {
                 min="0.001"
                 value={stdDev}
                 onChange={e => setStdDev(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -225,7 +225,7 @@ export default function ProbabilityLab() {
                 disabled={calcType === 'below'}
                 value={lowerVal}
                 onChange={e => setLowerVal(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-500 disabled:bg-slate-900"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500 disabled:bg-slate-900"
               />
             </div>
 
@@ -241,7 +241,7 @@ export default function ProbabilityLab() {
                 disabled={calcType === 'above'}
                 value={upperVal}
                 onChange={e => setUpperVal(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-500 disabled:bg-slate-900"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500 disabled:bg-slate-900"
               />
             </div>
           </div>
@@ -259,7 +259,7 @@ export default function ProbabilityLab() {
             <button
               onClick={() => handleCalculate(calcType)}
               disabled={loading}
-              className="px-5 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-cyan-950/60"
+              className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-blue-950/40"
             >
               <Percent className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>{loading ? 'Evaluating via SciPy...' : 'Calculate Normal Probability'}</span>
@@ -283,7 +283,7 @@ export default function ProbabilityLab() {
               unit=""
               subtext="Normalized distribution area [0.0 - 1.0]"
               icon={Percent}
-              accent="cyan"
+              accent="blue"
             />
             <MetricCard
               label="Percentage Representation"
@@ -305,7 +305,7 @@ export default function ProbabilityLab() {
               unit=""
               subtext="Z = (X - μ) / σ distance"
               icon={Info}
-              accent="cyan"
+              accent="blue"
             />
           </div>
 
@@ -321,7 +321,7 @@ export default function ProbabilityLab() {
 
             <div className="mt-4 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs font-mono text-slate-400 space-y-1.5">
               <span className="text-slate-500 text-[10px] uppercase font-bold block">Mathematical Foundation:</span>
-              <p className="text-cyan-300">
+              <p className="text-blue-400">
                 {calcType === 'below' && `P(X ≤ ${upperVal}) = Φ(Z) = Φ((${upperVal} - ${mean}) / ${stdDev})`}
                 {calcType === 'above' && `P(X ≥ ${lowerVal}) = 1 - Φ(Z) = 1 - Φ((${lowerVal} - ${mean}) / ${stdDev})`}
                 {calcType === 'between' && `P(${lowerVal} ≤ X ≤ ${upperVal}) = Φ(Z_b) - Φ(Z_a) = Φ((${upperVal} - ${mean}) / ${stdDev}) - Φ((${lowerVal} - ${mean}) / ${stdDev})`}

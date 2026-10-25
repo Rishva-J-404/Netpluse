@@ -59,19 +59,19 @@ export default function Leaderboard() {
         title="Authoritative Progression Standard"
         subtitle="Rankings computed from verified server-side completions"
         icon={Shield}
-        className="border-cyan-900/40 bg-gradient-to-r from-cyan-950/20 via-slate-900/60 to-slate-900/40"
+        className="border-[#26354d] bg-gradient-to-r from-blue-950/20 via-slate-900/60 to-slate-900/40"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono text-slate-300">
           <div className="space-y-1">
             <p>
-              Rankings are backed by <strong className="text-cyan-400">authoritative server-side verification</strong>. All XP is awarded through the statistical engine and secured with database idempotency.
+              Rankings are backed by <strong className="text-blue-400">authoritative server-side verification</strong>. All XP is awarded through the statistical engine and secured with database idempotency.
             </p>
             <p className="text-slate-400">
               Only public callsigns, tier levels, and verified total XP are visible. Private analysis logs, emails, and student UUIDs are completely protected.
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-800/50 text-[11px] shrink-0">
-            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#161f30] text-blue-400 border border-blue-800/50 text-[11px] shrink-0">
+            <Activity className="w-3.5 h-3.5 text-blue-400" />
             <span>Live Standings</span>
           </span>
         </div>
@@ -149,7 +149,7 @@ export default function Leaderboard() {
                     {/* Student Callsign */}
                     <td className="py-3.5 px-6">
                       <div className="flex items-center gap-2">
-                        <User className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <User className="w-4 h-4 text-blue-400 shrink-0" />
                         <span className="font-bold text-white tracking-wide">
                           {entry.username}
                         </span>
@@ -164,7 +164,7 @@ export default function Leaderboard() {
                     {/* Rank Tier */}
                     <td className="py-3.5 px-6">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-cyan-300 font-semibold text-[11px]">
+                        <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-blue-400 font-semibold text-[11px]">
                           Level {entry.level}
                         </span>
                         <span className="text-slate-400 text-[11px] hidden sm:inline">

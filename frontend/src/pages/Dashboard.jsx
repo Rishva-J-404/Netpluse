@@ -99,7 +99,7 @@ export default function Dashboard() {
               unit="Mbps"
               subtext="Sample Mean (μ)"
               icon={TrendingUp}
-              accent="cyan"
+              accent="blue"
             />
             <MetricCard
               label="Standard Deviation"
@@ -107,7 +107,7 @@ export default function Dashboard() {
               unit="Mbps"
               subtext="Dispersion spread (s)"
               icon={Activity}
-              accent="cyan"
+              accent="blue"
             />
             <MetricCard
               label="Peak Recorded Load"
@@ -136,7 +136,7 @@ export default function Dashboard() {
             actions={
               <Link
                 to="/technical-lab"
-                className="inline-flex items-center gap-1 text-xs font-mono text-cyan-400 hover:text-cyan-300"
+                className="inline-flex items-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300"
               >
                 <span>Full Lab Workbench</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -222,7 +222,7 @@ export default function Dashboard() {
                           <td className="py-2.5 px-4 text-slate-400 font-semibold">{row.timestamp}</td>
                           <td className="py-2.5 px-4 font-bold text-white">{row.network_load} Mbps</td>
                           <td className="py-2.5 px-4 text-slate-300">
-                            <span className={z > 2 ? 'text-rose-400 font-bold' : z < -2 ? 'text-cyan-400 font-bold' : 'text-slate-300'}>
+                            <span className={z > 2 ? 'text-rose-400 font-bold' : z < -2 ? 'text-blue-400 font-bold' : 'text-slate-300'}>
                               {z > 0 ? `+${z}` : z}σ
                             </span>
                           </td>
@@ -245,7 +245,7 @@ export default function Dashboard() {
           action={
             <button
               onClick={loadData}
-              className="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs"
+              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs"
             >
               Load Baseline Dataset
             </button>

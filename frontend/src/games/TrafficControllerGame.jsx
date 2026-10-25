@@ -8,7 +8,8 @@ import {
   Clock,
   ArrowRight,
   TrendingUp,
-  RotateCcw
+  RotateCcw,
+  Gauge
 } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
 import Panel from '../components/Panel'
@@ -16,9 +17,11 @@ import StatusBadge from '../components/StatusBadge'
 import LoadingState from '../components/LoadingState'
 import ErrorState from '../components/ErrorState'
 import GameResultCard from './GameResultCard'
+import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
 
 export default function TrafficControllerGame({ scenario, onLeave }) {
   const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
+  const [viewMode, setViewMode] = useState('simulator')
   const [selectedOption, setSelectedOption] = useState('')
 
   // Scenario fallback if not supplied
@@ -38,6 +41,58 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
       { time: '15:00', load: 91.0 }
     ],
     options: ['Continue Monitoring', 'Investigate', 'Emergency Response']
+  }
+
+  // 3D Simulator Mode (Default)
+  if (viewMode === 'simulator') {
+    return (
+      <div className="space-y-4 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between pb-3 border-b border-[#26354d]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider font-bold">
+              GAME 1 — TRAFFIC CONTROLLER
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#10b981] border border-[#26354d] flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+              3D SIMULATOR ACTIVE
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setViewMode('classic')}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Classic Workbench Mode
+            </button>
+            <button
+              onClick={onLeave}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Exit to Lobby
+            </button>
+          </div>
+        </div>
+
+        <NetworkHighwayEngine
+          missionId="traffic_controller"
+          missionTitle="Mission 01: Traffic Controller"
+          category="Incident Response & Decision Making"
+          difficulty="Introductory"
+          description={sc.description}
+          learningOutcomes="Evaluate rapidly surging campus bandwidth, compute standard deviation thresholds, and trigger appropriate operational mitigation."
+          statFocus="Z = (X - μ) / σ with empirical threshold triage"
+          scenario={{
+            ...sc,
+            mean: sc.baseline_mean || sc.mean || 50.0,
+            std_dev: sc.baseline_std || sc.std_dev || 5.0,
+            current_load: sc.current_load || 91.0,
+            question: 'With measured load surging to 91.0 Mbps (Z = +8.20), select the operational response:',
+            options: sc.options || ['Continue Monitoring', 'Investigate', 'Emergency Response', 'Ignore Telemetry']
+          }}
+          onLeave={onLeave}
+        />
+      </div>
+    )
   }
 
   const handleSubmit = async (e) => {
@@ -66,26 +121,35 @@ export default function TrafficControllerGame({ scenario, onLeave }) {
   return (
     <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto">
       {/* Game Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#26354d]">
         <div>
-          <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider block">
-            GAME 1 — TRAFFIC CONTROLLER
+          <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider block font-bold">
+            GAME 1 — TRAFFIC CONTROLLER (CLASSIC WORKBENCH)
           </span>
-          <h2 className="text-2xl font-bold font-mono text-white mt-1">
+          <h2 className="text-2xl font-bold font-mono text-[#f9fafb] mt-1">
             {sc.title}
           </h2>
         </div>
-        <button
-          onClick={onLeave}
-          className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-mono transition-colors"
-        >
-          Exit to Lobby
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setViewMode('simulator')}
+            className="px-3 py-1.5 rounded-lg bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-mono font-bold transition flex items-center gap-1.5 shadow"
+          >
+            <Gauge className="w-3.5 h-3.5" />
+            Switch to 3D Simulator
+          </button>
+          <button
+            onClick={onLeave}
+            className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] text-xs font-mono border border-[#26354d] transition-colors"
+          >
+            Exit to Lobby
+          </button>
+        </div>
       </div>
 
       {/* Narrative Context Card */}
       <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-mono text-slate-300 space-y-2">
-        <div className="flex items-center gap-2 text-cyan-400 font-bold">
+        <div className="flex items-center gap-2 text-blue-400 font-bold">
           <Info className="w-4 h-4 shrink-0" />
           <span>Operational Situation Report:</span>
         </div>

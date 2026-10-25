@@ -98,7 +98,7 @@ export default function GameResultCard({
               +{result.xp_awarded} XP
             </span>
             {result.total_xp !== undefined && (
-              <span className="text-[10px] font-mono text-cyan-300 block">
+              <span className="text-[10px] font-mono text-blue-400 block">
                 Total XP: {result.total_xp} • Level {result.level}
               </span>
             )}
@@ -126,7 +126,7 @@ export default function GameResultCard({
         {/* Natural Language Explanation from Backend */}
         {result.explanation && (
           <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 text-xs font-sans text-slate-300 leading-relaxed">
-            <span className="text-[10px] font-mono uppercase text-cyan-400 block font-bold mb-1">
+            <span className="text-[10px] font-mono uppercase text-blue-400 block font-bold mb-1">
               Statistical Evidence & Reasoning:
             </span>
             {result.explanation}
@@ -139,7 +139,7 @@ export default function GameResultCard({
             {groundTruth.calculated_z !== undefined && (
               <div>
                 Z-Score:{' '}
-                <strong className="text-cyan-300">
+                <strong className="text-blue-400">
                   {groundTruth.calculated_z > 0
                     ? `+${groundTruth.calculated_z}`
                     : groundTruth.calculated_z}
@@ -194,12 +194,12 @@ export default function GameResultCard({
           title="The Golden Bridge — Transition to Technical Lab"
           subtitle="Inspect the full Gaussian probability density curve and formula substitution for this scenario."
           icon={Sparkles}
-          className="border-cyan-800/40 bg-gradient-to-r from-cyan-950/30 via-slate-900/60 to-slate-900/40"
+          className="border-blue-800/40 bg-gradient-to-r from-blue-950/30 via-slate-900/60 to-slate-900/40"
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono">
             <div className="space-y-1 text-slate-300">
               <p>
-                Transfer scenario load <strong className="text-cyan-300">{bridgeData.current_load} Mbps</strong> (Z = {bridgeData.z_score}σ, CDF = {(bridgeData.probability_below * 100).toFixed(2)}%) to the Technical Lab.
+                Transfer scenario load <strong className="text-blue-400">{bridgeData.current_load} Mbps</strong> (Z = {bridgeData.z_score}σ, CDF = {(bridgeData.probability_below * 100).toFixed(2)}%) to the Technical Lab.
               </p>
               <p className="text-[11px] text-slate-500">
                 Formula: <code className="text-slate-300">{bridgeData.z_formula}</code>
@@ -208,7 +208,7 @@ export default function GameResultCard({
 
             <button
               onClick={handleOpenTechnicalLab}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-slate-950 font-bold transition-all shadow-lg shadow-cyan-950/40 shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold transition-all shadow-lg shadow-blue-950/40 shrink-0"
             >
               <FlaskConical className="w-4 h-4" />
               <span>View Technical Analysis</span>

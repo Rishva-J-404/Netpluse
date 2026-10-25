@@ -237,12 +237,12 @@ export default function WhatIfSimulator() {
             {/* Load Big Value & Numeric Sync */}
             <div className="lg:col-span-4 p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider">
+                <span className="text-xs font-mono text-blue-400 uppercase tracking-wider">
                   Observed Throughput (X)
                 </span>
                 {updating && (
-                  <span className="text-[10px] font-mono text-cyan-400 animate-pulse flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                  <span className="text-[10px] font-mono text-blue-400 animate-pulse flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     Computing...
                   </span>
                 )}
@@ -256,7 +256,7 @@ export default function WhatIfSimulator() {
                   max="150"
                   value={load}
                   onChange={e => handleLoadChange(e.target.value)}
-                  className="w-36 text-3xl font-mono font-bold text-white bg-slate-900 border border-slate-700 rounded-lg px-3 py-1 focus:outline-none focus:border-cyan-500"
+                  className="w-36 text-3xl font-mono font-bold text-white bg-slate-900 border border-slate-700 rounded-lg px-3 py-1 focus:outline-none focus:border-blue-500"
                 />
                 <span className="text-base text-slate-400 font-mono">Mbps</span>
               </div>
@@ -271,7 +271,7 @@ export default function WhatIfSimulator() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs font-mono">
                   <span className="text-slate-400">Continuous Throughput Sweeper</span>
-                  <span className="text-cyan-400 font-bold">{load.toFixed(1)} Mbps</span>
+                  <span className="text-blue-400 font-bold">{load.toFixed(1)} Mbps</span>
                 </div>
 
                 <input
@@ -281,7 +281,7 @@ export default function WhatIfSimulator() {
                   step="0.5"
                   value={Math.min(100, Math.max(10, load))}
                   onChange={e => handleLoadChange(e.target.value)}
-                  className="w-full h-3 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/40"
+                  className="w-full h-3 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                 />
 
                 <div className="flex justify-between text-[11px] font-mono text-slate-500">
@@ -296,7 +296,7 @@ export default function WhatIfSimulator() {
                 <span className="text-slate-500 text-[11px]">Scenarios:</span>
                 <button
                   onClick={() => handlePreset(mean)}
-                  className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-800 transition-colors"
+                  className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-blue-400 border border-slate-800 transition-colors"
                 >
                   Peak (μ = {mean.toFixed(1)})
                 </button>
@@ -331,7 +331,7 @@ export default function WhatIfSimulator() {
           {/* Secondary Distribution Moment Adjusters */}
           <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
             <div className="flex items-center gap-2 text-slate-400">
-              <Info className="w-4 h-4 text-cyan-400 shrink-0" />
+              <Info className="w-4 h-4 text-blue-400 shrink-0" />
               <span>Gaussian Model Moments:</span>
             </div>
 
@@ -344,7 +344,7 @@ export default function WhatIfSimulator() {
                   min="1"
                   value={mean}
                   onChange={e => handleMeanChange(e.target.value)}
-                  className="w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-white font-mono focus:outline-none focus:border-cyan-500"
+                  className="w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-white font-mono focus:outline-none focus:border-blue-500"
                 />
                 <span className="text-slate-500">Mbps</span>
               </div>
@@ -357,7 +357,7 @@ export default function WhatIfSimulator() {
                   min="0.5"
                   value={stdDev}
                   onChange={e => handleStdChange(e.target.value)}
-                  className="w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-white font-mono focus:outline-none focus:border-cyan-500"
+                  className="w-24 bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-white font-mono focus:outline-none focus:border-blue-500"
                 />
                 <span className="text-slate-500">Mbps</span>
               </div>
@@ -402,7 +402,7 @@ export default function WhatIfSimulator() {
               unit="%"
               subtext={`Tail P(X ≥ x): ${((1 - simData.probability) * 100).toFixed(2)}%`}
               icon={Percent}
-              accent="cyan"
+              accent="blue"
             />
 
             <MetricCard
@@ -456,7 +456,7 @@ export default function WhatIfSimulator() {
                     ? 'border-rose-900/40 bg-rose-950/10'
                     : interpretation.badgeColor === 'amber'
                     ? 'border-amber-900/40 bg-amber-950/10'
-                    : 'border-cyan-900/40 bg-cyan-950/10'
+                    : 'border-[#26354d] bg-blue-950/10'
                 }
               >
                 <div className="space-y-4 font-mono text-xs">
@@ -470,7 +470,7 @@ export default function WhatIfSimulator() {
                           ? 'bg-amber-900/60 text-amber-300 border border-amber-700'
                           : interpretation.badgeColor === 'emerald'
                           ? 'bg-emerald-900/60 text-emerald-300 border border-emerald-700'
-                          : 'bg-cyan-900/60 text-cyan-300 border border-cyan-700'
+                          : 'bg-blue-900/40 text-blue-400 border border-blue-700'
                       }`}
                     >
                       {interpretation.level}
@@ -482,7 +482,7 @@ export default function WhatIfSimulator() {
                   </p>
 
                   <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
-                    <span className="text-[11px] text-cyan-400 font-bold uppercase tracking-wide block">
+                    <span className="text-[11px] text-blue-400 font-bold uppercase tracking-wide block">
                       Recommended Action:
                     </span>
                     <p className="text-slate-400 font-sans">
@@ -501,7 +501,7 @@ export default function WhatIfSimulator() {
             >
               <div className="space-y-4 font-mono text-xs">
                 <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-cyan-300 font-bold">
+                  <div className="text-blue-400 font-bold">
                     H = max(0, min(100, 100 - 25 × max(0, |Z| - 1)))
                   </div>
                   <div className="text-[11px] text-slate-500 mt-1 font-sans">
@@ -514,7 +514,7 @@ export default function WhatIfSimulator() {
                     <span className="text-emerald-400 font-bold">90 – 100:</span> Excellent (|Z| ≤ 1.4σ)
                   </div>
                   <div className="p-2 rounded bg-slate-950/70 border border-slate-800/80">
-                    <span className="text-cyan-400 font-bold">70 – 89:</span> Healthy (|Z| ≤ 2.2σ)
+                    <span className="text-blue-400 font-bold">70 – 89:</span> Healthy (|Z| ≤ 2.2σ)
                   </div>
                   <div className="p-2 rounded bg-slate-950/70 border border-slate-800/80">
                     <span className="text-amber-400 font-bold">50 – 69:</span> Warning (|Z| ≤ 3.0σ)
@@ -549,7 +549,7 @@ export default function WhatIfSimulator() {
               </Link>
               <Link
                 to="/zscore-analysis"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-600 text-white transition-colors"
               >
                 <span>Z-Score Analysis</span>
                 <ArrowRight className="w-3.5 h-3.5" />

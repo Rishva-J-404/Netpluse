@@ -147,7 +147,7 @@ export default function Achievements() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono text-slate-300">
           <div className="space-y-1">
             <p>
-              Catalog Source: <strong className={isFromDb ? 'text-emerald-400' : 'text-cyan-400'}>
+              Catalog Source: <strong className={isFromDb ? 'text-emerald-400' : 'text-blue-400'}>
                 {isFromDb ? 'Supabase public.achievements (Live PostgreSQL)' : 'Curriculum Static Definition Catalog'}
               </strong>
             </p>

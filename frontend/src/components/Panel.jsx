@@ -14,22 +14,22 @@ export default function Panel({
 }) {
   return (
     <section
-      className={`rounded-xl bg-slate-900/60 border border-slate-800 backdrop-blur-sm overflow-hidden flex flex-col ${className}`}
+      className={`rounded-2xl bg-[#111827] border border-[#26354d] overflow-hidden flex flex-col shadow-sm ${className}`}
     >
       {(title || Icon || actions) && (
-        <div className="px-4 sm:px-5 py-3.5 border-b border-slate-800/80 flex items-center justify-between gap-3 bg-slate-900/40">
+        <div className="px-4 sm:px-5 py-3.5 border-b border-[#26354d] flex items-center justify-between gap-3 bg-[#161f30]">
           <div className="flex items-center gap-2.5 min-w-0">
             {Icon && (
-              <Icon className="w-4 h-4 text-cyan-400 shrink-0" aria-hidden="true" />
+              <Icon className="w-4 h-4 text-[#3b82f6] shrink-0" aria-hidden="true" />
             )}
             <div className="min-w-0">
               {title && (
-                <h2 className="text-sm sm:text-base font-semibold text-slate-200 tracking-wide truncate">
+                <h2 className="text-sm sm:text-base font-semibold text-[#f9fafb] tracking-wide truncate">
                   {title}
                 </h2>
               )}
               {subtitle && (
-                <p className="text-xs text-slate-500 font-mono truncate">
+                <p className="text-xs text-[#94a3b8] font-mono truncate">
                   {subtitle}
                 </p>
               )}

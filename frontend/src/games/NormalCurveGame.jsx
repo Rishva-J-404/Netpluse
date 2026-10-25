@@ -7,7 +7,8 @@ import {
   RotateCcw,
   Sparkles,
   Sliders,
-  CheckCircle2
+  CheckCircle2,
+  Gauge
 } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
 import { runSimulation } from '../services/api'
@@ -15,9 +16,11 @@ import Panel from '../components/Panel'
 import GaussianBellChart from '../components/GaussianBellChart'
 import LoadingState from '../components/LoadingState'
 import GameResultCard from './GameResultCard'
+import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
 
 export default function NormalCurveGame({ scenario, onLeave }) {
   const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
+  const [viewMode, setViewMode] = useState('simulator')
 
   const sc = scenario || {
     id: 'normal_curve_01',
@@ -34,6 +37,56 @@ export default function NormalCurveGame({ scenario, onLeave }) {
   const mean = sc.mean || 50.0
   const std = sc.std_dev || 5.0
   const targetZ = sc.target_z || 2.0
+
+  // 3D Simulator Mode (Default)
+  if (viewMode === 'simulator') {
+    return (
+      <div className="space-y-4 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between pb-3 border-b border-[#26354d]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider font-bold">
+              GAME 3 — NORMAL CURVE HIGHWAY
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#10b981] border border-[#26354d] flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+              3D SIMULATOR ACTIVE
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setViewMode('classic')}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Classic Workbench Mode
+            </button>
+            <button
+              onClick={onLeave}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Exit to Lobby
+            </button>
+          </div>
+        </div>
+
+        <NetworkHighwayEngine
+          missionId="normal_curve_challenge"
+          missionTitle="Mission 03: Normal Curve Highway"
+          category="Interactive Gaussian Bell Curve"
+          difficulty="Intermediate"
+          description={sc.description}
+          learningOutcomes="Connect continuous probability density f(x) with standardized distances and CDF areas under the curve."
+          statFocus="68-95-99.7 Empirical Rule & SciPy CDF boundaries"
+          scenario={{
+            ...sc,
+            current_load: sc.target_load || 60.0,
+            question: `In this network distribution (μ = ${mean.toFixed(1)}, σ = ${std.toFixed(1)}), steer into the target gate corresponding to Z = +2.0:`,
+            options: ['Z = +0.5', 'Z = +1.0', 'Z = +2.0', 'Z = +3.0']
+          }}
+          onLeave={onLeave}
+        />
+      </div>
+    )
+  }
 
   // Interactive slider state (defaults near center)
   const [sliderLoad, setSliderLoad] = useState(52.0)

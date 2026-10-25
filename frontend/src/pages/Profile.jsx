@@ -123,12 +123,12 @@ export default function Profile() {
         title="NOC Operator Credentials"
         subtitle={isAuthenticated ? 'Verified Supabase Student Account' : 'Guest Analyst Session'}
         icon={Shield}
-        className="border-cyan-900/40 bg-gradient-to-r from-cyan-950/20 via-slate-900/60 to-slate-900/40"
+        className="border-[#26354d] bg-gradient-to-r from-blue-950/20 via-slate-900/60 to-slate-900/40"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             {/* Avatar Badge */}
-            <div className="w-16 h-16 rounded-2xl bg-cyan-950/80 border border-cyan-500/50 flex items-center justify-center text-cyan-400 font-mono text-2xl font-bold shadow-lg shadow-cyan-950 shrink-0">
+            <div className="w-16 h-16 rounded-2xl bg-[#161f30] border border-blue-500/40 flex items-center justify-center text-blue-400 font-mono text-2xl font-bold shadow-lg shadow-blue-950/40 shrink-0">
               {profile?.username ? profile.username.substring(0, 2).toUpperCase() : 'CA'}
             </div>
 
@@ -141,7 +141,7 @@ export default function Profile() {
                   {isAuthenticated && (
                     <button
                       onClick={handleStartEdit}
-                      className="p-1 rounded text-slate-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors"
+                      className="p-1 rounded text-slate-400 hover:text-blue-300 hover:bg-slate-800 transition-colors"
                       title="Edit student callsign"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
@@ -154,7 +154,7 @@ export default function Profile() {
                     type="text"
                     value={editUsername}
                     onChange={(e) => setEditUsername(e.target.value)}
-                    className="bg-slate-950 border border-cyan-500 rounded px-2.5 py-1 text-sm font-mono text-white focus:outline-none"
+                    className="bg-slate-950 border border-blue-500 rounded px-2.5 py-1 text-sm font-mono text-white focus:outline-none"
                     placeholder="Enter new username"
                     autoFocus
                   />
@@ -198,7 +198,7 @@ export default function Profile() {
           <div className="flex items-center gap-3 font-mono text-xs w-full sm:w-auto justify-end">
             <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center min-w-[80px]">
               <span className="text-[10px] text-slate-500 uppercase block">Rank Tier</span>
-              <span className="text-cyan-400 font-bold text-base">
+              <span className="text-blue-400 font-bold text-base">
                 Lvl {profile?.level || 1}
               </span>
             </div>
@@ -233,7 +233,7 @@ export default function Profile() {
         title="Verified Laboratory Progression"
         subtitle={`Current Rank Tier: ${LEVEL_TITLES[profile?.level || 1] || 'Analyst'}`}
         icon={Zap}
-        className="border-cyan-900/40"
+        className="border-[#26354d]"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
           <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
@@ -242,7 +242,7 @@ export default function Profile() {
               <span className="text-xl font-bold text-white">
                 {progStats?.games_completed_count ?? 0}
               </span>
-              <Activity className="w-4 h-4 text-cyan-400" />
+              <Activity className="w-4 h-4 text-blue-400" />
             </div>
             <span className="text-[10px] text-slate-500 block">Verified incident runs</span>
           </div>
@@ -286,7 +286,7 @@ export default function Profile() {
 
           <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
             <span className="text-[10px] text-slate-500 uppercase block">Course Code:</span>
-            <span className="text-cyan-300 font-bold">25CS203</span>
+            <span className="text-blue-400 font-bold">25CS203</span>
           </div>
 
           <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 space-y-1">

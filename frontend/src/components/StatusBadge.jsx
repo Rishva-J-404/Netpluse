@@ -11,73 +11,73 @@ export default function StatusBadge({ status, size = 'md', className = '' }) {
 
   const config = {
     NORMAL: {
-      bg: 'bg-emerald-950/60',
-      text: 'text-emerald-400',
-      border: 'border-emerald-700/50',
-      dot: 'bg-emerald-400',
+      bg: 'bg-[#10b981]/10',
+      text: 'text-[#10b981]',
+      border: 'border-[#10b981]/30',
+      dot: 'bg-[#10b981]',
       label: 'NORMAL'
     },
     'UNUSUALLY LOW': {
-      bg: 'bg-cyan-950/60',
-      text: 'text-cyan-400',
-      border: 'border-cyan-700/50',
-      dot: 'bg-cyan-400',
+      bg: 'bg-[#3b82f6]/10',
+      text: 'text-[#3b82f6]',
+      border: 'border-[#3b82f6]/30',
+      dot: 'bg-[#3b82f6]',
       label: 'UNUSUALLY LOW'
     },
     'UNUSUALLY HIGH': {
-      bg: 'bg-rose-950/60',
-      text: 'text-rose-400',
-      border: 'border-rose-700/50',
-      dot: 'bg-rose-400',
+      bg: 'bg-[#ef4444]/10',
+      text: 'text-[#ef4444]',
+      border: 'border-[#ef4444]/30',
+      dot: 'bg-[#ef4444]',
       label: 'UNUSUALLY HIGH'
     },
     EXCELLENT: {
-      bg: 'bg-emerald-950/60',
-      text: 'text-emerald-300',
-      border: 'border-emerald-600/50',
-      dot: 'bg-emerald-400',
+      bg: 'bg-[#10b981]/10',
+      text: 'text-[#10b981]',
+      border: 'border-[#10b981]/30',
+      dot: 'bg-[#10b981]',
       label: 'EXCELLENT'
     },
     HEALTHY: {
-      bg: 'bg-cyan-950/60',
-      text: 'text-cyan-300',
-      border: 'border-cyan-600/50',
-      dot: 'bg-cyan-400',
+      bg: 'bg-[#3b82f6]/10',
+      text: 'text-[#3b82f6]',
+      border: 'border-[#3b82f6]/30',
+      dot: 'bg-[#3b82f6]',
       label: 'HEALTHY'
     },
     WARNING: {
-      bg: 'bg-amber-950/60',
-      text: 'text-amber-400',
-      border: 'border-amber-700/50',
-      dot: 'bg-amber-400',
+      bg: 'bg-[#f59e0b]/10',
+      text: 'text-[#f59e0b]',
+      border: 'border-[#f59e0b]/30',
+      dot: 'bg-[#f59e0b]',
       label: 'WARNING'
     },
     POOR: {
-      bg: 'bg-orange-950/60',
-      text: 'text-orange-400',
-      border: 'border-orange-700/50',
-      dot: 'bg-orange-400',
+      bg: 'bg-[#f59e0b]/10',
+      text: 'text-[#f59e0b]',
+      border: 'border-[#f59e0b]/30',
+      dot: 'bg-[#f59e0b]',
       label: 'POOR'
     },
     CRITICAL: {
-      bg: 'bg-rose-950/70',
-      text: 'text-rose-400',
-      border: 'border-rose-600/60',
-      dot: 'bg-rose-500 animate-pulse',
+      bg: 'bg-[#ef4444]/15',
+      text: 'text-[#ef4444]',
+      border: 'border-[#ef4444]/40',
+      dot: 'bg-[#ef4444] animate-pulse',
       label: 'CRITICAL'
     },
     ONLINE: {
-      bg: 'bg-emerald-950/50',
-      text: 'text-emerald-400',
-      border: 'border-emerald-800/40',
-      dot: 'bg-emerald-400',
+      bg: 'bg-[#10b981]/10',
+      text: 'text-[#10b981]',
+      border: 'border-[#10b981]/30',
+      dot: 'bg-[#10b981]',
       label: 'ONLINE'
     },
     OFFLINE: {
-      bg: 'bg-rose-950/50',
-      text: 'text-rose-400',
-      border: 'border-rose-800/40',
-      dot: 'bg-rose-400',
+      bg: 'bg-[#ef4444]/10',
+      text: 'text-[#ef4444]',
+      border: 'border-[#ef4444]/30',
+      dot: 'bg-[#ef4444]',
       label: 'OFFLINE'
     }
   }

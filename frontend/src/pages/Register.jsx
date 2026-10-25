@@ -112,7 +112,7 @@ export default function Register() {
             <p className="text-slate-300 font-sans leading-relaxed">
               A verification email has been dispatched to:
             </p>
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-cyan-300 font-bold">
+            <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-blue-400 font-bold">
               {registeredEmail}
             </div>
             <p className="text-[11px] text-slate-400 font-sans leading-relaxed pt-2">
@@ -123,7 +123,7 @@ export default function Register() {
           <div className="pt-3 border-t border-slate-800 flex justify-center">
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-md shadow-cyan-950/60"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md shadow-blue-950/40"
             >
               <span>Proceed to Login</span>
               <ArrowRight className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function Register() {
     <div className="max-w-md mx-auto my-6 sm:my-10 space-y-6">
       {/* Brand Header */}
       <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 text-cyan-400 flex items-center justify-center mx-auto shadow-sm shadow-cyan-950">
+        <div className="w-12 h-12 rounded-xl bg-[#161f30] border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto shadow-sm shadow-blue-950/40">
           <Activity className="w-6 h-6 animate-pulse" />
         </div>
         <h1 className="text-2xl font-bold font-mono text-white tracking-tight">
@@ -156,7 +156,7 @@ export default function Register() {
           <div className="space-y-1">
             <span className="font-bold text-amber-300">Supabase Offline:</span>
             <p className="text-slate-300 font-sans">
-              To enable cloud account registration, add <code className="text-cyan-300 font-mono">VITE_SUPABASE_URL</code> and <code className="text-cyan-300 font-mono">VITE_SUPABASE_PUBLISHABLE_KEY</code> to your <code className="text-white">frontend/.env</code> file.
+              To enable cloud account registration, add <code className="text-blue-400 font-mono">VITE_SUPABASE_URL</code> and <code className="text-blue-400 font-mono">VITE_SUPABASE_PUBLISHABLE_KEY</code> to your <code className="text-white">frontend/.env</code> file.
             </p>
           </div>
         </div>
@@ -178,7 +178,7 @@ export default function Register() {
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 placeholder="URK25CS1236_Analyst"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function Register() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="student@karunya.edu"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -216,7 +216,7 @@ export default function Register() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-10 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-9 pr-10 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
               <button
                 type="button"
@@ -243,7 +243,7 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </div>
@@ -271,7 +271,7 @@ export default function Register() {
 
         <div className="text-center text-xs font-mono text-slate-400 pt-4 mt-4 border-t border-slate-800/80">
           Already registered?{' '}
-          <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold underline">
+          <Link to="/login" className="text-blue-400 hover:text-blue-300 font-semibold underline">
             Sign in to NOC
           </Link>
         </div>

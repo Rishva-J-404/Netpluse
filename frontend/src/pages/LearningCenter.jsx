@@ -131,7 +131,7 @@ export default function LearningCenter() {
               <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
                 Mathematical Expression:
               </span>
-              <code className="text-base sm:text-lg font-bold font-mono text-cyan-300 block">
+              <code className="text-base sm:text-lg font-bold font-mono text-blue-400 block">
                 {current.formula}
               </code>
             </div>

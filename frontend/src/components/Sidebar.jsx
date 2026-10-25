@@ -24,10 +24,10 @@ import { useAuth } from '../contexts/AuthContext'
 export default function Sidebar({ isOpen, onClose }) {
   const { isAuthenticated, signOut } = useAuth()
   const navLinkClass = ({ isActive }) =>
-    `flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-mono transition-all ${
+    `flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-mono transition-all ${
       isActive
-        ? 'bg-cyan-950/70 text-cyan-300 border border-cyan-800/60 shadow-sm shadow-cyan-950/50 font-medium'
-        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent'
+        ? 'bg-[#161f30] text-[#3b82f6] border border-[#26354d] font-semibold shadow-sm'
+        : 'text-[#94a3b8] hover:text-[#f9fafb] hover:bg-[#111827] border border-transparent'
     }`
 
   const handleLinkClick = () => {
@@ -50,9 +50,9 @@ export default function Sidebar({ isOpen, onClose }) {
       <aside
         aria-label="Main Navigation"
         className={`
-          fixed top-16 bottom-0 left-0 w-64 bg-[#0b0f19] border-r border-slate-800/80 p-4 z-40
+          fixed top-16 bottom-0 left-0 w-64 bg-[#0b0f17] border-r border-[#26354d] p-4 z-40
           overflow-y-auto transition-transform duration-200 ease-in-out
-          ${isOpen ? 'translate-x-0 shadow-2xl shadow-cyan-950/30' : '-translate-x-full lg:translate-x-0'}
+          ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}
         `}
       >
         {/* Mobile Header with close button */}
@@ -77,11 +77,11 @@ export default function Sidebar({ isOpen, onClose }) {
             </div>
             <div className="space-y-1">
               <NavLink to="/" end className={navLinkClass} onClick={handleLinkClick}>
-                <Home className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Home className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Home</span>
               </NavLink>
               <NavLink to="/dashboard" className={navLinkClass} onClick={handleLinkClick}>
-                <LayoutDashboard className="w-4 h-4 text-cyan-400 shrink-0" />
+                <LayoutDashboard className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Dashboard</span>
               </NavLink>
             </div>
@@ -110,32 +110,32 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* 3. TECHNICAL LAB */}
           <div>
-            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-cyan-400 font-semibold flex items-center gap-1.5">
+            <div className="px-3 pb-1.5 text-[10px] font-mono tracking-wider uppercase text-blue-400 font-semibold flex items-center gap-1.5">
               <span>🔬 Technical Lab</span>
             </div>
             <div className="space-y-1">
               <NavLink to="/technical-lab" className={navLinkClass} onClick={handleLinkClick}>
-                <FlaskConical className="w-4 h-4 text-cyan-400 shrink-0" />
+                <FlaskConical className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Technical Lab</span>
               </NavLink>
               <NavLink to="/distribution-explorer" className={navLinkClass} onClick={handleLinkClick}>
-                <LineChart className="w-4 h-4 text-cyan-400 shrink-0" />
+                <LineChart className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Distribution Explorer</span>
               </NavLink>
               <NavLink to="/probability-lab" className={navLinkClass} onClick={handleLinkClick}>
-                <Percent className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Percent className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Probability Lab</span>
               </NavLink>
               <NavLink to="/zscore-analysis" className={navLinkClass} onClick={handleLinkClick}>
-                <Target className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Target className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Z-Score Analysis</span>
               </NavLink>
               <NavLink to="/what-if-simulator" className={navLinkClass} onClick={handleLinkClick}>
-                <Sliders className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Sliders className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>What-If Simulator</span>
               </NavLink>
               <NavLink to="/analysis-history" className={navLinkClass} onClick={handleLinkClick}>
-                <History className="w-4 h-4 text-cyan-400 shrink-0" />
+                <History className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Analysis History</span>
               </NavLink>
             </div>
@@ -163,7 +163,7 @@ export default function Sidebar({ isOpen, onClose }) {
               {isAuthenticated ? (
                 <>
                   <NavLink to="/profile" className={navLinkClass} onClick={handleLinkClick}>
-                    <User className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <User className="w-4 h-4 text-blue-400 shrink-0" />
                     <span>Profile</span>
                   </NavLink>
                   <button

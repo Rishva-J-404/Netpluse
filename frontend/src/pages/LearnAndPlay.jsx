@@ -152,34 +152,75 @@ export default function LearnAndPlay() {
         modeBadge="MODE 1: LEARN & PLAY"
       />
 
+      {/* Featured 3D Simulator Hero Banner */}
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#111827] via-[#161f30] to-[#0b0f17] border border-[#26354d] p-6 sm:p-8 shadow-2xl">
+        <div className="relative z-10 max-w-2xl space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[#0b0f17] text-[#3b82f6] border border-[#26354d] font-bold">
+              SIGNATURE 3D SIMULATOR // COURSE 25CS203
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0b0f17] text-[#10b981] border border-[#26354d] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+              REAL-TIME ARCADE ENGINE
+            </span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-extrabold font-mono text-[#f9fafb] tracking-tight">
+            NETWORK HIGHWAY: INCIDENT RESPONSE
+          </h2>
+
+          <p className="text-sm text-[#94a3b8] leading-relaxed">
+            Drive through the virtual campus network backbone. Read live switch telemetry, calculate standardized Z-scores at 140 km/h, and steer your interceptor vehicle into mathematically verified response gateways.
+          </p>
+
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => startGame('zscore_challenge')}
+              className="px-6 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white text-xs font-mono font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              START ENGINE ▶
+            </button>
+
+            <a
+              href="#missions"
+              className="px-4 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#f9fafb] text-xs font-mono border border-[#26354d] transition flex items-center gap-2"
+            >
+              <span>Explore 5 Curriculum Missions</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#3b82f6]" />
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Real Session Performance Indicators */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-1 font-mono text-xs">
-          <span className="text-slate-400 uppercase text-[10px] block">Session XP Earned</span>
-          <div className="text-2xl font-bold text-emerald-400">
-            +{sessionXP} <span className="text-xs text-slate-400 font-normal">XP</span>
+        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
+          <span className="text-[#94a3b8] uppercase text-[10px] block">Session XP Earned</span>
+          <div className="text-2xl font-bold text-[#3b82f6] tabular-nums">
+            +{sessionXP} <span className="text-xs text-[#94a3b8] font-normal">XP</span>
           </div>
-          <span className="text-[10px] text-slate-500">
-            * Ephemeral session reward; persistence arrives in Phase 8/9.
+          <span className="text-[10px] text-[#64748b]">
+            * Server-verified session rewards with idempotency
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-1 font-mono text-xs">
-          <span className="text-slate-400 uppercase text-[10px] block">Session Accuracy</span>
-          <div className="text-2xl font-bold text-cyan-400">
+        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
+          <span className="text-[#94a3b8] uppercase text-[10px] block">Session Accuracy</span>
+          <div className="text-2xl font-bold text-[#10b981] tabular-nums">
             {accuracyPercentage}%
           </div>
-          <span className="text-[10px] text-slate-500">
+          <span className="text-[10px] text-[#64748b]">
             {totalCorrect} of {totalAttempts} questions answered correctly
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-1 font-mono text-xs">
-          <span className="text-slate-400 uppercase text-[10px] block">Missions Completed</span>
-          <div className="text-2xl font-bold text-purple-400">
+        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
+          <span className="text-[#94a3b8] uppercase text-[10px] block">Missions Completed</span>
+          <div className="text-2xl font-bold text-[#f9fafb] tabular-nums">
             {Object.keys(completedGames).length} / {gameDefinitions.length}
           </div>
-          <span className="text-[10px] text-slate-500">
+          <span className="text-[10px] text-[#64748b]">
             Playable curriculum scenarios available
           </span>
         </div>
@@ -190,21 +231,21 @@ export default function LearnAndPlay() {
         title="The Golden Bridge Concept"
         subtitle="Game Decision → Statistical Proof → Gaussian Bell Curve Visualization"
         icon={Sparkles}
-        className="border-emerald-800/40 bg-gradient-to-r from-emerald-950/40 via-slate-900/60 to-slate-900/40"
+        className="border-[#26354d] bg-[#111827]"
       >
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs font-mono">
-          <div className="space-y-1 text-slate-300">
+          <div className="space-y-1 text-[#94a3b8]">
             <p>
               In NETPULSE, games and serious statistics are not isolated silos.
-              Every challenge passes its telemetry to the shared Python statistical engine and includes a <strong className="text-cyan-300">[View Technical Analysis]</strong> bridge button.
+              Every challenge passes its telemetry to the shared Python statistical engine and includes a <strong className="text-[#3b82f6]">[View Technical Analysis]</strong> bridge button.
             </p>
-            <p className="text-slate-400">
+            <p className="text-[#64748b]">
               When clicked, the exact scenario parameters transfer into the Technical Lab to display the mathematical proof and live Gaussian bell curve.
             </p>
           </div>
           <Link
             to="/technical-lab"
-            className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-cyan-700/80 hover:bg-cyan-600 text-white font-medium transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-medium transition shadow"
           >
             <FlaskConical className="w-3.5 h-3.5" />
             <span>Open Technical Lab</span>
@@ -213,13 +254,13 @@ export default function LearnAndPlay() {
       </Panel>
 
       {/* 5 Educational Game Modules */}
-      <section className="space-y-4">
+      <section id="missions" className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
-            <Layers className="w-4 h-4 text-emerald-400" />
+          <h2 className="text-sm font-mono uppercase tracking-wider text-[#94a3b8] flex items-center gap-2 font-bold">
+            <Layers className="w-4 h-4 text-[#3b82f6]" />
             <span>Curriculum Game Catalog ({gameDefinitions.length} Missions Available)</span>
           </h2>
-          <span className="text-xs font-mono text-emerald-400 flex items-center gap-1">
+          <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
             <Zap className="w-3.5 h-3.5" />
             <span>FastAPI Evaluator Online</span>
           </span>
@@ -241,34 +282,34 @@ export default function LearnAndPlay() {
               return (
                 <div
                   key={game.id}
-                  className={`rounded-xl bg-slate-900/60 border p-5 space-y-4 transition-all flex flex-col justify-between ${
+                  className={`rounded-2xl bg-[#111827] border p-5 space-y-4 transition-all flex flex-col justify-between ${
                     isCompleted
-                      ? 'border-emerald-700/60 ring-1 ring-emerald-500/20'
-                      : 'border-slate-800 hover:border-slate-700'
+                      ? 'border-[#10b981]/50 ring-1 ring-[#10b981]/20'
+                      : 'border-[#26354d] hover:border-[#3b82f6]/50'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-emerald-950/60 border border-emerald-800/50 flex items-center justify-center text-emerald-400 shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#161f30] border border-[#26354d] flex items-center justify-center text-[#3b82f6] shrink-0">
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-white text-base">
+                          <h3 className="font-bold text-[#f9fafb] text-base">
                             {game.title}
                           </h3>
-                          <span className="text-[11px] font-mono text-emerald-400 block">
+                          <span className="text-[11px] font-mono text-[#3b82f6] block">
                             {game.category}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#94a3b8] border border-[#26354d]">
                           {game.difficulty}
                         </span>
                         {isCompleted && (
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300 flex items-center gap-1">
+                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] flex items-center gap-1">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>Done</span>
                           </span>
@@ -276,39 +317,39 @@ export default function LearnAndPlay() {
                       </div>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                    <p className="text-xs text-[#94a3b8] leading-relaxed font-sans">
                       {game.desc}
                     </p>
 
                     <div className="space-y-1.5 text-[11px] font-mono">
-                      <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80 text-slate-400 space-y-1">
-                        <span className="text-slate-500 uppercase text-[10px] block">Learning Outcomes:</span>
-                        <p className="text-slate-300 font-sans">{game.learningOutcomes}</p>
-                        <div className="pt-1 border-t border-slate-900 flex justify-between items-center text-[10px]">
-                          <span>Formula: <code className="text-cyan-300">{game.statFocus}</code></span>
-                          <span className="text-emerald-400 font-bold">+{game.maxXP} XP</span>
+                      <div className="p-3 rounded-xl bg-[#0b0f17] border border-[#1e293b] text-[#94a3b8] space-y-1.5">
+                        <span className="text-[#64748b] uppercase text-[10px] block">Learning Outcomes:</span>
+                        <p className="text-[#f9fafb]/90 font-sans">{game.learningOutcomes}</p>
+                        <div className="pt-1.5 border-t border-[#1e293b] flex justify-between items-center text-[10px]">
+                          <span>Formula: <code className="text-[#3b82f6]">{game.statFocus}</code></span>
+                          <span className="text-[#10b981] font-bold">+{game.maxXP} XP</span>
                         </div>
                       </div>
 
                       {matchingScenario && (
-                        <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5 pt-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                          <span>Pre-configured dataset scenario: <strong className="text-slate-300">{matchingScenario.title}</strong></span>
+                        <div className="text-[11px] font-mono text-[#64748b] flex items-center gap-1.5 pt-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981] shrink-0" />
+                          <span>Pre-configured dataset scenario: <strong className="text-[#f9fafb]">{matchingScenario.title}</strong></span>
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
-                    <span className="text-slate-500">
+                  <div className="pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-mono">
+                    <span className="text-[#64748b]">
                       {isCompleted ? 'Completed in session' : 'Ready to launch'}
                     </span>
                     <button
                       onClick={() => startGame(game.id, matchingScenario)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold transition-all shadow-lg shadow-emerald-950/40 cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-mono text-xs font-bold transition shadow"
                     >
-                      <Play className="w-3.5 h-3.5" />
-                      <span>{isCompleted ? 'Replay Mission' : 'Start Game'}</span>
+                      <Play className="w-3.5 h-3.5 fill-white" />
+                      <span>{isCompleted ? 'Replay Mission' : 'Start Mission'}</span>
                     </button>
                   </div>
                 </div>

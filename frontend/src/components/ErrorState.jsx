@@ -50,19 +50,19 @@ export default function ErrorState({
         {message}
       </p>
 
-      <div className="mt-4 px-3 py-2 rounded-lg bg-slate-950 border border-slate-800 text-left max-w-md w-full text-xs font-mono text-slate-400 flex items-start gap-2">
-        <Terminal className="w-3.5 h-3.5 text-cyan-400 mt-0.5 shrink-0" />
+      <div className="mt-4 px-3 py-2 rounded-lg bg-[#0b0f17] border border-[#26354d] text-left max-w-md w-full text-xs font-mono text-slate-400 flex items-start gap-2">
+        <Terminal className="w-3.5 h-3.5 text-blue-400 mt-0.5 shrink-0" />
         <div>
           <span className="text-slate-500">FastAPI launch command:</span>
           <br />
-          <code className="text-cyan-300">cd netpulse/backend && uvicorn main:app --reload</code>
+          <code className="text-blue-300">cd netpulse/backend && uvicorn main:app --reload</code>
         </div>
       </div>
 
       {onRetry && (
         <button
           onClick={onRetry}
-          className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs font-mono tracking-wide shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+          className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs font-mono tracking-wide shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Retry Connection</span>

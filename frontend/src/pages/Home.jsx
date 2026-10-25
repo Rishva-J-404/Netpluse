@@ -65,12 +65,11 @@ export default function Home() {
   return (
     <div className="space-y-8">
       {/* Hero NOC Command Section */}
-      <section className="relative rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/95 to-cyan-950/40 border border-slate-800 p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl">
-        <div className="absolute -right-24 -top-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative rounded-2xl bg-gradient-to-br from-[#111827] via-[#161f30] to-[#0b0f17] border border-[#26354d] p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl">
         <div className="relative z-10 max-w-4xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-300 text-xs font-mono">
-              <Activity className="w-3.5 h-3.5 animate-pulse text-cyan-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0b0f17] border border-[#26354d] text-[#3b82f6] text-xs font-mono font-semibold">
+              <Activity className="w-3.5 h-3.5 animate-pulse text-[#3b82f6]" />
               <span>Network Operations Center · Course 25CS203</span>
             </span>
             {health && (
@@ -78,15 +77,15 @@ export default function Home() {
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-mono">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#f9fafb] font-mono">
             NETPULSE
           </h1>
 
-          <p className="text-base sm:text-xl text-cyan-300/90 font-medium font-mono">
+          <p className="text-base sm:text-lg text-[#3b82f6] font-semibold font-mono">
             "Network Load Analysis Using Normal Distribution"
           </p>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed max-w-3xl">
             An educational Network Operations Center and probability lab for Computer Science students.
             Every observed throughput metric connects directly to the Python statistical engine to evaluate
             Gaussian distribution properties, standardized Z-scores, SciPy cumulative probabilities, and empirical anomaly thresholds.
@@ -96,25 +95,25 @@ export default function Home() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/learn-and-play"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold transition-all shadow-lg shadow-emerald-950/40 hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-mono text-xs font-bold transition-all shadow-lg shadow-blue-500/20"
             >
               <Gamepad2 className="w-4 h-4" />
-              <span>Enter Learn & Play</span>
+              <span>Network Highway Ops (3D Simulator)</span>
             </Link>
 
             <Link
               to="/technical-lab"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-semibold transition-all shadow-lg shadow-cyan-950/40 hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#f9fafb] font-mono text-xs font-semibold border border-[#26354d] transition-all"
             >
-              <FlaskConical className="w-4 h-4" />
+              <FlaskConical className="w-4 h-4 text-[#3b82f6]" />
               <span>Open Technical Lab</span>
             </Link>
 
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-mono text-xs font-semibold border border-slate-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] hover:text-[#f9fafb] font-mono text-xs font-semibold border border-[#26354d] transition-colors"
             >
-              <BarChart2 className="w-4 h-4 text-cyan-400" />
+              <BarChart2 className="w-4 h-4 text-[#3b82f6]" />
               <span>NOC Dashboard</span>
             </Link>
           </div>
@@ -136,12 +135,12 @@ export default function Home() {
           <section className="space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-cyan-400" />
+                <Layers className="w-4 h-4 text-blue-400" />
                 <span>Baseline Campus Telemetry Metrics ({dataset.name})</span>
               </h2>
               <button
                 onClick={loadData}
-                className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-cyan-300 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-blue-300 transition-colors"
                 title="Refresh dataset from backend"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
@@ -156,7 +155,7 @@ export default function Home() {
                 unit="Mbps"
                 subtext="μ = (1/n) Σ x_i"
                 icon={TrendingUp}
-                accent="cyan"
+                accent="blue"
               />
               <MetricCard
                 label="Sample Std Dev (s)"
@@ -164,7 +163,7 @@ export default function Home() {
                 unit="Mbps"
                 subtext="Bessel's correction (ddof=1)"
                 icon={Activity}
-                accent="cyan"
+                accent="blue"
               />
               <MetricCard
                 label="Sample Variance (s²)"
@@ -172,7 +171,7 @@ export default function Home() {
                 unit="Mbps²"
                 subtext={`n = ${dataset.total_records} hourly observations`}
                 icon={Cpu}
-                accent="cyan"
+                accent="blue"
               />
               <MetricCard
                 label="Throughput Range"
@@ -193,7 +192,7 @@ export default function Home() {
             actions={
               <Link
                 to="/technical-lab"
-                className="inline-flex items-center gap-1 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 transition-colors"
               >
                 <span>Analyze in Lab</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -284,7 +283,7 @@ export default function Home() {
               <div className="pt-2">
                 <Link
                   to="/technical-lab"
-                  className="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-mono text-blue-400 hover:text-blue-300 font-semibold transition-colors"
                 >
                   <span>Open Technical Workbench</span>
                   <ArrowRight className="w-3.5 h-3.5" />

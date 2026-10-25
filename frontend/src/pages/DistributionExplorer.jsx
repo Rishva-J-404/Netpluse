@@ -91,7 +91,7 @@ export default function DistributionExplorer() {
             </button>
             <Link
               to="/zscore-analysis"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-700 hover:bg-cyan-600 text-white text-xs font-mono font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-600 text-white text-xs font-mono font-medium transition-colors"
             >
               <Target className="w-3.5 h-3.5" />
               <span>Analyze Z-Score</span>
@@ -101,15 +101,15 @@ export default function DistributionExplorer() {
       />
 
       {/* Model Assumption Academic Alert */}
-      <div className="p-4 rounded-xl bg-cyan-950/30 border border-cyan-800/40 text-xs font-mono text-slate-300 flex items-start gap-3">
-        <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+      <div className="p-4 rounded-xl bg-blue-950/30 border border-blue-800/40 text-xs font-mono text-slate-300 flex items-start gap-3">
+        <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-semibold text-cyan-300">
+          <p className="font-semibold text-blue-400">
             Educational Modeling Note (Course 25CS203):
           </p>
           <p className="text-slate-400 leading-relaxed font-sans">
             In real networks, telemetry distributions often exhibit skewness or heavy tails. For this micro-project,
-            a continuous Gaussian model <code className="text-cyan-300 font-mono">X ~ N(μ, σ²)</code> is fitted to the campus sample mean (μ = {mean} Mbps)
+            a continuous Gaussian model <code className="text-blue-400 font-mono">X ~ N(μ, σ²)</code> is fitted to the campus sample mean (μ = {mean} Mbps)
             and sample standard deviation (s = {std} Mbps) to explore classical probability theorems, tail exceedance, and empirical standard deviation boundaries.
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function DistributionExplorer() {
               unit="Mbps"
               subtext="Center of mass / Bell curve peak"
               icon={TrendingUp}
-              accent="cyan"
+              accent="blue"
             />
             <MetricCard
               label="Sample Std Dev (s)"
@@ -137,7 +137,7 @@ export default function DistributionExplorer() {
               unit="Mbps"
               subtext="Dispersion spread parameter"
               icon={Activity}
-              accent="cyan"
+              accent="blue"
             />
             <MetricCard
               label="Observed Load (X)"
@@ -154,7 +154,7 @@ export default function DistributionExplorer() {
               unit="%"
               subtext="Cumulative distribution below X"
               icon={Layers}
-              accent="cyan"
+              accent="blue"
             />
           </div>
 
@@ -177,7 +177,7 @@ export default function DistributionExplorer() {
                     min="0"
                     value={loadInput}
                     onChange={e => handleUpdateLoad(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-cyan-500 pr-14"
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-blue-500 pr-14"
                   />
                   <span className="absolute right-3 top-2 text-xs font-mono text-slate-500 pointer-events-none">
                     Mbps
@@ -246,10 +246,10 @@ export default function DistributionExplorer() {
               title="Operational Threshold (μ ± 2σ)"
               subtitle="95.45% of nominal traffic"
               icon={Info}
-              className="border-cyan-900/40"
+              className="border-[#26354d]"
             >
               <div className="space-y-2 font-mono text-xs">
-                <div className="text-cyan-400 font-bold text-sm">
+                <div className="text-blue-400 font-bold text-sm">
                   {Math.max(0, mean - 2 * std).toFixed(2)} Mbps – {(mean + 2 * std).toFixed(2)} Mbps
                 </div>
                 <p className="text-slate-300 leading-relaxed font-sans">

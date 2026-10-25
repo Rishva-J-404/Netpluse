@@ -15,7 +15,7 @@ export default function PageHeader({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           {modeBadge && (
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-2 rounded-full text-[11px] font-mono font-medium tracking-wide bg-cyan-950/60 border border-cyan-800/40 text-cyan-300">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-2 rounded-full text-[11px] font-mono font-medium tracking-wide bg-blue-950/50 border border-blue-800/40 text-blue-300">
               {modeBadge}
             </div>
           )}

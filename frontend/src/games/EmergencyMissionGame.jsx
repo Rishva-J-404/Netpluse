@@ -9,14 +9,17 @@ import {
   ArrowRight,
   CheckCircle2,
   ListOrdered,
-  ChevronRight
+  ChevronRight,
+  Gauge
 } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
 import Panel from '../components/Panel'
 import GameResultCard from './GameResultCard'
+import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
 
 export default function EmergencyMissionGame({ scenario, onLeave }) {
   const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
+  const [viewMode, setViewMode] = useState('simulator')
 
   const sc = scenario || {
     id: 'emergency_mission_01',
@@ -50,6 +53,56 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         correct: 'Activate rate-limiting and DDoS scrubbers'
       }
     ]
+  }
+
+  // 3D Simulator Mode (Default)
+  if (viewMode === 'simulator') {
+    return (
+      <div className="space-y-4 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between pb-3 border-b border-[#26354d]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider font-bold">
+              GAME 5 — NETWORK EMERGENCY MISSION
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#10b981] border border-[#26354d] flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+              3D SIMULATOR ACTIVE
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setViewMode('classic')}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Classic Multi-Step Mode
+            </button>
+            <button
+              onClick={onLeave}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Exit to Lobby
+            </button>
+          </div>
+        </div>
+
+        <NetworkHighwayEngine
+          missionId="emergency_mission"
+          missionTitle="Mission 05: Network Emergency Mission"
+          category="Comprehensive Cyber Defense Triage"
+          difficulty="Advanced Multi-Step"
+          description={sc.description}
+          learningOutcomes="Synthesize probability estimation, state classification, and technical incident response into a staged driving workflow."
+          statFocus="Exceedance probability P(X ≥ x) and critical risk triage"
+          scenario={{
+            ...sc,
+            current_load: sc.current_load || 68.0,
+            question: 'Observed load 68.0 Mbps on central core gateway. Compute Z-score:',
+            options: ['Z = 1.8', 'Z = 2.4', 'Z = 3.6', 'Z = 4.2']
+          }}
+          onLeave={onLeave}
+        />
+      </div>
+    )
   }
 
   // Multi-step tracking
@@ -163,7 +216,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
           {sc.description}
         </p>
         <div className="grid grid-cols-3 gap-3 pt-2 text-[11px] font-mono border-t border-slate-800">
-          <div>Baseline Mean (μ): <strong className="text-cyan-300">{sc.mean} Mbps</strong></div>
+          <div>Baseline Mean (μ): <strong className="text-blue-400">{sc.mean} Mbps</strong></div>
           <div>Baseline Std (σ): <strong className="text-emerald-300">{sc.std_dev} Mbps</strong></div>
           <div>Alarm Telemetry (X): <strong className="text-rose-400">{sc.current_load} Mbps</strong></div>
         </div>
@@ -174,7 +227,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 1
-              ? 'bg-cyan-950/60 border-cyan-500 text-white font-bold'
+              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
               : step1Result?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -187,7 +240,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 2
-              ? 'bg-cyan-950/60 border-cyan-500 text-white font-bold'
+              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
               : step2Result?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -200,7 +253,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
         <div
           className={`p-3 rounded-xl border text-center transition-all ${
             activeStep === 3
-              ? 'bg-cyan-950/60 border-cyan-500 text-white font-bold'
+              ? 'bg-[#161f30] border-blue-500 text-white font-bold'
               : finalResult?.is_correct
               ? 'bg-emerald-950/40 border-emerald-700 text-emerald-300'
               : 'bg-slate-950 border-slate-800 text-slate-500'
@@ -232,7 +285,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
                   placeholder="e.g. 3.6"
                   value={step1Input}
                   onChange={(e) => setStep1Input(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-cyan-500 pr-10"
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm font-mono text-white focus:outline-none focus:border-blue-500 pr-10"
                 />
                 <span className="absolute right-3 top-2.5 text-xs font-mono text-slate-500 pointer-events-none">
                   σ
@@ -252,7 +305,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
                 <button
                   type="submit"
                   disabled={!step1Input || submitting}
-                  className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all disabled:bg-slate-800 disabled:text-slate-500 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all disabled:bg-slate-800 disabled:text-slate-500 cursor-pointer"
                 >
                   {submitting ? 'Verifying...' : 'Submit Stage 1'}
                 </button>
@@ -319,7 +372,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
                     onClick={() => setStep2Choice(opt)}
                     className={`p-3 rounded-xl border text-center font-mono text-xs transition-all ${
                       step2Choice === opt
-                        ? 'bg-cyan-950/60 border-cyan-500 text-white font-bold ring-1 ring-cyan-500/50'
+                        ? 'bg-[#161f30] border-blue-500 text-white font-bold ring-1 ring-blue-500/40'
                         : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
                     }`}
                   >
@@ -345,7 +398,7 @@ export default function EmergencyMissionGame({ scenario, onLeave }) {
                 <button
                   type="submit"
                   disabled={!step2Choice || submitting}
-                  className="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono text-xs font-bold transition-all disabled:bg-slate-800 disabled:text-slate-500 cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold transition-all disabled:bg-slate-800 disabled:text-slate-500 cursor-pointer"
                 >
                   {submitting ? 'Verifying...' : 'Submit Stage 2'}
                 </button>

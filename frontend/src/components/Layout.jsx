@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="min-h-screen flex flex-col bg-[#0b0f17] text-[#f9fafb] antialiased selection:bg-[#3b82f6]/30 selection:text-[#f9fafb]">
       <Navbar onToggleSidebar={() => setIsSidebarOpen(prev => !prev)} />
 
       <div className="flex-1 flex relative">
@@ -17,10 +17,10 @@ export default function Layout({ children }) {
             {children}
           </div>
 
-          <footer className="mt-auto border-t border-slate-900 bg-[#090d16] py-4 px-6 text-center text-xs text-slate-500 font-mono">
+          <footer className="mt-auto border-t border-[#1e293b] bg-[#080d15] py-4 px-6 text-center text-xs text-[#64748b] font-mono">
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
               <span>NETPULSE · Course Code 25CS203 · Department of Computer Science & Engineering</span>
-              <span className="text-slate-600">Probability & Statistics for CS Micro-Project</span>
+              <span className="text-[#64748b]">Probability & Statistics for CS Micro-Project</span>
             </div>
           </footer>
         </main>

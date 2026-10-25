@@ -10,40 +10,42 @@ export default function MetricCard({
   icon: Icon,
   subtext,
   badge,
-  accent = 'cyan',
+  accent = 'blue',
   className = ''
 }) {
   const accentBorder = {
-    cyan: 'border-slate-800 hover:border-cyan-500/40',
-    emerald: 'border-slate-800 hover:border-emerald-500/40',
-    amber: 'border-slate-800 hover:border-amber-500/40',
-    rose: 'border-slate-800 hover:border-rose-500/40',
-    slate: 'border-slate-800 hover:border-slate-700'
-  }[accent] || 'border-slate-800 hover:border-cyan-500/40'
+    blue: 'border-[#26354d] hover:border-[#3b82f6]/60',
+    cyan: 'border-[#26354d] hover:border-[#3b82f6]/60',
+    emerald: 'border-[#26354d] hover:border-[#10b981]/60',
+    amber: 'border-[#26354d] hover:border-[#f59e0b]/60',
+    rose: 'border-[#26354d] hover:border-[#ef4444]/60',
+    slate: 'border-[#26354d] hover:border-[#334155]'
+  }[accent] || 'border-[#26354d] hover:border-[#3b82f6]/60'
 
   const iconBg = {
-    cyan: 'bg-cyan-950/60 text-cyan-400 border-cyan-800/40',
-    emerald: 'bg-emerald-950/60 text-emerald-400 border-emerald-800/40',
-    amber: 'bg-amber-950/60 text-amber-400 border-amber-800/40',
-    rose: 'bg-rose-950/60 text-rose-400 border-rose-800/40',
-    slate: 'bg-slate-900 text-slate-400 border-slate-700'
-  }[accent] || 'bg-cyan-950/60 text-cyan-400 border-cyan-800/40'
+    blue: 'bg-[#161f30] text-[#3b82f6] border-[#26354d]',
+    cyan: 'bg-[#161f30] text-[#3b82f6] border-[#26354d]',
+    emerald: 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30',
+    amber: 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30',
+    rose: 'bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/30',
+    slate: 'bg-[#161f30] text-[#94a3b8] border-[#26354d]'
+  }[accent] || 'bg-[#161f30] text-[#3b82f6] border-[#26354d]'
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl bg-slate-900/60 backdrop-blur-sm border p-4 sm:p-5 transition-all duration-150 ${accentBorder} ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-[#111827] border p-4 sm:p-5 transition-all duration-150 ${accentBorder} ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1 min-w-0">
-          <p className="text-xs font-mono uppercase tracking-wider text-slate-400 truncate">
+          <p className="text-xs font-mono uppercase tracking-wider text-[#94a3b8] truncate">
             {label}
           </p>
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className="text-2xl sm:text-3xl font-bold font-mono text-white tracking-tight">
+            <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f9fafb] tracking-tight tabular-nums">
               {value !== undefined && value !== null ? value : '—'}
             </span>
             {unit && (
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-[#94a3b8]">
                 {unit}
               </span>
             )}
@@ -52,7 +54,7 @@ export default function MetricCard({
 
         {Icon && (
           <div
-            className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 ${iconBg}`}
+            className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${iconBg}`}
             aria-hidden="true"
           >
             <Icon className="w-5 h-5" />
@@ -61,7 +63,7 @@ export default function MetricCard({
       </div>
 
       {(subtext || badge) && (
-        <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+        <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-mono text-[#94a3b8]">
           {subtext && <span className="truncate">{subtext}</span>}
           {badge && <span className="ml-auto shrink-0">{badge}</span>}
         </div>

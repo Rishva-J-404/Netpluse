@@ -32,7 +32,7 @@ function GaussianTooltip({ active, payload, mean, stdDev }) {
     return (
       <div className="rounded-lg bg-slate-950 border border-slate-700/90 p-3 shadow-xl text-xs font-mono space-y-1">
         <p className="text-slate-400 font-semibold">Throughput: <span className="text-white font-bold">{x.toFixed(2)} Mbps</span></p>
-        <p className="text-cyan-300">Density f(x): <span className="font-bold">{pdf.toFixed(6)}</span></p>
+        <p className="text-blue-300">Density f(x): <span className="font-bold">{pdf.toFixed(6)}</span></p>
         {z !== null && (
           <p className="text-slate-300">
             Z-Distance: <span className={Math.abs(Number(z)) > 2 ? 'text-rose-400 font-bold' : 'text-emerald-400'}>
@@ -89,12 +89,12 @@ export default function GaussianBellChart({
           >
             <defs>
               <linearGradient id="bellGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.02} />
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.02} />
               </linearGradient>
             </defs>
 
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#26354d" vertical={false} />
 
             <XAxis
               dataKey="x"
@@ -122,11 +122,11 @@ export default function GaussianBellChart({
             {showMarkers && mMean !== undefined && mMean !== null && (
               <ReferenceLine
                 x={mMean}
-                stroke="#38bdf8"
+                stroke="#3b82f6"
                 strokeWidth={2}
                 label={{
                   value: `μ = ${mMean}`,
-                  fill: '#38bdf8',
+                  fill: '#3b82f6',
                   fontSize: 10,
                   position: 'top',
                   fontFamily: 'ui-monospace'

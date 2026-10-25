@@ -7,14 +7,17 @@ import {
   RotateCcw,
   Sparkles,
   ShieldAlert,
-  CheckCircle2
+  CheckCircle2,
+  Gauge
 } from 'lucide-react'
 import { useGame } from '../contexts/GameContext'
 import Panel from '../components/Panel'
 import GameResultCard from './GameResultCard'
+import NetworkHighwayEngine from '../simulator/NetworkHighwayEngine'
 
 export default function AnomalyHunterGame({ scenario, onLeave }) {
   const { submitAnswer, submitting, lastResult, submissionError, clearResult, completeGame } = useGame()
+  const [viewMode, setViewMode] = useState('simulator')
 
   const sc = scenario || {
     id: 'anomaly_hunter_01',
@@ -25,6 +28,56 @@ export default function AnomalyHunterGame({ scenario, onLeave }) {
     mean: 54.1,
     std_dev: 13.06,
     suspicious_value: 91
+  }
+
+  // 3D Simulator Mode (Default)
+  if (viewMode === 'simulator') {
+    return (
+      <div className="space-y-4 max-w-5xl mx-auto">
+        <div className="flex items-center justify-between pb-3 border-b border-[#26354d]">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider font-bold">
+              GAME 4 — ANOMALY HUNTER
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#10b981] border border-[#26354d] flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+              3D SIMULATOR ACTIVE
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setViewMode('classic')}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Classic Workbench Mode
+            </button>
+            <button
+              onClick={onLeave}
+              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+            >
+              Exit to Lobby
+            </button>
+          </div>
+        </div>
+
+        <NetworkHighwayEngine
+          missionId="anomaly_hunter"
+          missionTitle="Mission 04: Anomaly Hunter"
+          category="Telemetry Array Auditing"
+          difficulty="Intermediate"
+          description={sc.description}
+          learningOutcomes="Scan sampled packet series, calculate Z-scores against cluster variance, and isolate anomalous telemetry outliers (|Z| > 2.0)."
+          statFocus="Outlier detection, sample variance, empirical classification"
+          scenario={{
+            ...sc,
+            current_load: sc.suspicious_value || 91.0,
+            question: `Which telemetry sample constitutes the statistical outlier (|Z| > 2.0) in this array?`,
+            options: ['48.0', '51.0', '53.0', String(sc.suspicious_value || 91)]
+          }}
+          onLeave={onLeave}
+        />
+      </div>
+    )
   }
 
   const [selectedValue, setSelectedValue] = useState(null)
