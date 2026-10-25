@@ -12,10 +12,13 @@ import {
   Layers,
   CheckCircle2,
   Play,
-  Zap
+  Zap,
+  Lock,
+  RotateCcw,
+  Sparkles
 } from 'lucide-react'
 import { fetchScenarios } from '../services/api'
-import { useGame } from '../contexts/GameContext'
+import { useGame, MISSION_SEQUENCE, MISSION_METADATA } from '../contexts/GameContext'
 import PageHeader from '../components/PageHeader'
 import Panel from '../components/Panel'
 import StatusBadge from '../components/StatusBadge'
@@ -38,7 +41,10 @@ export default function LearnAndPlay() {
     totalAttempts,
     totalCorrect,
     accuracyPercentage,
-    completedGames
+    completedMissions,
+    getMissionStatus,
+    isMissionUnlocked,
+    getPrerequisiteMission
   } = useGame()
 
   const [scenarios, setScenarios] = useState([])
@@ -62,6 +68,7 @@ export default function LearnAndPlay() {
   const gameDefinitions = [
     {
       id: 'traffic_controller',
+      number: 1,
       title: 'Mission 1: Traffic Controller',
       icon: Radio,
       category: 'Incident Response & Decision Making',
@@ -73,6 +80,7 @@ export default function LearnAndPlay() {
     },
     {
       id: 'zscore_challenge',
+      number: 2,
       title: 'Mission 2: Z-Score Challenge',
       icon: Target,
       category: 'Standardization Arithmetic',
@@ -84,6 +92,7 @@ export default function LearnAndPlay() {
     },
     {
       id: 'normal_curve_challenge',
+      number: 3,
       title: 'Mission 3: Normal Curve Challenge',
       icon: LineChart,
       category: 'Interactive Gaussian Bell Curve',
@@ -95,6 +104,7 @@ export default function LearnAndPlay() {
     },
     {
       id: 'anomaly_hunter',
+      number: 4,
       title: 'Mission 4: Anomaly Hunter',
       icon: Search,
       category: 'Telemetry Array Auditing',
@@ -106,6 +116,7 @@ export default function LearnAndPlay() {
     },
     {
       id: 'emergency_mission',
+      number: 5,
       title: 'Mission 5: Network Emergency Mission',
       icon: AlertTriangle,
       category: 'Multi-Step Triage',
@@ -116,6 +127,13 @@ export default function LearnAndPlay() {
       maxXP: 25
     }
   ]
+
+  // Find the next available uncompleted mission for quick start
+  const nextMissionToPlay = gameDefinitions.find(
+    g => !completedMissions.includes(g.id) && isMissionUnlocked(g.id)
+  ) || gameDefinitions[0]
+
+  const allMissionsCompleted = completedMissions.length >= gameDefinitions.length
 
   // If a mission is actively running, render that mission's view
   if (activeGameId) {
@@ -131,7 +149,7 @@ export default function LearnAndPlay() {
       case 'emergency_mission':
         return <EmergencyMissionGame scenario={scenarios.find(s => s.game === 'emergency_mission')} onLeave={leaveGame} />
       default:
-        return <ZScoreChallengeGame scenario={scenarios[0]} onLeave={leaveGame} />
+        return <TrafficControllerGame scenario={scenarios[0]} onLeave={leaveGame} />
     }
   }
 
@@ -143,41 +161,54 @@ export default function LearnAndPlay() {
         subtitle="Drive simulated network routes and evaluate telemetry observations at checkpoints against Gaussian distribution baselines."
       />
 
-      {/* Featured 3D Simulator Banner */}
+      {/* Featured Sequential Progression Hero Banner */}
       <div className="rounded-xl bg-[#181f2b] border border-[#2b3545] p-6 sm:p-8">
         <div className="max-w-2xl space-y-3">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#202938] text-[#4f7cff] border border-[#2b3545] font-semibold">
-              Interactive Route Simulation
+              Sequential Route Curriculum
             </span>
             <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#202938] text-[#35a875] border border-[#2b3545] flex items-center gap-1.5 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-[#35a875]" />
-              Statistical Engine Active
+              {completedMissions.length} of 5 Missions Cleared
             </span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-bold text-[#f3f4f6] tracking-tight font-sans">
-            Network Route: Telemetry Checkpoints
+            {allMissionsCompleted
+              ? 'Complete Curriculum Mastered'
+              : `Current Objective: ${nextMissionToPlay.title}`}
           </h2>
 
           <p className="text-sm text-[#9ca8b8] leading-relaxed">
-            Drive along the simulated network path. As you travel, you will reach telemetry checkpoints where network load readings are captured. Calculate the Z-score, classify whether the measurement is normal or anomalous, and confirm your decision.
+            {allMissionsCompleted
+              ? 'You have successfully mastered all five network statistical missions. Replay any route to practice calculations or examine live telemetry in the Statistical Lab.'
+              : 'Drive along the simulated highway route. When reaching checkpoint gantries, evaluate live network throughput observations against Gaussian parameters to unlock the next mission.'}
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
-              onClick={() => startGame('zscore_challenge')}
-              className="px-5 py-2.5 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] text-xs font-sans font-bold transition-colors flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                const targetScenario = scenarios.find(s => s.game === nextMissionToPlay.id)
+                startGame(nextMissionToPlay.id, targetScenario)
+              }}
+              className="px-5 py-2.5 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] text-xs font-sans font-bold transition-colors flex items-center gap-2 cursor-pointer shadow-sm"
             >
               <Play className="w-4 h-4 fill-[#111827]" />
-              <span>Launch Route Simulator</span>
+              <span>
+                {allMissionsCompleted
+                  ? 'Replay Mission 1'
+                  : completedMissions.length === 0
+                  ? 'Start Mission 1: Traffic Controller'
+                  : `Continue: ${nextMissionToPlay.title}`}
+              </span>
             </button>
 
             <a
               href="#missions"
               className="px-4 py-2.5 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] text-xs font-sans border border-[#2b3545] transition-colors flex items-center gap-2"
             >
-              <span>View All 5 Missions</span>
+              <span>View Route Sequence</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#4f7cff]" />
             </a>
           </div>
@@ -207,12 +238,12 @@ export default function LearnAndPlay() {
         </div>
 
         <div className="p-4 rounded-xl bg-[#181f2b] border border-[#2b3545] space-y-1 font-sans text-xs">
-          <span className="text-[#9ca8b8] uppercase text-[10px] block font-medium">Missions Completed</span>
+          <span className="text-[#9ca8b8] uppercase text-[10px] block font-medium">Curriculum Progress</span>
           <div className="text-2xl font-bold text-[#f3f4f6] font-mono tabular-nums">
-            {Object.keys(completedGames).length} / {gameDefinitions.length}
+            {completedMissions.length} / {gameDefinitions.length}
           </div>
           <span className="text-[10px] text-[#9ca8b8]">
-            Completed scenarios
+            Sequential missions cleared
           </span>
         </div>
       </div>
@@ -222,7 +253,7 @@ export default function LearnAndPlay() {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-sans uppercase tracking-wider text-[#9ca8b8] flex items-center gap-2 font-semibold">
             <Layers className="w-4 h-4 text-[#4f7cff]" />
-            <span>Simulation Missions ({gameDefinitions.length} Available)</span>
+            <span>Sequential Learning Path ({gameDefinitions.length} Missions)</span>
           </h2>
         </div>
 
@@ -237,25 +268,37 @@ export default function LearnAndPlay() {
               const matchingScenario = scenarios.find(
                 s => s.game === game.id || (game.id === 'normal_curve_challenge' && s.game === 'normal_curve_challenge')
               )
-              const isCompleted = Boolean(completedGames[game.id])
+              const status = getMissionStatus(game.id)
+              const isCompleted = status === 'completed'
+              const isLocked = status === 'locked'
+              const isAvailable = status === 'available' || status === 'active'
+              const prereq = isLocked ? getPrerequisiteMission(game.id) : null
 
               return (
                 <div
                   key={game.id}
-                  className={`rounded-xl bg-[#181f2b] border p-5 space-y-3.5 transition-colors flex flex-col justify-between ${
+                  className={`rounded-xl border p-5 space-y-3.5 transition-colors flex flex-col justify-between ${
                     isCompleted
-                      ? 'border-[#35a875]/40'
-                      : 'border-[#2b3545] hover:border-[#4f7cff]/50'
+                      ? 'bg-[#181f2b] border-[#35a875]/40'
+                      : isLocked
+                      ? 'bg-[#141b27]/80 border-[#2b3545]/60 opacity-80'
+                      : 'bg-[#181f2b] border-[#4f7cff]/40 shadow-sm'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-[#202938] border border-[#2b3545] flex items-center justify-center text-[#4f7cff] shrink-0">
-                          <Icon className="w-5 h-5" />
+                        <div className={`w-10 h-10 rounded-lg border flex items-center justify-center shrink-0 ${
+                          isCompleted
+                            ? 'bg-[#35a875]/10 border-[#35a875]/30 text-[#35a875]'
+                            : isLocked
+                            ? 'bg-[#1e2738] border-[#2b3545] text-[#64748b]'
+                            : 'bg-[#202938] border-[#4f7cff]/40 text-[#4f7cff]'
+                        }`}>
+                          {isLocked ? <Lock className="w-5 h-5 text-[#64748b]" /> : <Icon className="w-5 h-5" />}
                         </div>
                         <div>
-                          <h3 className="font-semibold text-[#f3f4f6] text-base font-sans">
+                          <h3 className={`font-semibold text-base font-sans ${isLocked ? 'text-[#9ca8b8]' : 'text-[#f3f4f6]'}`}>
                             {game.title}
                           </h3>
                           <span className="text-xs font-sans text-[#4f7cff] block">
@@ -272,6 +315,18 @@ export default function LearnAndPlay() {
                           <span className="text-[11px] font-sans px-2 py-0.5 rounded bg-[#35a875]/10 border border-[#35a875]/30 text-[#35a875] flex items-center gap-1 font-medium">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>Done</span>
+                          </span>
+                        )}
+                        {isLocked && (
+                          <span className="text-[11px] font-sans px-2 py-0.5 rounded bg-[#202938] border border-[#2b3545] text-[#64748b] flex items-center gap-1 font-medium">
+                            <Lock className="w-3 h-3 text-[#64748b]" />
+                            <span>Locked</span>
+                          </span>
+                        )}
+                        {isAvailable && !isCompleted && (
+                          <span className="text-[11px] font-sans px-2 py-0.5 rounded bg-[#4f7cff]/10 border border-[#4f7cff]/30 text-[#4f7cff] flex items-center gap-1 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#4f7cff] animate-pulse" />
+                            <span>Next Up</span>
                           </span>
                         )}
                       </div>
@@ -291,15 +346,43 @@ export default function LearnAndPlay() {
 
                   <div className="pt-3 border-t border-[#2b3545] flex items-center justify-between text-xs font-sans">
                     <span className="text-[#9ca8b8]">
-                      {isCompleted ? 'Mission verified' : 'Ready to start'}
+                      {isCompleted
+                        ? 'Verified route completed'
+                        : isLocked
+                        ? `Prerequisite: ${prereq ? prereq.shortTitle : 'Previous Mission'}`
+                        : 'Ready to drive'}
                     </span>
-                    <button
-                      onClick={() => startGame(game.id, matchingScenario)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-sans text-xs font-bold transition-colors cursor-pointer"
-                    >
-                      <Play className="w-3.5 h-3.5 fill-[#111827]" />
-                      <span>{isCompleted ? 'Replay Mission' : 'Start Mission'}</span>
-                    </button>
+
+                    {isLocked ? (
+                      <button
+                        disabled
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#202938] text-[#64748b] font-sans text-xs font-medium border border-[#2b3545] cursor-not-allowed opacity-60"
+                      >
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Locked</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => startGame(game.id, matchingScenario)}
+                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-sans text-xs font-bold transition-colors cursor-pointer ${
+                          isCompleted
+                            ? 'bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545]'
+                            : 'bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827]'
+                        }`}
+                      >
+                        {isCompleted ? (
+                          <>
+                            <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
+                            <span>Replay Mission</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-3.5 h-3.5 fill-[#111827]" />
+                            <span>Start Mission</span>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               )

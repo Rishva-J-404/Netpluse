@@ -7,10 +7,14 @@ import {
   RotateCcw,
   FlaskConical,
   ArrowRight,
-  Activity
+  Activity,
+  CheckCheck,
+  Sparkles
 } from 'lucide-react'
+import { useGame, MISSION_METADATA } from '../contexts/GameContext'
 
 export default function MissionResults({
+  missionId,
   missionTitle,
   score = 0,
   xpEarned = 0,
@@ -21,9 +25,14 @@ export default function MissionResults({
   packetsCollected = 0,
   unlockedAchievements = [],
   onReplay,
+  onNextMission,
   onOpenTechnicalLab,
   onExit
 }) {
+  const { getNextMissionId } = useGame()
+  const nextMissionId = missionId ? getNextMissionId(missionId) : null
+  const nextMissionInfo = nextMissionId ? MISSION_METADATA[nextMissionId] : null
+
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0')
     const s = (secs % 60).toFixed(1).padStart(4, '0')
@@ -57,8 +66,12 @@ export default function MissionResults({
               </h2>
             </div>
           </div>
-          <span className={`text-xs font-semibold ${isSuccess ? 'text-[#35a875]' : 'text-[#d95c5c]'}`}>
-            {isSuccess ? 'Completed' : 'Review Needed'}
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${
+            isSuccess
+              ? 'bg-[#35a875]/10 text-[#35a875] border-[#35a875]/30'
+              : 'bg-[#d95c5c]/10 text-[#d95c5c] border-[#d95c5c]/30'
+          }`}>
+            {isSuccess ? 'Mission Cleared' : 'Review Needed'}
           </span>
         </div>
 
@@ -101,9 +114,49 @@ export default function MissionResults({
             <span>Statistical Concept Applied</span>
           </div>
           <p className="text-[#9ca8b8] leading-relaxed">
-            By standardizing observed network throughput against the baseline mean (<span className="text-[#f3f4f6] font-mono">Z = (X - μ) / σ</span>), you determined whether traffic operated within the nominal 95% confidence interval (<span className="text-[#35a875] font-mono">-2.0 ≤ Z ≤ +2.0</span>) or represented an anomalous surge.
+            By standardizing observed network throughput against the baseline mean (<span className="text-[#f3f4f6] font-mono">Z = (X - μ) / σ</span>), you determined whether traffic operated within nominal confidence intervals or represented an anomalous surge.
           </p>
         </div>
+
+        {/* Next Mission Unlocked Banner */}
+        {isSuccess && nextMissionInfo && (
+          <div className="p-3 rounded-lg bg-[#202938] border border-[#4f7cff]/40 flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-md bg-[#4f7cff]/20 text-[#4f7cff] flex items-center justify-center shrink-0">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <span className="text-[10px] font-semibold text-[#4f7cff] uppercase block">
+                  Next Unlocked Route
+                </span>
+                <span className="font-bold text-[#f3f4f6]">
+                  {nextMissionInfo.title}
+                </span>
+              </div>
+            </div>
+
+            {onNextMission && (
+              <button
+                onClick={onNextMission}
+                className="px-3.5 py-1.5 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-bold text-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer"
+              >
+                <span>Continue</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* All Missions Cleared Banner */}
+        {isSuccess && !nextMissionInfo && missionId === 'emergency_mission' && (
+          <div className="p-3 rounded-lg bg-[#35a875]/10 border border-[#35a875]/30 flex items-center gap-2.5 text-xs text-[#35a875]">
+            <CheckCheck className="w-5 h-5 shrink-0" />
+            <div>
+              <span className="font-bold block text-sm">Curriculum Complete!</span>
+              <span className="text-[#9ca8b8]">All 5 sequential network statistical missions successfully cleared.</span>
+            </div>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs">
@@ -112,7 +165,7 @@ export default function MissionResults({
             className="w-full sm:w-auto px-4 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#f3f4f6] border border-[#2b3545] font-medium flex items-center justify-center gap-1.5 transition cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5 text-[#4f7cff]" />
-            <span>Replay</span>
+            <span>Replay Mission</span>
           </button>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -120,14 +173,14 @@ export default function MissionResults({
               onClick={onExit}
               className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#9ca8b8] hover:text-[#f3f4f6] border border-[#2b3545] transition text-center font-medium cursor-pointer"
             >
-              Lobby
+              Simulator Hub
             </button>
             <button
               onClick={onOpenTechnicalLab}
-              className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#4f7cff] hover:bg-[#6b93ff] text-[#111827] font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-[#202938] hover:bg-[#2b3545] text-[#4f7cff] border border-[#2b3545] font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <FlaskConical className="w-3.5 h-3.5" />
-              <span>Open in Statistical Lab</span>
+              <span>Statistical Lab</span>
             </button>
           </div>
         </div>

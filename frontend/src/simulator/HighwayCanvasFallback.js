@@ -227,27 +227,31 @@ export class HighwayCanvasFallback {
     const carX = roadBottomX + (this.currentLane + 0.5) * laneWidthBottom
 
     // Underglow
+    // Subtle Sapphire Underglow
     const underglowGrad = ctx.createRadialGradient(carX, carY + 4, 6, carX, carY + 4, 38)
-    underglowGrad.addColorStop(0, 'rgba(79, 124, 255, 0.4)')
-    underglowGrad.addColorStop(1, 'rgba(79, 124, 255, 0)')
+    underglowGrad.addColorStop(0, 'rgba(59, 130, 246, 0.45)')
+    underglowGrad.addColorStop(1, 'rgba(59, 130, 246, 0)')
     ctx.fillStyle = underglowGrad
     ctx.beginPath()
     ctx.ellipse(carX, carY + 4, 40, 14, 0, 0, Math.PI * 2)
     ctx.fill()
 
-    // Wheels
-    ctx.fillStyle = '#0f172a'
-    ctx.fillRect(carX - 33, carY - 10, 7, 20)
-    ctx.fillRect(carX + 26, carY - 10, 7, 20)
-    ctx.fillStyle = '#4f7cff'
-    ctx.fillRect(carX - 33, carY - 1, 7, 2)
-    ctx.fillRect(carX + 26, carY - 1, 7, 2)
+    // 4 High-Grip Wheels with High-Contrast Brushed Alloy Rims
+    ctx.fillStyle = '#111827' // Dark tire rubber
+    ctx.fillRect(carX - 34, carY - 12, 8, 22)
+    ctx.fillRect(carX + 26, carY - 12, 8, 22)
+    ctx.fillStyle = '#d1d5db' // Brushed alloy rim face
+    ctx.fillRect(carX - 33, carY - 7, 6, 12)
+    ctx.fillRect(carX + 27, carY - 7, 6, 12)
+    ctx.fillStyle = '#3b82f6' // Sapphire center hub
+    ctx.fillRect(carX - 32, carY - 1, 4, 2)
+    ctx.fillRect(carX + 28, carY - 1, 4, 2)
 
-    // Chassis Body
+    // Chassis Body (Mid-tone Graphite Metallic - clearly visible against dark road)
     const titaniumGrad = ctx.createLinearGradient(carX - 27, carY, carX + 27, carY)
-    titaniumGrad.addColorStop(0, '#181f2b')
-    titaniumGrad.addColorStop(0.5, '#202938')
-    titaniumGrad.addColorStop(1, '#181f2b')
+    titaniumGrad.addColorStop(0, '#475569')
+    titaniumGrad.addColorStop(0.5, '#64748b')
+    titaniumGrad.addColorStop(1, '#475569')
     ctx.fillStyle = titaniumGrad
 
     ctx.beginPath()
@@ -257,11 +261,16 @@ export class HighwayCanvasFallback {
     ctx.lineTo(carX - 27, carY + 6)
     ctx.closePath()
     ctx.fill()
-    ctx.strokeStyle = '#2b3545'
+    ctx.strokeStyle = '#94a3b8'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    // Cockpit Glass
+    // Flared Wheel Arch Accents
+    ctx.fillStyle = '#334155'
+    ctx.fillRect(carX - 28, carY - 14, 4, 24)
+    ctx.fillRect(carX + 24, carY - 14, 4, 24)
+
+    // Cockpit Glass (Deep Tinted Canopy)
     ctx.fillStyle = '#0f172a'
     ctx.beginPath()
     ctx.moveTo(carX - 15, carY - 17)
@@ -270,18 +279,17 @@ export class HighwayCanvasFallback {
     ctx.lineTo(carX - 18, carY - 3)
     ctx.closePath()
     ctx.fill()
-    ctx.strokeStyle = '#2b3545'
+    ctx.strokeStyle = '#38bdf8'
     ctx.lineWidth = 1
     ctx.stroke()
 
-    // Restrained Blue Accents
-    ctx.fillStyle = '#4f7cff'
-    ctx.fillRect(carX - 4, carY - 20, 2, 26)
-    ctx.fillRect(carX + 2, carY - 20, 2, 26)
+    // Technical Sapphire Spine & Aero Accents
+    ctx.fillStyle = '#3b82f6'
+    ctx.fillRect(carX - 3, carY - 20, 6, 26)
 
-    // Taillights
-    ctx.fillStyle = '#d95c5c'
-    ctx.fillRect(carX - 22, carY + 3, 44, 2.5)
+    // Dual Taillight Endcaps & Full-Width LED Bar
+    ctx.fillStyle = '#ef4444'
+    ctx.fillRect(carX - 24, carY + 4, 48, 3)
   }
 
   pause() {

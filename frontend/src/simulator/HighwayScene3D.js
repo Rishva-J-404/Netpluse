@@ -108,10 +108,10 @@ export class HighwayScene3D {
     this.scene.background = new THREE.Color(0x111827)
     this.scene.fog = new THREE.FogExp2(0x111827, 0.005)
 
-    // 2. Camera Setup (55 deg FOV for realistic driving perspective)
-    this.camera = new THREE.PerspectiveCamera(55, width / height, 0.5, 380)
-    this.camera.position.set(this.vehicle.x * 0.85, 2.45, this.vehicle.z + 6.4)
-    this.camera.lookAt(this.vehicle.x * 0.4, 0.95, this.vehicle.z - 18)
+    // 2. Camera Setup (54 deg FOV for optimal third-person chase framing)
+    this.camera = new THREE.PerspectiveCamera(54, width / height, 0.5, 400)
+    this.camera.position.set(this.vehicle.x * 0.85, 2.85, this.vehicle.z + 7.8)
+    this.camera.lookAt(this.vehicle.x * 0.45, 1.15, this.vehicle.z - 22)
 
     // 3. WebGL Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
@@ -317,176 +317,250 @@ export class HighwayScene3D {
   }
 
   /**
-   * Build Player Car: Modern NOC Titanium & Technical Sapphire Interceptor
+   * Build Player Car: Modern Technical Titanium & Sapphire Interceptor
+   * - Mid-tone graphite metallic body (NOT black) for distinct silhouette against dark road
+   * - Flared muscular wheel arches framing all four wheels
+   * - High-contrast brushed titanium alloy rims (0xd1d5db) against dark rubber tires
+   * - Restrained technical sapphire accents, functional lighting & soft underbody glow
+   * - Perfectly grounded: wheels touch road at y = 0.00
    */
   buildPlayerCar() {
     const car = new THREE.Group()
 
     // 1. Core Materials
-    // Elevated Navy Hull (#1B2B46)
+    // Mid-tone Graphite Metallic Body (#475569) - distinct from road (#181f2b)
     const titaniumMat = new THREE.MeshStandardMaterial({
-      color: 0x1f2937,
-      roughness: 0.32,
-      metalness: 0.75
+      color: 0x475569,
+      roughness: 0.24,
+      metalness: 0.85
     })
 
-    // Primary Light Blue Accent (#8CC8FF)
-    const sapphireMat = new THREE.MeshStandardMaterial({
-      color: 0x4f7cff,
-      emissive: 0x3b66df,
-      emissiveIntensity: 0.35,
-      roughness: 0.2,
-      metalness: 0.8
+    // Lighter Metallic Highlight for hood, roof & spoiler blade (#64748b)
+    const titaniumHighlightMat = new THREE.MeshStandardMaterial({
+      color: 0x64748b,
+      roughness: 0.18,
+      metalness: 0.90
     })
 
-    // Dark Divider Trim (#14233D)
+    // Charcoal Carbon Structural Trim (#1e293b)
     const carbonMat = new THREE.MeshStandardMaterial({
-      color: 0x181f2b,
-      roughness: 0.5,
-      metalness: 0.5
+      color: 0x1e293b,
+      roughness: 0.45,
+      metalness: 0.60
     })
 
-    // Tinted Greenhouse Canopy Glass
+    // Technical Royal Sapphire Blue Accent (#3b82f6) with controlled emissive glow
+    const sapphireMat = new THREE.MeshStandardMaterial({
+      color: 0x3b82f6,
+      emissive: 0x1d4ed8,
+      emissiveIntensity: 0.60,
+      roughness: 0.20,
+      metalness: 0.80
+    })
+
+    // Deep Technical Tinted Canopy Glass (#0f172a)
     const glassMat = new THREE.MeshStandardMaterial({
       color: 0x0f172a,
-      roughness: 0.08,
-      metalness: 0.95
+      roughness: 0.05,
+      metalness: 0.96
     })
 
     // Front Integrated LED Headlights
-    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf3f4f6 })
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf0f9ff })
 
     // Full-Width Red LED Taillight Bar
-    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xd95c5c })
+    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xef4444 })
 
-    // 2. Sculpted Chassis Panels
-    // Lower Chassis Floor & Carbon Side Skirts (y: 0.16 to 0.42)
-    const lowerChassis = new THREE.Mesh(new THREE.BoxGeometry(1.92, 0.24, 4.3), carbonMat)
-    lowerChassis.position.y = 0.28
+    // 2. Sculpted Chassis & Aero Panels
+    // Lower Chassis Floor & Carbon Side Skirts (y: 0.16 to 0.38)
+    const lowerChassis = new THREE.Mesh(new THREE.BoxGeometry(1.92, 0.22, 4.30), carbonMat)
+    lowerChassis.position.y = 0.27
     car.add(lowerChassis)
 
     // Aerodynamic Front Splitter (Front points along -Z)
-    const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.08, 0.5), carbonMat)
-    frontSplitter.position.set(0, 0.16, -2.15)
+    const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(1.90, 0.07, 0.50), carbonMat)
+    frontSplitter.position.set(0, 0.16, -2.18)
     car.add(frontSplitter)
 
+    // Sapphire Front Aero Lip
+    const frontLip = new THREE.Mesh(new THREE.BoxGeometry(1.86, 0.03, 0.06), sapphireMat)
+    frontLip.position.set(0, 0.15, -2.42)
+    car.add(frontLip)
+
     // Rear Carbon Diffuser with Strakes
-    const rearDiffuser = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.12, 0.4), carbonMat)
-    rearDiffuser.position.set(0, 0.2, 2.15)
+    const rearDiffuser = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.12, 0.40), carbonMat)
+    rearDiffuser.position.set(0, 0.20, 2.18)
     car.add(rearDiffuser)
 
-    // Main Metallic Graphite Body Hull (y: 0.40 to 0.78)
-    const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.38, 3.8), titaniumMat)
-    mainBody.position.set(0, 0.55, -0.05)
+    // Main Metallic Graphite Fuselage (y: 0.38 to 0.74)
+    const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.36, 3.80), titaniumMat)
+    mainBody.position.set(0, 0.54, -0.05)
     car.add(mainBody)
 
+    // 3. Flared Wheel Arches / Muscular Sports Fenders
+    const archGeo = new THREE.BoxGeometry(0.18, 0.30, 0.82)
+    const archFL = new THREE.Mesh(archGeo, titaniumMat)
+    archFL.position.set(-0.99, 0.44, -1.35)
+    car.add(archFL)
+
+    const archFR = new THREE.Mesh(archGeo, titaniumMat)
+    archFR.position.set(0.99, 0.44, -1.35)
+    car.add(archFR)
+
+    const archRL = new THREE.Mesh(archGeo, titaniumMat)
+    archRL.position.set(-0.99, 0.44, 1.35)
+    car.add(archRL)
+
+    const archRR = new THREE.Mesh(archGeo, titaniumMat)
+    archRR.position.set(0.99, 0.44, 1.35)
+    car.add(archRR)
+
+    // 4. Sculpted Hood & Rear Deck
     // Sculpted Hood Slope
-    const hoodSlope = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.24, 1.2), titaniumMat)
+    const hoodSlope = new THREE.Mesh(new THREE.BoxGeometry(1.76, 0.22, 1.25), titaniumMat)
     hoodSlope.position.set(0, 0.56, -1.35)
     hoodSlope.rotation.x = Math.PI / 16
     car.add(hoodSlope)
 
+    // Hood Center Highlight Ridge
+    const hoodSpine = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.03, 1.20), titaniumHighlightMat)
+    hoodSpine.position.set(0, 0.68, -1.35)
+    hoodSpine.rotation.x = Math.PI / 16
+    car.add(hoodSpine)
+
+    // Twin Sapphire Racing Strakes on Hood
+    const stripeLeft = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.03, 1.15), sapphireMat)
+    stripeLeft.position.set(-0.28, 0.70, -1.35)
+    stripeLeft.rotation.x = Math.PI / 16
+    car.add(stripeLeft)
+
+    const stripeRight = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.03, 1.15), sapphireMat)
+    stripeRight.position.set(0.28, 0.70, -1.35)
+    stripeRight.rotation.x = Math.PI / 16
+    car.add(stripeRight)
+
     // Sculpted Rear Deck
-    const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.22, 0.9), titaniumMat)
+    const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.80, 0.22, 0.90), titaniumMat)
     rearDeck.position.set(0, 0.58, 1.35)
     car.add(rearDeck)
 
-    // 3. Technical Sapphire Racing Accents
-    // Twin Racing Stripes along the center hood
-    const stripeLeft = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 2.2), sapphireMat)
-    stripeLeft.position.set(-0.25, 0.74, -0.85)
-    car.add(stripeLeft)
+    const rearDeckHighlight = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.03, 0.82), titaniumHighlightMat)
+    rearDeckHighlight.position.set(0, 0.70, 1.35)
+    car.add(rearDeckHighlight)
 
-    const stripeRight = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 2.2), sapphireMat)
-    stripeRight.position.set(0.25, 0.74, -0.85)
-    car.add(stripeRight)
-
-    // Side Aero Blades in Sapphire Blue
-    const leftAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.6), sapphireMat)
-    leftAeroBlade.position.set(-0.96, 0.32, 0)
+    // 5. Technical Sapphire Side Aero Blades
+    const leftAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.70), sapphireMat)
+    leftAeroBlade.position.set(-0.97, 0.30, 0)
     car.add(leftAeroBlade)
 
-    const rightAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.6), sapphireMat)
-    rightAeroBlade.position.set(0.96, 0.32, 0)
+    const rightAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.70), sapphireMat)
+    rightAeroBlade.position.set(0.97, 0.30, 0)
     car.add(rightAeroBlade)
 
-    // Integrated Low-Profile Rear Spoiler Wing
-    const spoilerWing = new THREE.Mesh(new THREE.BoxGeometry(1.76, 0.06, 0.35), titaniumMat)
-    spoilerWing.position.set(0, 0.95, 1.95)
-    car.add(spoilerWing)
-
-    // Sapphire Spoiler Accent Lip
-    const spoilerLip = new THREE.Mesh(new THREE.BoxGeometry(1.74, 0.03, 0.08), sapphireMat)
-    spoilerLip.position.set(0, 0.98, 2.1)
-    car.add(spoilerLip)
-
-    // Spoiler Struts
-    const strutL = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.25, 0.12), carbonMat)
-    strutL.position.set(-0.6, 0.82, 1.95)
+    // 6. Visible Aerodynamic Rear Spoiler
+    const strutL = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.26, 0.12), carbonMat)
+    strutL.position.set(-0.62, 0.85, 1.95)
     car.add(strutL)
 
-    const strutR = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.25, 0.12), carbonMat)
-    strutR.position.set(0.6, 0.82, 1.95)
+    const strutR = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.26, 0.12), carbonMat)
+    strutR.position.set(0.62, 0.85, 1.95)
     car.add(strutR)
 
-    // 4. Aerodynamic Fastback Greenhouse / Cockpit Canopy
-    const greenhouse = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.4, 1.7), glassMat)
-    greenhouse.position.set(0, 0.92, 0.1)
+    // Main Metallic Spoiler Wing Blade
+    const spoilerWing = new THREE.Mesh(new THREE.BoxGeometry(1.80, 0.06, 0.38), titaniumHighlightMat)
+    spoilerWing.position.set(0, 0.98, 1.95)
+    car.add(spoilerWing)
+
+    // Sapphire Spoiler Trailing Lip
+    const spoilerLip = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.02, 0.08), sapphireMat)
+    spoilerLip.position.set(0, 1.01, 2.12)
+    car.add(spoilerLip)
+
+    // Sapphire Spoiler Endplates
+    const endplateL = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.14, 0.40), sapphireMat)
+    endplateL.position.set(-0.91, 1.00, 1.95)
+    car.add(endplateL)
+
+    const endplateR = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.14, 0.40), sapphireMat)
+    endplateR.position.set(0.91, 1.00, 1.95)
+    car.add(endplateR)
+
+    // 7. Aerodynamic Greenhouse & Windshield Canopy
+    const greenhouse = new THREE.Mesh(new THREE.BoxGeometry(1.44, 0.38, 1.70), glassMat)
+    greenhouse.position.set(0, 0.90, 0.10)
     car.add(greenhouse)
 
-    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.38, 0.75), glassMat)
-    windshield.position.set(0, 0.85, -0.72)
+    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.40, 0.36, 0.76), glassMat)
+    windshield.position.set(0, 0.84, -0.72)
     windshield.rotation.x = Math.PI / 5.5
     car.add(windshield)
 
-    const rearHatch = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.35, 0.75), glassMat)
-    rearHatch.position.set(0, 0.84, 0.92)
+    const rearHatch = new THREE.Mesh(new THREE.BoxGeometry(1.40, 0.34, 0.76), glassMat)
+    rearHatch.position.set(0, 0.83, 0.92)
     rearHatch.rotation.x = -Math.PI / 6.5
     car.add(rearHatch)
 
-    // 5. Lighting Integration
-    // Dual Front LED Headlights
-    const hlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.1, 0.08), ledMat)
-    hlLeft.position.set(-0.68, 0.52, -2.12)
+    // Roof Panel & Spine in Highlight Graphite & Sapphire
+    const roofCap = new THREE.Mesh(new THREE.BoxGeometry(1.36, 0.04, 1.30), titaniumHighlightMat)
+    roofCap.position.set(0, 1.10, 0.10)
+    car.add(roofCap)
+
+    const roofSpine = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 1.30), sapphireMat)
+    roofSpine.position.set(0, 1.13, 0.10)
+    car.add(roofSpine)
+
+    // 8. Front & Rear Lighting
+    const hlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.10, 0.08), ledMat)
+    hlLeft.position.set(-0.68, 0.52, -2.14)
     car.add(hlLeft)
 
-    const hlRight = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.1, 0.08), ledMat)
-    hlRight.position.set(0.68, 0.52, -2.12)
+    const hlRight = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.10, 0.08), ledMat)
+    hlRight.position.set(0.68, 0.52, -2.14)
     car.add(hlRight)
 
-    // Full-Width Rear Red LED Lightbar
-    const taillightBar = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.09, 0.08), taillightMat)
-    taillightBar.position.set(0, 0.64, 2.12)
+    const frontGlowStrip = new THREE.Mesh(new THREE.BoxGeometry(1.10, 0.03, 0.06), sapphireMat)
+    frontGlowStrip.position.set(0, 0.35, -2.16)
+    car.add(frontGlowStrip)
+
+    const tlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.10, 0.08), taillightMat)
+    tlLeft.position.set(-0.72, 0.62, 2.14)
+    car.add(tlLeft)
+
+    const tlRight = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.10, 0.08), taillightMat)
+    tlRight.position.set(0.72, 0.62, 2.14)
+    car.add(tlRight)
+
+    const taillightBar = new THREE.Mesh(new THREE.BoxGeometry(1.12, 0.04, 0.08), taillightMat)
+    taillightBar.position.set(0, 0.62, 2.14)
     car.add(taillightBar)
 
-    // Subtle Light Blue Underglow
-    const underglow = new THREE.PointLight(0x8cc8ff, 1.4, 4.0, 1.2)
-    underglow.position.set(0, 0.18, 0)
+    // Subtle Sapphire Underbody Glow Light (Soft pool of blue light beneath chassis)
+    const underglow = new THREE.PointLight(0x3b82f6, 1.2, 3.5, 1.4)
+    underglow.position.set(0, 0.16, 0)
     car.add(underglow)
 
-    // 6. 4 High-Grip Alloy Wheels & Rubber Tires
-    // Wheel Radius: 0.34m (Center height = 0.34m -> Touches asphalt at y = 0.0)
-    const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.28, 24)
+    // 9. Four Visible High-Grip Wheels with High-Contrast Brushed Alloy Rims
+    const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.26, 24)
     tireGeo.rotateZ(Math.PI / 2)
-    const tireMat = new THREE.MeshStandardMaterial({ color: 0x090e17, roughness: 0.9 })
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.88 })
 
-    const rimGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.29, 20)
+    const rimGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.28, 20)
     rimGeo.rotateZ(Math.PI / 2)
-    const rimMat = new THREE.MeshStandardMaterial({ color: 0x2c3d58, roughness: 0.25, metalness: 0.85 })
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, roughness: 0.16, metalness: 0.95 })
 
-    const hubGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.31, 16)
+    const hubGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.30, 16)
     hubGeo.rotateZ(Math.PI / 2)
-    const hubMat = new THREE.MeshStandardMaterial({ color: 0x8cc8ff, roughness: 0.2, metalness: 0.8 })
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, roughness: 0.2, metalness: 0.8 })
 
     const wheelPositions = [
-      [-0.98, 0.34, -1.35], // Front-Left
-      [0.98, 0.34, -1.35],  // Front-Right
-      [-0.98, 0.34, 1.35],  // Rear-Left
-      [0.98, 0.34, 1.35]    // Rear-Right
+      [-0.99, 0.34, -1.35], // Front-Left
+      [0.99, 0.34, -1.35],  // Front-Right
+      [-0.99, 0.34, 1.35],  // Rear-Left
+      [0.99, 0.34, 1.35]    // Rear-Right
     ]
 
     this.vehicle.wheels = []
-    wheelPositions.forEach(pos => {
+    wheelPositions.forEach((pos) => {
       const wheelGroup = new THREE.Group()
 
       const tire = new THREE.Mesh(tireGeo, tireMat)
@@ -498,12 +572,23 @@ export class HighwayScene3D {
       const hub = new THREE.Mesh(hubGeo, hubMat)
       wheelGroup.add(hub)
 
+      // 5-Spoke Wheel Styling (Thin spoke accents on outer rim face)
+      const spokeGeo = new THREE.BoxGeometry(0.03, 0.24, 0.02)
+      for (let s = 0; s < 5; s++) {
+        const spoke = new THREE.Mesh(spokeGeo, rimMat)
+        const angle = (s * Math.PI * 2) / 5
+        const sign = pos[0] > 0 ? 1 : -1
+        spoke.position.set(sign * 0.14, 0, 0)
+        spoke.rotation.x = angle
+        wheelGroup.add(spoke)
+      }
+
       wheelGroup.position.set(...pos)
       car.add(wheelGroup)
       this.vehicle.wheels.push(wheelGroup)
     })
 
-    // Ground vehicle so wheels contact y = 0.0
+    // Ground vehicle so wheels contact road at y = 0.00
     car.position.set(this.vehicle.x, 0.0, this.vehicle.z)
     this.scene.add(car)
     this.vehicle.mesh = car
@@ -577,12 +662,12 @@ export class HighwayScene3D {
     this.trafficVehicles.forEach(t => this.scene.remove(t.mesh))
     this.trafficVehicles = []
 
-    // Realistic vehicle specifications
+    // Realistic vehicle specifications (Subtle distinct slates & gunmetals for high contrast)
     const trafficConfigs = [
-      { type: 'sedan', color: 0x14233d, length: 4.2, width: 1.85, height: 1.35, speed: 72 }, // Dark Navy Sedan
-      { type: 'coupe', color: 0x1b2b46, length: 3.9, width: 1.82, height: 1.25, speed: 78 }, // Elevated Navy Coupe
-      { type: 'van',   color: 0x2c3d58, length: 4.8, width: 2.0,  height: 1.75, speed: 68 }, // Slate Service Van
-      { type: 'sedan', color: 0x233554, length: 4.2, width: 1.85, height: 1.35, speed: 74 }  // Steel Sedan
+      { type: 'sedan', color: 0x334155, length: 4.2, width: 1.85, height: 1.35, speed: 72 }, // Slate Grey Sedan
+      { type: 'coupe', color: 0x2b3545, length: 3.9, width: 1.82, height: 1.25, speed: 78 }, // Dark Gunmetal Coupe
+      { type: 'van',   color: 0x475569, length: 4.8, width: 2.0,  height: 1.75, speed: 68 }, // Mid-Tone Service Van
+      { type: 'sedan', color: 0x3b4758, length: 4.2, width: 1.85, height: 1.35, speed: 74 }  // Technical Steel Sedan
     ]
 
     trafficConfigs.forEach((cfg, idx) => {
@@ -919,8 +1004,12 @@ export class HighwayScene3D {
       this.vehicle.mesh.rotation.z = this.vehicle.steerAngle * 0.35
 
       const wheelSpin = this.vehicle.vz * delta * 2.8
-      this.vehicle.wheels.forEach(w => {
+      this.vehicle.wheels.forEach((w, idx) => {
         w.rotation.x -= wheelSpin
+        // Front wheels turn visibly with steering input
+        if (idx < 2) {
+          w.rotation.y = this.vehicle.steerAngle * 0.70
+        }
       })
 
       // Collision flash feedback
@@ -936,14 +1025,14 @@ export class HighwayScene3D {
     if (this.camera) {
       if (this.cameraMode === 'CHASE') {
         const targetCamX = this.vehicle.x * 0.85
-        const targetCamY = 2.45 + (this.vehicle.speedKmh / 180) * 0.35
-        const targetCamZ = this.vehicle.z + 6.4
+        const targetCamY = 2.85 + (this.vehicle.speedKmh / 180) * 0.35
+        const targetCamZ = this.vehicle.z + 7.8
 
-        this.camera.position.x += (targetCamX - this.camera.position.x) * 0.14
+        this.camera.position.x += (targetCamX - this.camera.position.x) * 0.15
         this.camera.position.y += (targetCamY - this.camera.position.y) * 0.15
         this.camera.position.z = targetCamZ
 
-        this.camera.lookAt(this.vehicle.x * 0.4, 0.95, this.vehicle.z - 18)
+        this.camera.lookAt(this.vehicle.x * 0.45, 1.15, this.vehicle.z - 22)
       } else if (this.cameraMode === 'HOOD') {
         this.camera.position.set(this.vehicle.x, 1.25, this.vehicle.z - 0.8)
         this.camera.lookAt(this.vehicle.x, 1.1, this.vehicle.z - 28)

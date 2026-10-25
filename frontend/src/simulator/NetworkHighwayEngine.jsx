@@ -24,7 +24,7 @@ export default function NetworkHighwayEngine({
   onLeave
 }) {
   const navigate = useNavigate()
-  const { submitAnswer, completeGame, submitting, newlyUnlockedAchievements } = useGame()
+  const { submitAnswer, completeGame, completeMission, advanceToNextMission, submitting, newlyUnlockedAchievements } = useGame()
   const { setBridgePayload, setCurrentLoad } = useStats()
 
   const containerRef = useRef(null)
@@ -322,6 +322,9 @@ export default function NetworkHighwayEngine({
         setCorrectCount(prev => prev + 1)
         setTotalScore(prev => prev + 250)
         setEarnedXP(res.xp_awarded || 15)
+        if (completeMission) {
+          completeMission(missionId, res.xp_awarded || 15)
+        }
       }
     } catch {
       // Local fallback evaluation if network is offline
@@ -336,6 +339,9 @@ export default function NetworkHighwayEngine({
         setCorrectCount(prev => prev + 1)
         setTotalScore(prev => prev + 250)
         setEarnedXP(15)
+        if (completeMission) {
+          completeMission(missionId, 15)
+        }
       }
     }
   }
@@ -355,6 +361,12 @@ export default function NetworkHighwayEngine({
         engineRef.current.setupCheckpointGantry(activeScenario.options || [], 400)
         engineRef.current.resume()
       }
+    }
+  }
+
+  const handleNextMission = () => {
+    if (advanceToNextMission) {
+      advanceToNextMission()
     }
   }
 
@@ -394,6 +406,7 @@ export default function NetworkHighwayEngine({
       {/* In-Game HUD Overlay */}
       {stage !== 'BRIEFING' && (
         <SimulatorHUD
+          missionId={missionId}
           missionTitle={missionTitle}
           objectiveText={activeScenario.question || 'Reach checkpoint and select correct gateway.'}
           checkpointIndex={currentCheckpointIndex}
@@ -431,6 +444,7 @@ export default function NetworkHighwayEngine({
       {/* Stage Overlays */}
       {stage === 'BRIEFING' && (
         <MissionBriefing
+          missionId={missionId}
           missionTitle={missionTitle}
           category={category}
           difficulty={difficulty}
@@ -467,6 +481,7 @@ export default function NetworkHighwayEngine({
 
       {stage === 'PAUSED' && (
         <PauseMenu
+          missionId={missionId}
           missionTitle={missionTitle}
           soundEnabled={soundEnabled}
           invertSteering={invertSteering}
@@ -492,6 +507,7 @@ export default function NetworkHighwayEngine({
 
       {stage === 'RESULTS' && (
         <MissionResults
+          missionId={missionId}
           missionTitle={missionTitle}
           score={totalScore}
           xpEarned={earnedXP}
@@ -502,6 +518,7 @@ export default function NetworkHighwayEngine({
           packetsCollected={telemetryState.packetsCollected}
           unlockedAchievements={newlyUnlockedAchievements}
           onReplay={handleRestart}
+          onNextMission={handleNextMission}
           onOpenTechnicalLab={handleOpenTechnicalLab}
           onExit={onLeave}
         />
