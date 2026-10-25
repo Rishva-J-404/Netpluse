@@ -19,14 +19,14 @@ function CustomTooltip({ active, payload, label, mean, stdDev }) {
     const zScore = (mean !== undefined && stdDev) ? ((load - mean) / stdDev).toFixed(2) : null
     
     return (
-      <div className="rounded-lg bg-slate-950 border border-slate-700/80 p-3 shadow-xl text-xs font-mono">
-        <p className="text-slate-400 font-semibold mb-1">Time: {label}</p>
-        <p className="text-blue-300 text-sm font-bold">
-          Load: {load} <span className="text-[10px] text-slate-400 font-normal">Mbps</span>
+      <div className="rounded-xl bg-[#14233d] border border-[#2c3d58] p-3 shadow-xl text-xs font-mono">
+        <p className="text-[#a6b4c9] font-semibold mb-1">Time: {label}</p>
+        <p className="text-[#8cc8ff] text-sm font-bold">
+          Load: {load} <span className="text-[10px] text-[#a6b4c9] font-normal">Mbps</span>
         </p>
         {zScore !== null && (
-          <p className="text-slate-400 mt-1">
-            Z-Score: <span className={Number(zScore) > 2 ? 'text-rose-400 font-bold' : Number(zScore) < -2 ? 'text-blue-400' : 'text-emerald-400'}>{Number(zScore) > 0 ? `+${zScore}` : zScore}σ</span>
+          <p className="text-[#a6b4c9] mt-1">
+            Z-Score: <span className={Number(zScore) > 2 ? 'text-[#f87171] font-bold' : Number(zScore) < -2 ? 'text-[#8cc8ff]' : 'text-[#34d399]'}>{Number(zScore) > 0 ? `+${zScore}` : zScore}σ</span>
           </p>
         )}
       </div>
@@ -47,13 +47,12 @@ export default function NetworkTrendChart({
 }) {
   if (!data || data.length === 0) {
     return (
-      <div className="h-[200px] flex items-center justify-center text-xs font-mono text-slate-500">
+      <div className="h-[200px] flex items-center justify-center text-xs font-mono text-[#a6b4c9]">
         No telemetry time-series points to plot.
       </div>
     )
   }
 
-  // Calculate empirical thresholds if mean & stdDev provided
   const upperAnomaly = (mean !== undefined && stdDev) ? Number((mean + 2 * stdDev).toFixed(1)) : null
   const lowerAnomaly = (mean !== undefined && stdDev) ? Number(Math.max(0, mean - 2 * stdDev).toFixed(1)) : null
 
@@ -66,23 +65,23 @@ export default function NetworkTrendChart({
         >
           <defs>
             <linearGradient id="nocLoadGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.35} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
+              <stop offset="5%" stopColor="#8cc8ff" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="#8cc8ff" stopOpacity={0.0} />
             </linearGradient>
           </defs>
 
-          <CartesianGrid strokeDasharray="3 3" stroke="#26354d" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#2c3d58" vertical={false} />
 
           <XAxis
             dataKey="timestamp"
-            stroke="#64748b"
+            stroke="#a6b4c9"
             fontSize={11}
             tickLine={false}
             fontFamily="ui-monospace, monospace"
           />
 
           <YAxis
-            stroke="#64748b"
+            stroke="#a6b4c9"
             fontSize={11}
             tickLine={false}
             fontFamily="ui-monospace, monospace"
@@ -97,11 +96,11 @@ export default function NetworkTrendChart({
           {mean !== undefined && (
             <ReferenceLine
               y={mean}
-              stroke="#3b82f6"
+              stroke="#8cc8ff"
               strokeDasharray="4 4"
               label={{
-                value: `μ = ${mean.toFixed(1)}`,
-                fill: '#3b82f6',
+                value: `μ = ${mean}M`,
+                fill: '#8cc8ff',
                 fontSize: 10,
                 position: 'right',
                 fontFamily: 'ui-monospace'
@@ -112,13 +111,28 @@ export default function NetworkTrendChart({
           {upperAnomaly !== null && (
             <ReferenceLine
               y={upperAnomaly}
-              stroke="#ef4444"
-              strokeDasharray="3 3"
+              stroke="#fbbf24"
+              strokeDasharray="2 2"
               label={{
-                value: `+2σ = ${upperAnomaly}`,
-                fill: '#ef4444',
+                value: `+2σ Threshold (${upperAnomaly}M)`,
+                fill: '#fbbf24',
                 fontSize: 10,
-                position: 'right',
+                position: 'insideTopRight',
+                fontFamily: 'ui-monospace'
+              }}
+            />
+          )}
+
+          {lowerAnomaly !== null && (
+            <ReferenceLine
+              y={lowerAnomaly}
+              stroke="#fbbf24"
+              strokeDasharray="2 2"
+              label={{
+                value: `-2σ Threshold (${lowerAnomaly}M)`,
+                fill: '#fbbf24',
+                fontSize: 10,
+                position: 'insideBottomRight',
                 fontFamily: 'ui-monospace'
               }}
             />
@@ -127,13 +141,11 @@ export default function NetworkTrendChart({
           <Area
             type="monotone"
             dataKey="network_load"
-            name="Network Load"
-            stroke="#3b82f6"
+            stroke="#8cc8ff"
             strokeWidth={2}
             fillOpacity={1}
             fill="url(#nocLoadGradient)"
-            dot={{ r: 2.5, fill: '#3b82f6', stroke: '#0b0f17', strokeWidth: 1 }}
-            activeDot={{ r: 5, fill: '#60a5fa', stroke: '#0b0f17', strokeWidth: 2 }}
+            isAnimationActive={false}
           />
         </AreaChart>
       </ResponsiveContainer>

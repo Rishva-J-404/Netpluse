@@ -9,8 +9,7 @@ import {
   ArrowRight,
   TrendingUp,
   Cpu,
-  Layers,
-  Sparkles
+  Layers
 } from 'lucide-react'
 import { fetchDataset, fetchScenarios, fetchHealth } from '../services/api'
 import PageHeader from '../components/PageHeader'
@@ -63,13 +62,13 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 font-sans">
       {/* Hero NOC Command Section */}
-      <section className="relative rounded-2xl bg-gradient-to-br from-[#111827] via-[#161f30] to-[#0b0f17] border border-[#26354d] p-6 sm:p-8 lg:p-10 overflow-hidden shadow-2xl">
+      <section className="relative rounded-2xl bg-[#14233d] border border-[#2c3d58] p-6 sm:p-8 lg:p-10 overflow-hidden shadow-xl">
         <div className="relative z-10 max-w-4xl space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0b0f17] border border-[#26354d] text-[#3b82f6] text-xs font-mono font-semibold">
-              <Activity className="w-3.5 h-3.5 animate-pulse text-[#3b82f6]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1b2b46] border border-[#2c3d58] text-[#8cc8ff] text-xs font-mono font-semibold">
+              <Activity className="w-3.5 h-3.5 text-[#8cc8ff]" />
               <span>Network Operations Center · Course 25CS203</span>
             </span>
             {health && (
@@ -77,15 +76,15 @@ export default function Home() {
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white font-sans">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#f4f7fc] font-sans">
             NETPULSE
           </h1>
 
-          <p className="text-base sm:text-lg text-[#00f0ff] font-semibold font-sans">
-            "Network Load Analysis Using Normal Distribution"
+          <p className="text-base sm:text-lg text-[#8cc8ff] font-semibold font-sans">
+            Network Load Analysis Using Normal Distribution
           </p>
 
-          <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-[#a6b4c9] leading-relaxed max-w-3xl">
             An educational Network Operations Center and probability lab for Computer Science students.
             Every observed throughput metric connects directly to the Python statistical engine to evaluate
             Gaussian distribution properties, standardized Z-scores, SciPy cumulative probabilities, and empirical anomaly thresholds.
@@ -95,25 +94,25 @@ export default function Home() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               to="/learn-and-play"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-sans text-xs font-semibold transition-all shadow-lg shadow-blue-500/20"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-sans text-xs font-semibold transition-all shadow-sm"
             >
               <Gamepad2 className="w-4 h-4" />
-              <span>Network Highway Simulator (3D)</span>
+              <span>Highway Simulator (3D)</span>
             </Link>
 
             <Link
               to="/technical-lab"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#f9fafb] font-mono text-xs font-semibold border border-[#26354d] transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] font-sans text-xs font-semibold border border-[#2c3d58] transition-all"
             >
-              <FlaskConical className="w-4 h-4 text-[#3b82f6]" />
+              <FlaskConical className="w-4 h-4 text-[#8cc8ff]" />
               <span>Open Technical Lab</span>
             </Link>
 
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#94a3b8] hover:text-[#f9fafb] font-mono text-xs font-semibold border border-[#26354d] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#a6b4c9] hover:text-[#f4f7fc] font-sans text-xs font-semibold border border-[#2c3d58] transition-colors"
             >
-              <BarChart2 className="w-4 h-4 text-[#3b82f6]" />
+              <BarChart2 className="w-4 h-4 text-[#8cc8ff]" />
               <span>NOC Dashboard</span>
             </Link>
           </div>
@@ -134,13 +133,13 @@ export default function Home() {
           {/* Telemetry Summary Cards */}
           <section className="space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-mono uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-blue-400" />
+              <h2 className="text-sm font-sans uppercase tracking-wider text-[#a6b4c9] flex items-center gap-2 font-semibold">
+                <Layers className="w-4 h-4 text-[#8cc8ff]" />
                 <span>Baseline Campus Telemetry Metrics ({dataset.name})</span>
               </h2>
               <button
                 onClick={loadData}
-                className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-blue-300 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-sans text-[#a6b4c9] hover:text-[#8cc8ff] transition-colors cursor-pointer"
                 title="Refresh dataset from backend"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
@@ -192,7 +191,7 @@ export default function Home() {
             actions={
               <Link
                 to="/technical-lab"
-                className="inline-flex items-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300 transition-colors"
+                className="inline-flex items-center gap-1 text-xs font-sans text-[#8cc8ff] hover:text-[#a3d5ff] transition-colors"
               >
                 <span>Analyze in Lab</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -216,7 +215,7 @@ export default function Home() {
               icon={Gamepad2}
               bodyClassName="space-y-4"
             >
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-[#a6b4c9] leading-relaxed">
                 Take command as a Campus NOC operator. Resolve network traffic spikes, calculate Z-scores under time pressure,
                 drag bell curve boundaries, hunt stealthy anomalies, and deploy DDoS mitigation protocols.
               </p>
@@ -225,13 +224,13 @@ export default function Home() {
                 {scenarios.slice(0, 3).map(scenario => (
                   <div
                     key={scenario.id}
-                    className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 flex items-center justify-between gap-3 text-xs font-mono"
+                    className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] flex items-center justify-between gap-3 text-xs font-sans"
                   >
                     <div>
-                      <p className="text-slate-200 font-semibold">{scenario.title}</p>
-                      <p className="text-[11px] text-slate-500 capitalize">{scenario.game.replace(/_/g, ' ')}</p>
+                      <p className="text-[#f4f7fc] font-semibold">{scenario.title}</p>
+                      <p className="text-[11px] text-[#a6b4c9] capitalize">{scenario.game.replace(/_/g, ' ')}</p>
                     </div>
-                    <span className="text-[10px] text-emerald-400 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/40">
+                    <span className="text-[10px] text-[#34d399] px-2 py-0.5 rounded bg-[#34d399]/10 border border-[#34d399]/30">
                       Scenario Ready
                     </span>
                   </div>
@@ -241,7 +240,7 @@ export default function Home() {
               <div className="pt-2">
                 <Link
                   to="/learn-and-play"
-                  className="inline-flex items-center gap-2 text-xs font-mono text-emerald-400 hover:text-emerald-300 font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-sans text-[#8cc8ff] hover:text-[#a3d5ff] font-semibold transition-colors"
                 >
                   <span>Launch Simulator Missions</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -256,34 +255,34 @@ export default function Home() {
               icon={FlaskConical}
               bodyClassName="space-y-4"
             >
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-[#a6b4c9] leading-relaxed">
                 Analyze raw network datasets or custom packet observations. Compute exact cumulative probabilities via SciPy normal distribution CDF,
                 inspect step-by-step formula derivations, and run dynamic What-If parameter sweeps.
               </p>
 
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Tool 1</span>
-                  <span className="text-slate-300 font-medium">Distribution Explorer</span>
+              <div className="grid grid-cols-2 gap-2 text-xs font-sans">
+                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
+                  <span className="text-[10px] text-[#a6b4c9] uppercase block font-medium">Tool 1</span>
+                  <span className="text-[#f4f7fc] font-medium">Distribution Explorer</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Tool 2</span>
-                  <span className="text-slate-300 font-medium">Probability Lab</span>
+                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
+                  <span className="text-[10px] text-[#a6b4c9] uppercase block font-medium">Tool 2</span>
+                  <span className="text-[#f4f7fc] font-medium">Probability Lab</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Tool 3</span>
-                  <span className="text-slate-300 font-medium">Z-Score Analyzer</span>
+                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
+                  <span className="text-[10px] text-[#a6b4c9] uppercase block font-medium">Tool 3</span>
+                  <span className="text-[#f4f7fc] font-medium">Z-Score Analyzer</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
-                  <span className="text-[10px] text-slate-500 uppercase block">Tool 4</span>
-                  <span className="text-slate-300 font-medium">What-If Simulator</span>
+                <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58]">
+                  <span className="text-[10px] text-[#a6b4c9] uppercase block font-medium">Tool 4</span>
+                  <span className="text-[#f4f7fc] font-medium">What-If Simulator</span>
                 </div>
               </div>
 
               <div className="pt-2">
                 <Link
                   to="/technical-lab"
-                  className="inline-flex items-center gap-2 text-xs font-mono text-blue-400 hover:text-blue-300 font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-sans text-[#8cc8ff] hover:text-[#a3d5ff] font-semibold transition-colors"
                 >
                   <span>Launch Technical Workbench</span>
                   <ArrowRight className="w-3.5 h-3.5" />

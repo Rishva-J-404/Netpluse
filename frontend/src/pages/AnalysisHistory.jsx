@@ -115,21 +115,21 @@ export default function AnalysisHistory() {
           title="Guest Session Notice — Authentication Required for Private Audit Logs"
           subtitle="Row-Level Security (RLS) protects user telemetry records"
           icon={ShieldAlert}
-          className="border-amber-800/40 bg-gradient-to-r from-amber-950/30 via-slate-900/60 to-slate-900/40"
+          className="border-[#2C3D58] bg-[#14233D]"
         >
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-slate-300">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-[#A6B4C9]">
             <div className="space-y-1">
               <p>
-                You are currently in <strong className="text-amber-300">Guest Analyst Mode</strong>. Under NETPULSE security policies, private analysis history records require an authenticated user identity (<code className="text-blue-400 font-bold">auth.uid()</code>).
+                You are currently in <strong className="text-amber-300">Guest Analyst Mode</strong>. Under NETPULSE security policies, private analysis history records require an authenticated user identity (<code className="text-[#8CC8FF] font-bold">auth.uid()</code>).
               </p>
-              <p className="text-slate-400">
+              <p className="text-[#A6B4C9]/80">
                 Please sign in to save and review historical calculation snapshots.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-bold transition-colors shadow-sm"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Go to Login</span>
@@ -149,7 +149,7 @@ export default function AnalysisHistory() {
             <button
               onClick={loadHistory}
               disabled={loading}
-              className="flex items-center gap-1.5 text-xs font-mono text-slate-400 hover:text-blue-300 transition-colors"
+              className="flex items-center gap-1.5 text-xs font-mono text-[#A6B4C9] hover:text-[#8CC8FF] transition-colors"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -163,12 +163,12 @@ export default function AnalysisHistory() {
             <LoadingState message="Retrieving private analysis history..." compact />
           </div>
         ) : errorMsg ? (
-          <div className="p-8 text-center text-xs font-mono text-rose-300">
+          <div className="p-8 text-center text-xs font-mono text-[#F87171]">
             {errorMsg}
           </div>
         ) : (
           <table className="w-full text-left font-mono text-xs">
-            <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+            <thead className="bg-[#101A2D] border-b border-[#2C3D58] text-[#A6B4C9] uppercase text-[10px] tracking-wider">
               <tr>
                 <th className="py-3 px-5">Timestamp</th>
                 <th className="py-3 px-5">Dataset</th>
@@ -181,7 +181,7 @@ export default function AnalysisHistory() {
                 <th className="py-3 px-5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-[#2C3D58]/60">
               {historyRecords.length === 0 ? (
                 <tr>
                   <td colSpan="9" className="p-8">
@@ -196,7 +196,7 @@ export default function AnalysisHistory() {
                       action={
                         <Link
                           to="/technical-lab"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-semibold transition-colors"
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-mono text-xs font-semibold transition-colors shadow-sm"
                         >
                           <FlaskConical className="w-3.5 h-3.5" />
                           <span>Launch Technical Lab</span>
@@ -207,37 +207,37 @@ export default function AnalysisHistory() {
                 </tr>
               ) : (
                 historyRecords.map((rec) => (
-                  <tr key={rec.id} className="hover:bg-slate-900/40 transition-colors">
-                    <td className="py-3 px-5 text-slate-400">
+                  <tr key={rec.id} className="hover:bg-[#1B2B46]/40 transition-colors">
+                    <td className="py-3 px-5 text-[#A6B4C9]">
                       {new Date(rec.created_at).toLocaleString()}
                     </td>
-                    <td className="py-3 px-5 text-white font-bold">
+                    <td className="py-3 px-5 text-[#F4F7FC] font-bold">
                       {rec.dataset_name}
                     </td>
-                    <td className="py-3 px-5 text-slate-200">
+                    <td className="py-3 px-5 text-[#F4F7FC]">
                       {rec.current_load} Mbps
                     </td>
-                    <td className="py-3 px-5 text-blue-400">
+                    <td className="py-3 px-5 text-[#8CC8FF]">
                       {rec.mean} Mbps
                     </td>
-                    <td className="py-3 px-5 text-purple-300 font-bold">
+                    <td className="py-3 px-5 text-[#8CC8FF] font-bold">
                       {rec.z_score > 0 ? `+${rec.z_score}` : rec.z_score}σ
                     </td>
-                    <td className="py-3 px-5 text-slate-300">
+                    <td className="py-3 px-5 text-[#A6B4C9]">
                       {(rec.probability * 100).toFixed(2)}%
                     </td>
                     <td className="py-3 px-5">
                       <StatusBadge status={rec.status} size="sm" />
                     </td>
                     <td className="py-3 px-5 font-bold">
-                      <span className={rec.health_score >= 70 ? 'text-emerald-400' : rec.health_score >= 50 ? 'text-amber-400' : 'text-rose-400'}>
+                      <span className={rec.health_score >= 70 ? 'text-[#34D399]' : rec.health_score >= 50 ? 'text-[#FBBF24]' : 'text-[#F87171]'}>
                         {rec.health_score} / 100
                       </span>
                     </td>
                     <td className="py-3 px-5 text-right">
                       <button
                         onClick={() => handleLoadIntoLab(rec)}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-blue-950/50 hover:text-blue-300 border border-slate-700 hover:border-blue-700 text-slate-300 text-[11px] font-semibold transition-all"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1B2B46] hover:bg-[#2C3D58] hover:text-[#8CC8FF] border border-[#2C3D58] text-[#F4F7FC] text-[11px] font-semibold transition-all"
                       >
                         <ExternalLink className="w-3 h-3" />
                         <span>Load Lab</span>

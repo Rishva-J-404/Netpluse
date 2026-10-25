@@ -9,13 +9,10 @@ import {
   AlertTriangle,
   ArrowRight,
   FlaskConical,
-  Sparkles,
   Layers,
   CheckCircle2,
   Play,
-  RotateCcw,
-  Zap,
-  Award
+  Zap
 } from 'lucide-react'
 import { fetchScenarios } from '../services/api'
 import { useGame } from '../contexts/GameContext'
@@ -65,57 +62,57 @@ export default function LearnAndPlay() {
   const gameDefinitions = [
     {
       id: 'traffic_controller',
-      title: 'Game 1: Traffic Controller',
+      title: 'Mission 1: Traffic Controller',
       icon: Radio,
       category: 'Incident Response & Decision Making',
       difficulty: 'Introductory',
-      desc: 'Evaluate rapidly surging campus bandwidth. Calculate empirical Z-scores to decide whether to continue monitoring, investigate, or activate emergency throttling.',
+      desc: 'Evaluate surging bandwidth and deploy statistical threshold triage.',
       learningOutcomes: 'Interpret telemetry time-series, evaluate baseline variance, and trigger appropriate operational mitigation.',
-      statFocus: 'Z = (X - μ) / σ with empirical threshold triage',
+      statFocus: 'Z = (X - μ) / σ',
       maxXP: 10
     },
     {
       id: 'zscore_challenge',
-      title: 'Game 2: Z-Score Challenge',
+      title: 'Mission 2: Z-Score Challenge',
       icon: Target,
       category: 'Standardization Arithmetic',
       difficulty: 'Intermediate',
-      desc: 'Rapid-fire standardized score puzzles. Convert raw network throughput observations into standard deviation units using real backend datasets.',
+      desc: 'Convert raw throughput observations into standardized distance units.',
       learningOutcomes: 'Master the standardization formula Z = (X - μ) / σ and understand unitless dispersion scales.',
-      statFocus: 'Standardization, Bessel correction, unitless scale',
+      statFocus: 'Z = (X - μ) / σ',
       maxXP: 15
     },
     {
       id: 'normal_curve_challenge',
-      title: 'Game 3: Normal Curve Challenge',
+      title: 'Mission 3: Normal Curve Challenge',
       icon: LineChart,
       category: 'Interactive Gaussian Bell Curve',
       difficulty: 'Intermediate',
-      desc: 'Locate standard deviation markers (μ, ±1σ, ±2σ, ±3σ) by positioning an interactive cursor on the continuous Gaussian probability curve.',
+      desc: 'Locate standard deviation markers (μ, ±1σ, ±2σ, ±3σ) on the Gaussian curve.',
       learningOutcomes: 'Connect continuous probability density f(x) with standardized distances and CDF areas under the curve.',
-      statFocus: '68-95-99.7 Empirical Rule & SciPy CDF boundaries',
+      statFocus: '68-95-99.7 Empirical Rule',
       maxXP: 15
     },
     {
       id: 'anomaly_hunter',
-      title: 'Game 4: Anomaly Hunter',
+      title: 'Mission 4: Anomaly Hunter',
       icon: Search,
       category: 'Telemetry Array Auditing',
       difficulty: 'Intermediate',
-      desc: 'Scan sampled packet series to isolate anomalous throughput surges that detach from the distribution cluster (|Z| > 2.0).',
+      desc: 'Isolate anomalous throughput surges that detach from the baseline cluster (|Z| > 2.0).',
       learningOutcomes: 'Identify statistical outliers in discrete telemetry arrays and distinguish anomalies from confirmed attacks.',
-      statFocus: 'Outlier detection, sample variance, empirical classification',
+      statFocus: '|Z| > 2.0 Threshold',
       maxXP: 20
     },
     {
       id: 'emergency_mission',
-      title: 'Game 5: Network Emergency Mission',
+      title: 'Mission 5: Network Emergency',
       icon: AlertTriangle,
-      category: 'Comprehensive Cyber Defense Triage',
-      difficulty: 'Advanced Multi-Step',
-      desc: 'Multi-step incident triage during an alleged SYN-flood attack. Calculate Z-scores, classify operational state, and deploy automated rate limiters.',
+      category: 'Comprehensive Incident Response',
+      difficulty: 'Advanced',
+      desc: 'Multi-step cyber incident triage during an active SYN-flood network event.',
       learningOutcomes: 'Synthesize probability estimation, state classification, and technical incident response into a staged workflow.',
-      statFocus: 'Exceedance probability P(X ≥ x) and risk triage',
+      statFocus: 'P(X ≥ x) & Rate Limiting',
       maxXP: 35
     }
   ]
@@ -145,7 +142,7 @@ export default function LearnAndPlay() {
 
   // Otherwise render the Game Lobby
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 font-sans">
       <PageHeader
         title="Gaming Suite — Mission Operations Lobby"
         subtitle="Gamified network administration scenarios connecting practical troubleshooting directly to Probability & Statistics (Course 25CS203)."
@@ -153,114 +150,87 @@ export default function LearnAndPlay() {
       />
 
       {/* Featured 3D Simulator Hero Banner */}
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-[#111827] via-[#161f30] to-[#0b0f17] border border-[#26354d] p-6 sm:p-8 shadow-2xl">
+      <div className="relative rounded-2xl overflow-hidden bg-[#14233d] border border-[#2c3d58] p-6 sm:p-8 shadow-xl">
         <div className="relative z-10 max-w-2xl space-y-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[#0b0f17] text-[#3b82f6] border border-[#26354d] font-bold">
-              SIGNATURE 3D SIMULATOR // COURSE 25CS203
+            <span className="text-[10px] font-sans px-2.5 py-0.5 rounded bg-[#1b2b46] text-[#8cc8ff] border border-[#2c3d58] font-bold">
+              3D HIGHWAY SIMULATOR // COURSE 25CS203
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0b0f17] text-[#10b981] border border-[#26354d] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
-              REAL-TIME ARCADE ENGINE
+            <span className="text-[10px] font-sans px-2.5 py-0.5 rounded bg-[#1b2b46] text-[#34d399] border border-[#2c3d58] flex items-center gap-1.5 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399]" />
+              FASTAPI ENGINE CONNECTED
             </span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#f4f7fc] tracking-tight font-sans">
             Network Highway: Incident Response
           </h2>
 
-          <p className="text-sm text-[#94a3b8] leading-relaxed">
-            Drive through the virtual campus network backbone. Read live switch telemetry, calculate standardized Z-scores at 140 km/h, and steer your interceptor vehicle into mathematically verified response gateways.
+          <p className="text-sm text-[#a6b4c9] leading-relaxed">
+            Drive through the virtual campus network backbone. Read live switch telemetry, calculate standardized Z-scores under driving conditions, and steer your interceptor vehicle into mathematically verified response gateways.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={() => startGame('zscore_challenge')}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-[#00f0ff] hover:opacity-95 text-slate-950 text-xs font-sans font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20"
+              className="px-6 py-2.5 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] text-xs font-sans font-bold transition flex items-center gap-2 shadow-sm cursor-pointer"
             >
-              <Play className="w-4 h-4 fill-white" />
-              Start Simulation Engine
+              <Play className="w-4 h-4 fill-[#0b1426]" />
+              <span>Launch Highway Simulator</span>
             </button>
 
             <a
               href="#missions"
-              className="px-4 py-2.5 rounded-xl bg-[#161f30] hover:bg-[#1e293b] text-[#f9fafb] text-xs font-mono border border-[#26354d] transition flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] text-xs font-sans border border-[#2c3d58] transition flex items-center gap-2"
             >
               <span>Explore 5 Curriculum Missions</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#3b82f6]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#8cc8ff]" />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Real Session Performance Indicators */}
+      {/* Session Performance Indicators */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
-          <span className="text-[#94a3b8] uppercase text-[10px] block">Session XP Earned</span>
-          <div className="text-2xl font-bold text-[#3b82f6] tabular-nums">
-            +{sessionXP} <span className="text-xs text-[#94a3b8] font-normal">XP</span>
+        <div className="p-4 rounded-xl bg-[#14233d] border border-[#2c3d58] space-y-1 font-sans text-xs">
+          <span className="text-[#a6b4c9] uppercase text-[10px] block font-medium">Session XP</span>
+          <div className="text-2xl font-bold text-[#8cc8ff] font-mono tabular-nums">
+            +{sessionXP} <span className="text-xs text-[#a6b4c9] font-normal font-sans">XP</span>
           </div>
-          <span className="text-[10px] text-[#64748b]">
-            * Server-verified session rewards with idempotency
+          <span className="text-[10px] text-[#a6b4c9]">
+            Server-verified rewards
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
-          <span className="text-[#94a3b8] uppercase text-[10px] block">Session Accuracy</span>
-          <div className="text-2xl font-bold text-[#10b981] tabular-nums">
+        <div className="p-4 rounded-xl bg-[#14233d] border border-[#2c3d58] space-y-1 font-sans text-xs">
+          <span className="text-[#a6b4c9] uppercase text-[10px] block font-medium">Session Accuracy</span>
+          <div className="text-2xl font-bold text-[#34d399] font-mono tabular-nums">
             {accuracyPercentage}%
           </div>
-          <span className="text-[10px] text-[#64748b]">
+          <span className="text-[10px] text-[#a6b4c9]">
             {totalCorrect} of {totalAttempts} questions answered correctly
           </span>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#111827] border border-[#26354d] space-y-1 font-mono text-xs">
-          <span className="text-[#94a3b8] uppercase text-[10px] block">Missions Completed</span>
-          <div className="text-2xl font-bold text-[#f9fafb] tabular-nums">
+        <div className="p-4 rounded-xl bg-[#14233d] border border-[#2c3d58] space-y-1 font-sans text-xs">
+          <span className="text-[#a6b4c9] uppercase text-[10px] block font-medium">Missions Completed</span>
+          <div className="text-2xl font-bold text-[#f4f7fc] font-mono tabular-nums">
             {Object.keys(completedGames).length} / {gameDefinitions.length}
           </div>
-          <span className="text-[10px] text-[#64748b]">
+          <span className="text-[10px] text-[#a6b4c9]">
             Playable curriculum scenarios available
           </span>
         </div>
       </div>
 
-      {/* Analytical Telemetry Continuity Explainer */}
-      <Panel
-        title="Analytical Telemetry Continuity"
-        subtitle="Game Decision → Statistical Proof → Gaussian Bell Curve Visualization"
-        icon={Sparkles}
-        className="border-[#26354d] bg-[#111827]"
-      >
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs font-mono">
-          <div className="space-y-1 text-[#94a3b8]">
-            <p>
-              In NETPULSE, games and serious statistics are not isolated silos.
-              Every challenge passes its telemetry to the shared Python statistical engine and includes a <strong className="text-[#3b82f6]">[View Technical Analysis]</strong> bridge button.
-            </p>
-            <p className="text-[#64748b]">
-              When clicked, the exact scenario parameters transfer into the Technical Lab to display the mathematical proof and live Gaussian bell curve.
-            </p>
-          </div>
-          <Link
-            to="/technical-lab"
-            className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-medium transition shadow"
-          >
-            <FlaskConical className="w-3.5 h-3.5" />
-            <span>Open Technical Lab</span>
-          </Link>
-        </div>
-      </Panel>
-
-      {/* 5 Educational Game Modules */}
+      {/* Clean Mission Cards Catalog */}
       <section id="missions" className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-mono uppercase tracking-wider text-[#94a3b8] flex items-center gap-2 font-bold">
-            <Layers className="w-4 h-4 text-[#3b82f6]" />
-            <span>Curriculum Simulation Catalog ({gameDefinitions.length} Missions Available)</span>
+          <h2 className="text-sm font-sans uppercase tracking-wider text-[#a6b4c9] flex items-center gap-2 font-semibold">
+            <Layers className="w-4 h-4 text-[#8cc8ff]" />
+            <span>Curriculum Missions ({gameDefinitions.length} Available)</span>
           </h2>
-          <span className="text-xs font-mono text-[#10b981] flex items-center gap-1">
+          <span className="text-xs font-sans text-[#34d399] flex items-center gap-1 font-medium">
             <Zap className="w-3.5 h-3.5" />
             <span>FastAPI Evaluator Online</span>
           </span>
@@ -282,34 +252,34 @@ export default function LearnAndPlay() {
               return (
                 <div
                   key={game.id}
-                  className={`rounded-2xl bg-[#111827] border p-5 space-y-4 transition-all flex flex-col justify-between ${
+                  className={`rounded-2xl bg-[#14233d] border p-5 space-y-3.5 transition-all flex flex-col justify-between ${
                     isCompleted
-                      ? 'border-[#10b981]/50 ring-1 ring-[#10b981]/20'
-                      : 'border-[#26354d] hover:border-[#3b82f6]/50'
+                      ? 'border-[#34d399]/40 ring-1 ring-[#34d399]/20'
+                      : 'border-[#2c3d58] hover:border-[#8cc8ff]/50'
                   }`}
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#161f30] border border-[#26354d] flex items-center justify-center text-[#3b82f6] shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#1b2b46] border border-[#2c3d58] flex items-center justify-center text-[#8cc8ff] shrink-0">
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-[#f9fafb] text-base">
+                          <h3 className="font-bold text-[#f4f7fc] text-base font-sans">
                             {game.title}
                           </h3>
-                          <span className="text-[11px] font-mono text-[#3b82f6] block">
+                          <span className="text-[11px] font-sans text-[#8cc8ff] block">
                             {game.category}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#94a3b8] border border-[#26354d]">
+                        <span className="text-[11px] font-sans px-2.5 py-0.5 rounded bg-[#1b2b46] text-[#a6b4c9] border border-[#2c3d58]">
                           {game.difficulty}
                         </span>
                         {isCompleted && (
-                          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[#10b981]/10 border border-[#10b981]/30 text-[#10b981] flex items-center gap-1">
+                          <span className="text-[11px] font-sans px-2 py-0.5 rounded bg-[#34d399]/10 border border-[#34d399]/30 text-[#34d399] flex items-center gap-1 font-medium">
                             <CheckCircle2 className="w-3 h-3" />
                             <span>Done</span>
                           </span>
@@ -317,38 +287,28 @@ export default function LearnAndPlay() {
                       </div>
                     </div>
 
-                    <p className="text-xs text-[#94a3b8] leading-relaxed font-sans">
+                    {/* Short one-line objective */}
+                    <p className="text-xs text-[#a6b4c9] leading-relaxed font-sans">
                       {game.desc}
                     </p>
 
-                    <div className="space-y-1.5 text-[11px] font-mono">
-                      <div className="p-3 rounded-xl bg-[#0b0f17] border border-[#1e293b] text-[#94a3b8] space-y-1.5">
-                        <span className="text-[#64748b] uppercase text-[10px] block">Learning Outcomes:</span>
-                        <p className="text-[#f9fafb]/90 font-sans">{game.learningOutcomes}</p>
-                        <div className="pt-1.5 border-t border-[#1e293b] flex justify-between items-center text-[10px]">
-                          <span>Formula: <code className="text-[#3b82f6]">{game.statFocus}</code></span>
-                          <span className="text-[#10b981] font-bold">+{game.maxXP} XP</span>
-                        </div>
-                      </div>
-
-                      {matchingScenario && (
-                        <div className="text-[11px] font-mono text-[#64748b] flex items-center gap-1.5 pt-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10b981] shrink-0" />
-                          <span>Pre-configured dataset scenario: <strong className="text-[#f9fafb]">{matchingScenario.title}</strong></span>
-                        </div>
-                      )}
+                    <div className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] flex justify-between items-center text-xs font-sans">
+                      <span className="text-[#a6b4c9]">
+                        Formula: <code className="text-[#8cc8ff] font-mono">{game.statFocus}</code>
+                      </span>
+                      <span className="text-[#8cc8ff] font-semibold font-mono">+{game.maxXP} XP</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-mono">
-                    <span className="text-[#64748b]">
-                      {isCompleted ? 'Completed in session' : 'Ready to launch'}
+                  <div className="pt-3 border-t border-[#2c3d58] flex items-center justify-between text-xs font-sans">
+                    <span className="text-[#a6b4c9]">
+                      {isCompleted ? 'Mission verified' : 'Ready to start'}
                     </span>
                     <button
                       onClick={() => startGame(game.id, matchingScenario)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#3b82f6] hover:bg-[#2563eb] text-white font-sans text-xs font-semibold transition shadow"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-sans text-xs font-semibold transition shadow-sm cursor-pointer"
                     >
-                      <Play className="w-3.5 h-3.5 fill-white" />
+                      <Play className="w-3.5 h-3.5 fill-[#0b1426]" />
                       <span>{isCompleted ? 'Replay Mission' : 'Start Mission'}</span>
                     </button>
                   </div>

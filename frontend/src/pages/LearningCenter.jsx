@@ -75,7 +75,7 @@ export default function LearningCenter() {
   const current = lessons[activeLesson]
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
       <PageHeader
         title="Learning Center — Probability & Statistics Curriculum"
         subtitle="Comprehensive educational modules designed for Course 25CS203 (Probability and Statistics for Computer Science)."
@@ -85,7 +85,7 @@ export default function LearningCenter() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Topic Index Sidebar */}
         <div className="space-y-2">
-          <div className="px-3 pb-1 text-xs font-sans font-semibold uppercase tracking-wider text-slate-400 font-semibold">
+          <div className="px-3 pb-1 text-xs font-mono font-semibold uppercase tracking-wider text-[#A6B4C9]">
             Curriculum Lessons ({lessons.length} Topics)
           </div>
           {lessons.map((lesson, idx) => (
@@ -94,15 +94,15 @@ export default function LearningCenter() {
               onClick={() => setActiveLesson(idx)}
               className={`w-full text-left p-3 rounded-xl border text-xs font-sans transition-all flex items-center justify-between ${
                 activeLesson === idx
-                  ? 'bg-blue-600/15 border-blue-500/70 text-white shadow-md shadow-indigo-950/40'
-                  : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-[#1B2B46] border-[#8CC8FF] text-[#F4F7FC] shadow-sm'
+                  : 'bg-[#14233D] border-[#2C3D58] text-[#A6B4C9] hover:text-[#F4F7FC] hover:border-[#8CC8FF]/50'
               }`}
             >
               <div className="truncate pr-2">
                 <span className="font-semibold block truncate">{lesson.title}</span>
-                <span className="text-[10px] text-slate-500 truncate block">{lesson.concept}</span>
+                <span className="text-[10px] text-[#A6B4C9] truncate block">{lesson.concept}</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-slate-500 shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[#A6B4C9] shrink-0" />
             </button>
           ))}
         </div>
@@ -113,47 +113,47 @@ export default function LearningCenter() {
             title={current.title}
             subtitle={current.concept}
             icon={BookOpen}
-            className="border-indigo-900/40"
+            className="border-[#2C3D58] bg-[#14233D]"
             bodyClassName="space-y-6"
           >
             {/* Core Explanation */}
             <div>
-              <h3 className="text-xs font-mono text-slate-500 uppercase tracking-wider mb-2">
+              <h3 className="text-xs font-mono text-[#A6B4C9] uppercase tracking-wider mb-2">
                 Conceptual Overview
               </h3>
-              <p className="text-sm text-slate-200 leading-relaxed font-sans">
+              <p className="text-sm text-[#F4F7FC] leading-relaxed font-sans">
                 {current.explanation}
               </p>
             </div>
 
             {/* Mathematical Formula Card */}
-            <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">
+            <div className="p-4 rounded-xl bg-[#0B1426] border border-[#2C3D58] space-y-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#A6B4C9] block">
                 Mathematical Expression:
               </span>
-              <code className="text-base sm:text-lg font-bold font-mono text-blue-400 block">
+              <code className="text-base sm:text-lg font-bold font-mono text-[#8CC8FF] block">
                 {current.formula}
               </code>
             </div>
 
             {/* Campus Network Telemetry Example */}
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-1.5">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-semibold block">
+            <div className="p-4 rounded-xl bg-[#1B2B46]/60 border border-[#2C3D58] space-y-1.5">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#34D399] font-semibold block">
                 Network Telemetry Application Example:
               </span>
-              <p className="text-xs font-mono text-slate-300 leading-relaxed">
+              <p className="text-xs font-mono text-[#F4F7FC] leading-relaxed">
                 {current.example}
               </p>
             </div>
 
             {/* Viva & Exam Conceptual Check */}
-            <div className="p-4 rounded-xl bg-indigo-950/40 border border-indigo-900/50 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-mono text-indigo-300 font-semibold">
-                <HelpCircle className="w-4 h-4 text-indigo-400 shrink-0" />
+            <div className="p-4 rounded-xl bg-[#1B2B46] border border-[#2C3D58] space-y-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#8CC8FF] font-semibold">
+                <HelpCircle className="w-4 h-4 text-[#8CC8FF] shrink-0" />
                 <span>Viva Examination Check: {current.question}</span>
               </div>
-              <div className="flex items-start gap-2 text-xs font-mono text-slate-300 pt-1">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs font-mono text-[#F4F7FC] pt-1">
+                <CheckCircle2 className="w-4 h-4 text-[#34D399] shrink-0 mt-0.5" />
                 <span>{current.answer}</span>
               </div>
             </div>

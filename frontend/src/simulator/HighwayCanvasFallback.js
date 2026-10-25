@@ -21,7 +21,7 @@ export class HighwayCanvasFallback {
     this.laneNames = ['LANE 1', 'LANE 2', 'LANE 3', 'LANE 4']
     this.currentLane = 1 // 0, 1, 2, 3
 
-    this.speedKmh = 95
+    this.speedKmh = 85
     this.distanceMeters = 400
     this.score = 0
     this.packetsCollected = 0
@@ -82,10 +82,13 @@ export class HighwayCanvasFallback {
       this.animationFrameId = requestAnimationFrame(loop)
 
       if (!this.isPaused) {
-        // Accelerate / Brake
+        // Accelerate / Brake / Highway Cruise
         if (this.inputs.forward) this.speedKmh = Math.min(180, this.speedKmh + 0.8)
         else if (this.inputs.backward) this.speedKmh = Math.max(20, this.speedKmh - 1.5)
-        else this.speedKmh = Math.max(40, this.speedKmh - 0.1)
+        else {
+          if (this.speedKmh < 85) this.speedKmh = Math.min(85, this.speedKmh + 0.3)
+          else if (this.speedKmh > 85) this.speedKmh = Math.max(85, this.speedKmh - 0.2)
+        }
 
         this.roadOffset += this.speedKmh * 0.15
         if (this.roadOffset > 100) this.roadOffset = 0
@@ -132,37 +135,37 @@ export class HighwayCanvasFallback {
     const roadTopX = (w - roadTopWidth) / 2
     const roadBottomX = (w - roadBottomWidth) / 2
 
-    // Vibrant Cyber Sky
+    // 1. Dark Navy Sky
     const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY)
-    skyGrad.addColorStop(0, '#060a15')
-    skyGrad.addColorStop(0.6, '#0d152a')
-    skyGrad.addColorStop(1, '#1e1b4b')
+    skyGrad.addColorStop(0, '#0b1426')
+    skyGrad.addColorStop(0.6, '#0d192e')
+    skyGrad.addColorStop(1, '#14233d')
     ctx.fillStyle = skyGrad
     ctx.fillRect(0, 0, w, h)
 
     // Twinkling stars in sky
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+    ctx.fillStyle = 'rgba(244, 247, 252, 0.7)'
     for (let s = 0; s < 30; s++) {
       const sx = ((s * 47) % w)
       const sy = ((s * 19) % (horizonY * 0.9))
       ctx.fillRect(sx, sy, 1.5, 1.5)
     }
 
-    // Distant Cyber City Skyline with Glowing Windows
-    const bColors = ['#00f0ff', '#34d399', '#f59e0b', '#a855f7', '#ffffff']
+    // 2. Distant Facility Skyline
+    const bColors = ['#8cc8ff', '#f4f7fc', '#8cc8ff', '#34d399', '#f4f7fc']
     for (let b = 0; b < 16; b++) {
       const bw = 35 + (b * 13) % 40
       const bh = 50 + (b * 19) % 75
       const bx = b < 8 ? (b * 45) : (w - (b - 7) * 45)
       const by = horizonY - bh
 
-      ctx.fillStyle = '#0a1020'
+      ctx.fillStyle = '#14233d'
       ctx.fillRect(bx, by, bw, bh)
-      ctx.strokeStyle = '#1e293b'
+      ctx.strokeStyle = '#2c3d58'
       ctx.lineWidth = 1
       ctx.strokeRect(bx, by, bw, bh)
 
-      // Glowing windows
+      // Facility window lights
       for (let wr = 0; wr < Math.floor(bh / 10); wr++) {
         if ((wr + b) % 3 === 0) continue
         ctx.fillStyle = bColors[(wr + b) % bColors.length]
@@ -170,39 +173,35 @@ export class HighwayCanvasFallback {
       }
     }
 
-
-
-    // Road surface
+    // 3. Road Surface
     ctx.beginPath()
     ctx.moveTo(roadTopX, horizonY)
     ctx.lineTo(roadTopX + roadTopWidth, horizonY)
     ctx.lineTo(roadBottomX + roadBottomWidth, h)
     ctx.lineTo(roadBottomX, h)
     ctx.closePath()
-    ctx.fillStyle = '#111827'
+    ctx.fillStyle = '#101a2d'
     ctx.fill()
-    ctx.strokeStyle = '#26354d'
+    ctx.strokeStyle = '#2c3d58'
     ctx.lineWidth = 2
     ctx.stroke()
 
-    // Left Crash Barrier with subtle blue retroreflectors
+    // 4. Crash Barriers with subtle light blue retroreflectors
     ctx.save()
-    ctx.strokeStyle = '#1e293b'
+    ctx.strokeStyle = '#1b2b46'
     ctx.lineWidth = 4
     ctx.beginPath()
     ctx.moveTo(roadTopX, horizonY)
     ctx.lineTo(roadBottomX, h)
     ctx.stroke()
 
-    // Right Crash Barrier with subtle blue retroreflectors
-    ctx.strokeStyle = '#1e293b'
     ctx.beginPath()
     ctx.moveTo(roadTopX + roadTopWidth, horizonY)
     ctx.lineTo(roadBottomX + roadBottomWidth, h)
     ctx.stroke()
 
-    // Blue retroreflectors along barrier tops
-    ctx.strokeStyle = '#38bdf8'
+    // Light blue retroreflectors
+    ctx.strokeStyle = '#8cc8ff'
     ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(roadTopX - 2, horizonY)
@@ -212,7 +211,7 @@ export class HighwayCanvasFallback {
     ctx.stroke()
     ctx.restore()
 
-    // 4 Lanes (3 glowing dividers)
+    // 5. 4 Lanes (3 clean dividers)
     for (let l = 1; l <= 3; l++) {
       const topLX = roadTopX + (roadTopWidth / 4) * l
       const botLX = roadBottomX + (roadBottomWidth / 4) * l
@@ -221,31 +220,31 @@ export class HighwayCanvasFallback {
       ctx.lineDashOffset = -this.roadOffset
       ctx.moveTo(topLX, horizonY)
       ctx.lineTo(botLX, h)
-      ctx.strokeStyle = 'rgba(224, 242, 254, 0.75)'
+      ctx.strokeStyle = 'rgba(244, 247, 252, 0.75)'
       ctx.lineWidth = 2.5
       ctx.stroke()
       ctx.setLineDash([])
     }
 
-    // ---------------- PLAYER VEHICLE (Modern NOC Titanium & Technical Sapphire) ----------------
+    // 6. Player Vehicle (NOC Navy & Light Blue)
     const carY = h - 45
     const laneWidthBottom = roadBottomWidth / 4
     const carX = roadBottomX + (this.currentLane + 0.5) * laneWidthBottom
 
-    // 1. Royal Blue Chassis Underglow (Soft radial gradient halo on asphalt)
+    // Underglow
     const underglowGrad = ctx.createRadialGradient(carX, carY + 4, 6, carX, carY + 4, 40)
-    underglowGrad.addColorStop(0, 'rgba(59, 130, 246, 0.65)')
-    underglowGrad.addColorStop(0.5, 'rgba(59, 130, 246, 0.22)')
-    underglowGrad.addColorStop(1, 'rgba(59, 130, 246, 0)')
+    underglowGrad.addColorStop(0, 'rgba(140, 200, 255, 0.55)')
+    underglowGrad.addColorStop(0.5, 'rgba(140, 200, 255, 0.18)')
+    underglowGrad.addColorStop(1, 'rgba(140, 200, 255, 0)')
     ctx.fillStyle = underglowGrad
     ctx.beginPath()
     ctx.ellipse(carX, carY + 4, 42, 16, 0, 0, Math.PI * 2)
     ctx.fill()
 
-    // 2. Dual Forward LED Headlight Beams casting forward onto highway
+    // Headlight Beams
     const beamGradLeft = ctx.createLinearGradient(carX - 16, carY - 18, carX - 26, carY - 110)
-    beamGradLeft.addColorStop(0, 'rgba(219, 234, 254, 0.28)')
-    beamGradLeft.addColorStop(1, 'rgba(219, 234, 254, 0)')
+    beamGradLeft.addColorStop(0, 'rgba(244, 247, 252, 0.25)')
+    beamGradLeft.addColorStop(1, 'rgba(244, 247, 252, 0)')
     ctx.fillStyle = beamGradLeft
     ctx.beginPath()
     ctx.moveTo(carX - 22, carY - 18)
@@ -256,8 +255,8 @@ export class HighwayCanvasFallback {
     ctx.fill()
 
     const beamGradRight = ctx.createLinearGradient(carX + 16, carY - 18, carX + 26, carY - 110)
-    beamGradRight.addColorStop(0, 'rgba(219, 234, 254, 0.28)')
-    beamGradRight.addColorStop(1, 'rgba(219, 234, 254, 0)')
+    beamGradRight.addColorStop(0, 'rgba(244, 247, 252, 0.25)')
+    beamGradRight.addColorStop(1, 'rgba(244, 247, 252, 0)')
     ctx.fillStyle = beamGradRight
     ctx.beginPath()
     ctx.moveTo(carX + 12, carY - 18)
@@ -267,49 +266,46 @@ export class HighwayCanvasFallback {
     ctx.closePath()
     ctx.fill()
 
-    // 3. Alloy Wheels (Graphite Rims with Silver Center Hubs)
-    // Left Wheel
-    ctx.fillStyle = '#0b0f17' // Rubber tire
+    // Alloy Wheels
+    ctx.fillStyle = '#090e17'
     ctx.fillRect(carX - 33, carY - 10, 7, 20)
-    ctx.fillStyle = '#334155' // Graphite rim
+    ctx.fillStyle = '#2c3d58'
     ctx.fillRect(carX - 32, carY - 7, 5, 14)
-    ctx.fillStyle = '#e2e8f0' // Silver center hub
+    ctx.fillStyle = '#8cc8ff'
     ctx.fillRect(carX - 33, carY - 1, 7, 2)
 
-    // Right Wheel
-    ctx.fillStyle = '#0b0f17' // Rubber tire
+    ctx.fillStyle = '#090e17'
     ctx.fillRect(carX + 26, carY - 10, 7, 20)
-    ctx.fillStyle = '#334155' // Graphite rim
+    ctx.fillStyle = '#2c3d58'
     ctx.fillRect(carX + 27, carY - 7, 5, 14)
-    ctx.fillStyle = '#e2e8f0' // Silver center hub
+    ctx.fillStyle = '#8cc8ff'
     ctx.fillRect(carX + 26, carY - 1, 7, 2)
 
-    // 4. Titanium / Metallic Graphite Chassis Body
+    // Chassis Body (#1B2B46)
     const titaniumGrad = ctx.createLinearGradient(carX - 27, carY, carX + 27, carY)
-    titaniumGrad.addColorStop(0, '#1e293b')    // Dark flank
-    titaniumGrad.addColorStop(0.25, '#475569') // Titanium slate
-    titaniumGrad.addColorStop(0.5, '#64748b')  // High specular reflection peak
-    titaniumGrad.addColorStop(0.75, '#475569') // Titanium slate
-    titaniumGrad.addColorStop(1, '#1e293b')    // Dark flank
+    titaniumGrad.addColorStop(0, '#14233d')
+    titaniumGrad.addColorStop(0.25, '#1b2b46')
+    titaniumGrad.addColorStop(0.5, '#243758')
+    titaniumGrad.addColorStop(0.75, '#1b2b46')
+    titaniumGrad.addColorStop(1, '#14233d')
     ctx.fillStyle = titaniumGrad
 
-    // Sculpted interceptor hull (tapered front, wide rear)
     ctx.beginPath()
-    ctx.moveTo(carX - 22, carY - 20) // Front left
-    ctx.lineTo(carX + 22, carY - 20) // Front right
-    ctx.lineTo(carX + 27, carY + 6)  // Rear right
-    ctx.lineTo(carX - 27, carY + 6)  // Rear left
+    ctx.moveTo(carX - 22, carY - 20)
+    ctx.lineTo(carX + 22, carY - 20)
+    ctx.lineTo(carX + 27, carY + 6)
+    ctx.lineTo(carX - 27, carY + 6)
     ctx.closePath()
     ctx.fill()
-    ctx.strokeStyle = '#475569'
+    ctx.strokeStyle = '#2c3d58'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    // 5. Cockpit: Tinted Glass Canopy with Specular Highlight
+    // Cockpit Canopy
     const glassGrad = ctx.createLinearGradient(carX, carY - 17, carX, carY - 3)
-    glassGrad.addColorStop(0, '#0f172a')
-    glassGrad.addColorStop(0.6, '#1e293b')
-    glassGrad.addColorStop(1, '#0b0f17')
+    glassGrad.addColorStop(0, '#0b1426')
+    glassGrad.addColorStop(0.6, '#14233d')
+    glassGrad.addColorStop(1, '#0b1426')
     ctx.fillStyle = glassGrad
 
     ctx.beginPath()
@@ -319,44 +315,34 @@ export class HighwayCanvasFallback {
     ctx.lineTo(carX - 18, carY - 3)
     ctx.closePath()
     ctx.fill()
-    ctx.strokeStyle = '#334155'
+    ctx.strokeStyle = '#2c3d58'
     ctx.lineWidth = 1
     ctx.stroke()
 
-    // Diagonal Specular Reflection Streak across canopy
+    // Specular Reflection
     ctx.beginPath()
     ctx.moveTo(carX - 10, carY - 15)
     ctx.lineTo(carX + 4, carY - 5)
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)'
+    ctx.strokeStyle = 'rgba(244, 247, 252, 0.45)'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    // 6. Technical Sapphire Racing Accents (#3B82F6)
+    // Light Blue Racing Accents (#8CC8FF)
     ctx.save()
-    ctx.shadowColor = '#3b82f6'
-    ctx.shadowBlur = 6
-    ctx.fillStyle = '#3b82f6'
-
-    // Twin Racing Stripes down hood and deck
+    ctx.fillStyle = '#8cc8ff'
     ctx.fillRect(carX - 5, carY - 20, 2.5, 26)
     ctx.fillRect(carX + 2.5, carY - 20, 2.5, 26)
-
-    // Side Aero Blades
     ctx.fillRect(carX - 26, carY - 8, 2, 12)
     ctx.fillRect(carX + 24, carY - 8, 2, 12)
-
-    // Rear Spoiler Wing Accent Bar
     ctx.fillRect(carX - 24, carY + 5, 48, 2)
     ctx.restore()
 
-    // 7. Red LED Rear Taillights
+    // Red LED Taillights
     ctx.save()
-    ctx.shadowColor = '#ef4444'
-    ctx.shadowBlur = 8
-    ctx.fillStyle = '#ef4444'
-    ctx.fillRect(carX - 22, carY + 3, 44, 2.5) // Continuous LED bar
-    ctx.fillRect(carX - 24, carY + 2, 6, 4)     // Left cluster
-    ctx.fillRect(carX + 18, carY + 2, 6, 4)     // Right cluster
+    ctx.fillStyle = '#f87171'
+    ctx.fillRect(carX - 22, carY + 3, 44, 2.5)
+    ctx.fillRect(carX - 24, carY + 2, 6, 4)
+    ctx.fillRect(carX + 18, carY + 2, 6, 4)
     ctx.restore()
   }
 

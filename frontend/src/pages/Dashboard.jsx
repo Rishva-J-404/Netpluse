@@ -64,7 +64,7 @@ export default function Dashboard() {
   }, [dataset])
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 font-sans">
       <PageHeader
         title="NOC Command Dashboard"
         subtitle="Live campus gateway telemetry, continuous statistical surveillance, and empirical anomaly triage."
@@ -73,7 +73,7 @@ export default function Dashboard() {
           <button
             onClick={loadData}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-mono font-medium transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1b2b46] hover:bg-[#2c3d58] text-[#f4f7fc] border border-[#2c3d58] hover:border-[#8cc8ff] text-xs font-sans font-medium transition-colors disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Poll Telemetry</span>
@@ -136,7 +136,7 @@ export default function Dashboard() {
             actions={
               <Link
                 to="/technical-lab"
-                className="inline-flex items-center gap-1 text-xs font-mono text-blue-400 hover:text-blue-300"
+                className="inline-flex items-center gap-1 text-xs font-sans text-[#8cc8ff] hover:text-[#a3d5ff]"
               >
                 <span>Full Lab Workbench</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -165,31 +165,31 @@ export default function Dashboard() {
                   {anomalies.map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-lg bg-slate-950/70 border border-amber-900/40 space-y-1 font-mono text-xs"
+                      className="p-3 rounded-xl bg-[#0b1426] border border-[#2c3d58] space-y-1 font-mono text-xs"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-400 font-semibold">{item.timestamp}</span>
+                        <span className="text-[#a6b4c9] font-semibold">{item.timestamp}</span>
                         <StatusBadge status={item.status} size="sm" />
                       </div>
                       <div className="flex items-baseline justify-between pt-1">
-                        <span className="text-slate-200 font-bold text-sm">
-                          {item.network_load} <span className="text-xs text-slate-400 font-normal">Mbps</span>
+                        <span className="text-[#f4f7fc] font-bold text-sm">
+                          {item.network_load} <span className="text-xs text-[#a6b4c9] font-normal">Mbps</span>
                         </span>
-                        <span className="text-amber-400 font-bold">
+                        <span className="text-[#fbbf24] font-bold">
                           Z = {item.z_score > 0 ? `+${item.z_score}` : item.z_score}σ
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500 pt-1">
+                      <p className="text-[11px] text-[#a6b4c9] pt-1">
                         Traffic exceeds 2 standard deviations from campus baseline mean.
                       </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-xs font-mono text-slate-500 space-y-2">
-                  <CheckCircle2 className="w-8 h-8 text-emerald-500/70 mx-auto" />
-                  <p className="text-slate-400 font-medium">All telemetry points within 2σ normal band.</p>
-                  <p className="text-[11px]">No active outliers detected in this sample.</p>
+                <div className="text-center py-8 text-xs font-sans text-[#a6b4c9] space-y-2">
+                  <CheckCircle2 className="w-8 h-8 text-[#34d399] mx-auto" />
+                  <p className="text-[#f4f7fc] font-medium">All telemetry points within 2σ normal band.</p>
+                  <p className="text-[11px] text-[#a6b4c9]">No active outliers detected in this sample.</p>
                 </div>
               )}
             </Panel>
@@ -204,7 +204,7 @@ export default function Dashboard() {
             >
               <div className="max-h-[360px] overflow-y-auto">
                 <table className="w-full text-left font-mono text-xs">
-                  <thead className="bg-slate-950/80 sticky top-0 border-b border-slate-800 text-slate-400 uppercase text-[10px] tracking-wider">
+                  <thead className="bg-[#1b2b46] sticky top-0 border-b border-[#2c3d58] text-[#a6b4c9] uppercase text-[10px] tracking-wider font-sans">
                     <tr>
                       <th className="py-2.5 px-4">Timestamp</th>
                       <th className="py-2.5 px-4">Observed Load</th>
@@ -212,17 +212,17 @@ export default function Dashboard() {
                       <th className="py-2.5 px-4">Classification</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                  <tbody className="divide-y divide-[#2c3d58] text-[#a6b4c9]">
                     {dataset.data.map((row, idx) => {
                       const z = Number(((row.network_load - dataset.mean) / dataset.std_dev).toFixed(2))
                       const status = z > 2.0 ? 'UNUSUALLY HIGH' : z < -2.0 ? 'UNUSUALLY LOW' : 'NORMAL'
 
                       return (
-                        <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
-                          <td className="py-2.5 px-4 text-slate-400 font-semibold">{row.timestamp}</td>
-                          <td className="py-2.5 px-4 font-bold text-white">{row.network_load} Mbps</td>
-                          <td className="py-2.5 px-4 text-slate-300">
-                            <span className={z > 2 ? 'text-rose-400 font-bold' : z < -2 ? 'text-blue-400 font-bold' : 'text-slate-300'}>
+                        <tr key={idx} className="hover:bg-[#1b2b46]/40 transition-colors">
+                          <td className="py-2.5 px-4 text-[#a6b4c9] font-semibold">{row.timestamp}</td>
+                          <td className="py-2.5 px-4 font-bold text-[#f4f7fc]">{row.network_load} Mbps</td>
+                          <td className="py-2.5 px-4 text-[#f4f7fc]">
+                            <span className={z > 2 ? 'text-[#f87171] font-bold' : z < -2 ? 'text-[#8cc8ff] font-bold' : 'text-[#f4f7fc]'}>
                               {z > 0 ? `+${z}` : z}σ
                             </span>
                           </td>
@@ -245,7 +245,7 @@ export default function Dashboard() {
           action={
             <button
               onClick={loadData}
-              className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs"
+              className="px-4 py-2 rounded-xl bg-[#8cc8ff] hover:bg-[#a3d5ff] text-[#0b1426] font-semibold text-xs transition cursor-pointer"
             >
               Load Baseline Dataset
             </button>

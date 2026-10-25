@@ -76,11 +76,9 @@ export default function Register() {
       })
 
       if (res.isEmailConfirmationRequired) {
-        // Project has email confirmation enabled
         setRegisteredEmail(email.trim())
         setPendingConfirmation(true)
       } else {
-        // Email confirmation is disabled; user is immediately authenticated
         navigate('/dashboard')
       }
     } catch (err) {
@@ -93,37 +91,37 @@ export default function Register() {
   // Pending Email Confirmation State
   if (pendingConfirmation) {
     return (
-      <div className="max-w-md mx-auto my-8 sm:my-14 space-y-6">
+      <div className="max-w-md mx-auto my-8 sm:my-14 space-y-6 animate-fadeIn">
         <Panel
           title="Registration Successful — Email Confirmation Required"
           subtitle="Verification link sent to your institutional inbox"
           icon={Inbox}
-          className="border-emerald-800/50 bg-gradient-to-b from-emerald-950/30 via-slate-900 to-slate-900"
+          className="border-[#2C3D58] bg-[#14233D]"
           bodyClassName="p-6 space-y-5 text-center font-mono text-xs"
         >
-          <div className="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950">
+          <div className="w-14 h-14 rounded-2xl bg-[#1B2B46] border border-[#2C3D58] text-[#34D399] flex items-center justify-center mx-auto shadow-sm">
             <CheckCircle2 className="w-8 h-8" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-xl font-bold text-[#F4F7FC]">
               Verify Student Identity
             </h2>
-            <p className="text-slate-300 font-sans leading-relaxed">
+            <p className="text-[#A6B4C9] font-sans leading-relaxed">
               A verification email has been dispatched to:
             </p>
-            <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-blue-400 font-bold">
+            <div className="p-2.5 rounded-lg bg-[#0B1426] border border-[#2C3D58] text-[#8CC8FF] font-bold">
               {registeredEmail}
             </div>
-            <p className="text-[11px] text-slate-400 font-sans leading-relaxed pt-2">
+            <p className="text-[11px] text-[#A6B4C9] font-sans leading-relaxed pt-2">
               Please click the confirmation link in the email to activate your student account. Once confirmed, you can sign in to persist your laboratory sessions.
             </p>
           </div>
 
-          <div className="pt-3 border-t border-slate-800 flex justify-center">
+          <div className="pt-3 border-t border-[#2C3D58] flex justify-center">
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md shadow-blue-950/40"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-bold transition-all shadow-sm"
             >
               <span>Proceed to Login</span>
               <ArrowRight className="w-4 h-4" />
@@ -135,42 +133,42 @@ export default function Register() {
   }
 
   return (
-    <div className="max-w-md mx-auto my-6 sm:my-10 space-y-6">
+    <div className="max-w-md mx-auto my-6 sm:my-10 space-y-6 animate-fadeIn">
       {/* Brand Header */}
       <div className="text-center space-y-2">
-        <div className="w-12 h-12 rounded-xl bg-[#161f30] border border-blue-500/40 text-blue-400 flex items-center justify-center mx-auto shadow-sm shadow-blue-950/40">
+        <div className="w-12 h-12 rounded-xl bg-[#1B2B46] border border-[#2C3D58] text-[#8CC8FF] flex items-center justify-center mx-auto shadow-sm">
           <Activity className="w-6 h-6 animate-pulse" />
         </div>
-        <h1 className="text-2xl font-bold font-mono text-white tracking-tight">
+        <h1 className="text-2xl font-bold font-mono text-[#F4F7FC] tracking-tight">
           Register Student Profile
         </h1>
-        <p className="text-xs text-slate-400 font-mono">
+        <p className="text-xs text-[#A6B4C9] font-mono">
           Create an analyst identity for Probability Course 25CS203
         </p>
       </div>
 
       {/* Database Unconfigured Alert */}
       {!isConfigured && (
-        <div className="p-4 rounded-xl bg-amber-950/40 border border-amber-800/50 text-xs font-mono text-amber-200 flex items-start gap-2.5">
+        <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-800/40 text-xs font-mono text-amber-200 flex items-start gap-2.5">
           <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <span className="font-bold text-amber-300">Supabase Offline:</span>
-            <p className="text-slate-300 font-sans">
-              To enable cloud account registration, add <code className="text-blue-400 font-mono">VITE_SUPABASE_URL</code> and <code className="text-blue-400 font-mono">VITE_SUPABASE_PUBLISHABLE_KEY</code> to your <code className="text-white">frontend/.env</code> file.
+            <p className="text-[#A6B4C9] font-sans">
+              To enable cloud account registration, add <code className="text-[#8CC8FF] font-mono">VITE_SUPABASE_URL</code> and <code className="text-[#8CC8FF] font-mono">VITE_SUPABASE_PUBLISHABLE_KEY</code> to your <code className="text-[#F4F7FC]">frontend/.env</code> file.
             </p>
           </div>
         </div>
       )}
 
-      <Panel className="border-slate-800" bodyClassName="p-6">
+      <Panel className="border-[#2C3D58] bg-[#14233D]" bodyClassName="p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username */}
           <div>
-            <label htmlFor="reg-handle" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="reg-handle" className="block text-xs font-mono text-[#A6B4C9] mb-1.5 uppercase">
               Student Callsign / Username *
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
+              <User className="w-4 h-4 text-[#A6B4C9] absolute left-3 top-3 pointer-events-none" />
               <input
                 id="reg-handle"
                 type="text"
@@ -178,18 +176,18 @@ export default function Register() {
                 value={username}
                 onChange={e => setUsername(e.target.value)}
                 placeholder="URK25CS1236_Analyst"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-[#0B1426] border border-[#2C3D58] rounded-lg text-xs font-mono text-[#F4F7FC] placeholder-[#A6B4C9]/40 focus:outline-none focus:border-[#8CC8FF] focus:ring-1 focus:ring-[#8CC8FF]"
               />
             </div>
           </div>
 
           {/* Email */}
           <div>
-            <label htmlFor="reg-email" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="reg-email" className="block text-xs font-mono text-[#A6B4C9] mb-1.5 uppercase">
               Institutional Email *
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
+              <Mail className="w-4 h-4 text-[#A6B4C9] absolute left-3 top-3 pointer-events-none" />
               <input
                 id="reg-email"
                 type="email"
@@ -197,18 +195,18 @@ export default function Register() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="student@karunya.edu"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-[#0B1426] border border-[#2C3D58] rounded-lg text-xs font-mono text-[#F4F7FC] placeholder-[#A6B4C9]/40 focus:outline-none focus:border-[#8CC8FF] focus:ring-1 focus:ring-[#8CC8FF]"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label htmlFor="reg-password" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="reg-password" className="block text-xs font-mono text-[#A6B4C9] mb-1.5 uppercase">
               Password (min 6 characters) *
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
+              <Lock className="w-4 h-4 text-[#A6B4C9] absolute left-3 top-3 pointer-events-none" />
               <input
                 id="reg-password"
                 type={showPassword ? 'text' : 'password'}
@@ -216,12 +214,12 @@ export default function Register() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-10 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-10 py-2 bg-[#0B1426] border border-[#2C3D58] rounded-lg text-xs font-mono text-[#F4F7FC] placeholder-[#A6B4C9]/40 focus:outline-none focus:border-[#8CC8FF] focus:ring-1 focus:ring-[#8CC8FF]"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300"
+                className="absolute right-3 top-2.5 text-[#A6B4C9] hover:text-[#F4F7FC]"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -231,11 +229,11 @@ export default function Register() {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="reg-confirm-password" className="block text-xs font-mono text-slate-400 mb-1.5 uppercase">
+            <label htmlFor="reg-confirm-password" className="block text-xs font-mono text-[#A6B4C9] mb-1.5 uppercase">
               Confirm Password *
             </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
+              <Lock className="w-4 h-4 text-[#A6B4C9] absolute left-3 top-3 pointer-events-none" />
               <input
                 id="reg-confirm-password"
                 type={showPassword ? 'text' : 'password'}
@@ -243,14 +241,14 @@ export default function Register() {
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-xs font-mono text-slate-200 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-[#0B1426] border border-[#2C3D58] rounded-lg text-xs font-mono text-[#F4F7FC] placeholder-[#A6B4C9]/40 focus:outline-none focus:border-[#8CC8FF] focus:ring-1 focus:ring-[#8CC8FF]"
               />
             </div>
           </div>
 
           {/* Error Banner */}
           {errorMessage && (
-            <div className="p-3 rounded-lg bg-rose-950/60 border border-rose-800 text-rose-300 text-xs font-mono">
+            <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800/60 text-[#F87171] text-xs font-mono">
               {errorMessage}
             </div>
           )}
@@ -258,10 +256,10 @@ export default function Register() {
           <button
             type="submit"
             disabled={submitting || !isConfigured}
-            className={`w-full py-2.5 rounded-lg font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-md ${
+            className={`w-full py-2.5 rounded-lg font-mono text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm ${
               !submitting && isConfigured
-                ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-950/60 cursor-pointer'
-                : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                ? 'bg-[#8CC8FF] hover:bg-[#8CC8FF]/90 text-[#0B1426] font-bold cursor-pointer'
+                : 'bg-[#1B2B46] text-[#A6B4C9]/50 border border-[#2C3D58] cursor-not-allowed'
             }`}
           >
             <span>{submitting ? 'Registering Account...' : 'Register Profile'}</span>
@@ -269,9 +267,9 @@ export default function Register() {
           </button>
         </form>
 
-        <div className="text-center text-xs font-mono text-slate-400 pt-4 mt-4 border-t border-slate-800/80">
+        <div className="text-center text-xs font-mono text-[#A6B4C9] pt-4 mt-4 border-t border-[#2C3D58]/80">
           Already registered?{' '}
-          <Link to="/login" className="text-blue-400 hover:text-blue-300 font-semibold underline">
+          <Link to="/login" className="text-[#8CC8FF] hover:underline font-semibold">
             Sign in to NOC
           </Link>
         </div>

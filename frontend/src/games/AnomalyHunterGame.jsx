@@ -34,26 +34,26 @@ export default function AnomalyHunterGame({ scenario, onLeave }) {
   if (viewMode === 'simulator') {
     return (
       <div className="space-y-4 max-w-5xl mx-auto">
-        <div className="flex items-center justify-between pb-3 border-b border-[#26354d]">
+        <div className="flex items-center justify-between pb-3 border-b border-[#2C3D58]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-[#3b82f6] uppercase tracking-wider font-bold">
+            <span className="text-xs font-mono text-[#8CC8FF] uppercase tracking-wider font-bold">
               GAME 4 — ANOMALY HUNTER
             </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161f30] text-[#10b981] border border-[#26354d] flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse"></span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#1B2B46] text-[#34D399] border border-[#2C3D58] flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse"></span>
               3D SIMULATOR ACTIVE
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setViewMode('classic')}
-              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
             >
               Classic Workbench Mode
             </button>
             <button
               onClick={onLeave}
-              className="px-3 py-1.5 rounded-lg bg-[#161f30] hover:bg-[#1e293b] text-xs font-mono text-[#94a3b8] hover:text-[#f9fafb] border border-[#26354d] transition"
+              className="px-3 py-1.5 rounded-lg bg-[#14233D] hover:bg-[#1B2B46] text-xs font-mono text-[#A6B4C9] hover:text-[#F4F7FC] border border-[#2C3D58] transition"
             >
               Exit to Lobby
             </button>

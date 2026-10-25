@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * MetricCard - Clean dark NOC card for telemetry values and statistical parameters
+ * MetricCard - Clean dark navy NOC card for telemetry values and statistical parameters
  */
 export default function MetricCard({
   label,
@@ -14,38 +14,38 @@ export default function MetricCard({
   className = ''
 }) {
   const accentBorder = {
-    blue: 'border-[#26354d] hover:border-[#3b82f6]/60',
-    cyan: 'border-[#26354d] hover:border-[#3b82f6]/60',
-    emerald: 'border-[#26354d] hover:border-[#10b981]/60',
-    amber: 'border-[#26354d] hover:border-[#f59e0b]/60',
-    rose: 'border-[#26354d] hover:border-[#ef4444]/60',
-    slate: 'border-[#26354d] hover:border-[#334155]'
-  }[accent] || 'border-[#26354d] hover:border-[#3b82f6]/60'
+    blue: 'border-[#2c3d58] hover:border-[#8cc8ff]/60',
+    cyan: 'border-[#2c3d58] hover:border-[#8cc8ff]/60',
+    emerald: 'border-[#2c3d58] hover:border-[#34d399]/60',
+    amber: 'border-[#2c3d58] hover:border-[#fbbf24]/60',
+    rose: 'border-[#2c3d58] hover:border-[#f87171]/60',
+    slate: 'border-[#2c3d58] hover:border-[#3d5172]'
+  }[accent] || 'border-[#2c3d58] hover:border-[#8cc8ff]/60'
 
   const iconBg = {
-    blue: 'bg-[#161f30] text-[#3b82f6] border-[#26354d]',
-    cyan: 'bg-[#161f30] text-[#3b82f6] border-[#26354d]',
-    emerald: 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/30',
-    amber: 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/30',
-    rose: 'bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/30',
-    slate: 'bg-[#161f30] text-[#94a3b8] border-[#26354d]'
-  }[accent] || 'bg-[#161f30] text-[#3b82f6] border-[#26354d]'
+    blue: 'bg-[#1b2b46] text-[#8cc8ff] border-[#2c3d58]',
+    cyan: 'bg-[#1b2b46] text-[#8cc8ff] border-[#2c3d58]',
+    emerald: 'bg-[#34d399]/10 text-[#34d399] border-[#34d399]/30',
+    amber: 'bg-[#fbbf24]/10 text-[#fbbf24] border-[#fbbf24]/30',
+    rose: 'bg-[#f87171]/10 text-[#f87171] border-[#f87171]/30',
+    slate: 'bg-[#1b2b46] text-[#a6b4c9] border-[#2c3d58]'
+  }[accent] || 'bg-[#1b2b46] text-[#8cc8ff] border-[#2c3d58]'
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-[#111827] border p-4 sm:p-5 transition-all duration-150 ${accentBorder} ${className}`}
+      className={`relative overflow-hidden rounded-2xl bg-[#14233d] border p-4 sm:p-5 transition-all duration-150 ${accentBorder} ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1 min-w-0">
-          <p className="text-xs font-sans font-medium uppercase tracking-wider text-slate-400 truncate">
+          <p className="text-xs font-sans font-medium uppercase tracking-wider text-[#a6b4c9] truncate">
             {label}
           </p>
           <div className="flex items-baseline gap-1.5 flex-wrap">
-            <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f9fafb] tracking-tight tabular-nums">
+            <span className="text-2xl sm:text-3xl font-bold font-mono text-[#f4f7fc] tracking-tight tabular-nums">
               {value !== undefined && value !== null ? value : '—'}
             </span>
             {unit && (
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-[#a6b4c9]">
                 {unit}
               </span>
             )}
@@ -63,7 +63,7 @@ export default function MetricCard({
       </div>
 
       {(subtext || badge) && (
-        <div className="mt-3 pt-3 border-t border-[#1e293b] flex items-center justify-between text-xs font-sans text-slate-400">
+        <div className="mt-3 pt-3 border-t border-[#2c3d58] flex items-center justify-between text-xs font-sans text-[#a6b4c9]">
           {subtext && <span className="truncate">{subtext}</span>}
           {badge && <span className="ml-auto shrink-0">{badge}</span>}
         </div>

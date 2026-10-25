@@ -1,36 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  /* Refined Professional Graphite & Neutral Slate Palette */
-  --color-graphite-950: #0b0f17;
-  --color-graphite-900: #111827;
-  --color-graphite-850: #161f30;
-  --color-graphite-800: #1e293b;
-  --color-graphite-700: #334155;
-  --color-graphite-border: #26354d;
+  /* NETPULSE Professional Navy & Light-Blue Design Tokens */
+  --color-brand-bg: #0b1426;
+  --color-brand-card: #14233d;
+  --color-brand-elevated: #1b2b46;
+  --color-brand-accent: #8cc8ff;
+  --color-brand-accent-hover: #a3d5ff;
+  --color-brand-text: #f4f7fc;
+  --color-brand-secondary: #a6b4c9;
+  --color-brand-border: #2c3d58;
 
-  /* Restrained Professional Accents */
-  --color-accent-blue: #3b82f6;
-  --color-accent-blue-hover: #2563eb;
-  --color-accent-teal: #0d9488;
-  
-  /* Semantic States */
-  --color-status-green: #10b981;
-  --color-status-amber: #f59e0b;
-  --color-status-red: #ef4444;
+  /* Semantic State Colors (Restrained) */
+  --color-status-green: #34d399;
+  --color-status-amber: #fbbf24;
+  --color-status-red: #f87171;
 
-  /* Backward Compatible Tokens */
-  --color-noc-950: #0b0f17;
-  --color-noc-900: #111827;
-  --color-noc-800: #1e293b;
-  --color-noc-750: #161f30;
-  --color-noc-700: #334155;
-  --color-noc-border: #26354d;
-  --color-noc-cyan: #3b82f6;
-  --color-noc-blue: #2563eb;
-  --color-noc-emerald: #10b981;
-  --color-noc-amber: #f59e0b;
-  --color-noc-rose: #ef4444;
+  /* Aliases for Full Backward Compatibility Across Components */
+  --color-noc-950: #0b1426;
+  --color-noc-900: #14233d;
+  --color-noc-850: #1b2b46;
+  --color-noc-800: #1b2b46;
+  --color-noc-750: #233554;
+  --color-noc-700: #2c3d58;
+  --color-noc-border: #2c3d58;
+  --color-noc-cyan: #8cc8ff;
+  --color-noc-blue: #8cc8ff;
+  --color-noc-emerald: #34d399;
+  --color-noc-amber: #fbbf24;
+  --color-noc-rose: #f87171;
+
+  --color-graphite-950: #0b1426;
+  --color-graphite-900: #14233d;
+  --color-graphite-850: #1b2b46;
+  --color-graphite-800: #1b2b46;
+  --color-graphite-700: #2c3d58;
+  --color-graphite-border: #2c3d58;
+
+  --color-accent-blue: #8cc8ff;
+  --color-accent-blue-hover: #a3d5ff;
+  --color-accent-teal: #8cc8ff;
 
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -41,42 +50,42 @@
 
 body {
   margin: 0;
-  background-color: #0a0e17;
-  color: #f8fafc;
+  background-color: #0b1426;
+  color: #f4f7fc;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Tabular numerals strictly for telemetry and metrics */
+/* Tabular numerals strictly for telemetry, probabilities, and timer metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Glassmorphic card styling */
+/* Professional Navy Surface Panel */
 .glass-panel {
-  background: rgba(17, 24, 39, 0.75);
+  background: rgba(20, 35, 61, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.45);
+  border: 1px solid #2c3d58;
 }
 
-/* Custom scrollbars */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f17;
+  background: #0b1426;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #2c3d58;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3d5172;
 }

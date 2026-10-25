@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Panel - Reusable dark surface container with consistent header, border and padding
+ * Panel - Professional dark navy surface container with consistent header, border and padding
  */
 export default function Panel({
   title,
@@ -14,22 +14,22 @@ export default function Panel({
 }) {
   return (
     <section
-      className={`rounded-2xl bg-[#111827] border border-[#26354d] overflow-hidden flex flex-col shadow-sm ${className}`}
+      className={`rounded-2xl bg-[#14233d] border border-[#2c3d58] overflow-hidden flex flex-col shadow-sm ${className}`}
     >
       {(title || Icon || actions) && (
-        <div className="px-4 sm:px-5 py-3.5 border-b border-[#26354d] flex items-center justify-between gap-3 bg-[#161f30]">
+        <div className="px-4 sm:px-5 py-3.5 border-b border-[#2c3d58] flex items-center justify-between gap-3 bg-[#1b2b46]">
           <div className="flex items-center gap-2.5 min-w-0">
             {Icon && (
-              <Icon className="w-4 h-4 text-[#3b82f6] shrink-0" aria-hidden="true" />
+              <Icon className="w-4 h-4 text-[#8cc8ff] shrink-0" aria-hidden="true" />
             )}
             <div className="min-w-0">
               {title && (
-                <h2 className="text-sm sm:text-base font-sans font-semibold text-[#f9fafb] tracking-normal truncate">
+                <h2 className="text-sm sm:text-base font-sans font-semibold text-[#f4f7fc] tracking-normal truncate">
                   {title}
                 </h2>
               )}
               {subtitle && (
-                <p className="text-xs text-[#94a3b8] font-sans mt-0.5 truncate">
+                <p className="text-xs text-[#a6b4c9] font-sans mt-0.5 truncate">
                   {subtitle}
                 </p>
               )}

@@ -105,8 +105,8 @@ export class HighwayScene3D {
 
     // 1. Scene & Clean Atmospheric Fog
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(0x080d18)
-    this.scene.fog = new THREE.FogExp2(0x090f1d, 0.0055)
+    this.scene.background = new THREE.Color(0x0b1426)
+    this.scene.fog = new THREE.FogExp2(0x0b1426, 0.005)
 
     // 2. Camera Setup (55 deg FOV for realistic driving perspective)
     this.camera = new THREE.PerspectiveCamera(55, width / height, 0.5, 380)
@@ -123,16 +123,16 @@ export class HighwayScene3D {
 
     // 4. Professional Lighting
     // Ambient light (soft neutral visibility)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55)
     this.scene.add(ambientLight)
 
-    // Hemisphere light: cool twilight sky dome (slate blue) + dark asphalt bounce
-    const hemiLight = new THREE.HemisphereLight(0x94a3b8, 0x0f172a, 0.55)
+    // Hemisphere light: cool navy sky dome + dark road bounce
+    const hemiLight = new THREE.HemisphereLight(0x8cc8ff, 0x0b1426, 0.5)
     hemiLight.position.set(0, 50, 0)
     this.scene.add(hemiLight)
 
-    // Directional moonlight/facility illumination
-    const dirLight = new THREE.DirectionalLight(0xdbeafe, 0.85)
+    // Directional illumination
+    const dirLight = new THREE.DirectionalLight(0xdbeafe, 0.8)
     dirLight.position.set(25, 45, -30)
     this.scene.add(dirLight)
 
@@ -193,7 +193,7 @@ export class HighwayScene3D {
       // 1. Asphalt Highway Surface
       const asphaltGeo = new THREE.PlaneGeometry(this.roadWidth, this.roadSegmentLength)
       const asphaltMat = new THREE.MeshStandardMaterial({
-        color: 0x121824, // Realistic charcoal dark asphalt
+        color: 0x101a2d, // Dark navy charcoal highway
         roughness: 0.85,
         metalness: 0.15
       })
@@ -204,7 +204,7 @@ export class HighwayScene3D {
 
       // 2. Concrete Highway Shoulders
       const shoulderGeo = new THREE.BoxGeometry(1.6, 0.15, this.roadSegmentLength)
-      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x161e2e, roughness: 0.9 })
+      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x14233d, roughness: 0.9 })
 
       const leftShoulder = new THREE.Mesh(shoulderGeo, shoulderMat)
       leftShoulder.position.set(-this.roadWidth / 2 - 0.8, 0.075, 0)
@@ -214,10 +214,10 @@ export class HighwayScene3D {
       rightShoulder.position.set(this.roadWidth / 2 + 0.8, 0.075, 0)
       segGroup.add(rightShoulder)
 
-      // 3. Realistic Concrete / Galvanized Steel Crash Barriers
+      // 3. Realistic Steel Crash Barriers
       const barrierGeo = new THREE.BoxGeometry(0.35, 0.65, this.roadSegmentLength)
       const barrierMat = new THREE.MeshStandardMaterial({
-        color: 0x1f2937,
+        color: 0x1b2b46,
         roughness: 0.5,
         metalness: 0.6
       })
@@ -230,9 +230,9 @@ export class HighwayScene3D {
       rightBarrier.position.set(this.roadWidth / 2 + 1.5, 0.325, 0)
       segGroup.add(rightBarrier)
 
-      // 4. Subtle Blue Retroreflective Safety Markers on Barrier Tops
+      // 4. Subtle Light Blue Retroreflective Safety Markers on Barrier Tops
       const markerGeo = new THREE.BoxGeometry(0.08, 0.1, 0.25)
-      const markerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0x8cc8ff })
 
       for (let z = -this.roadSegmentLength / 2 + 6; z < this.roadSegmentLength / 2; z += 14) {
         const leftMarker = new THREE.Mesh(markerGeo, markerMat)
@@ -246,7 +246,7 @@ export class HighwayScene3D {
 
       // 5. Solid White Highway Edge Lines
       const edgeLineGeo = new THREE.PlaneGeometry(0.18, this.roadSegmentLength)
-      const whiteLineMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9 })
+      const whiteLineMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
 
       const leftEdgeLine = new THREE.Mesh(edgeLineGeo, whiteLineMat)
       leftEdgeLine.rotation.x = -Math.PI / 2
@@ -271,8 +271,8 @@ export class HighwayScene3D {
       }
 
       // 7. Modern Highway Streetlight Poles
-      const poleMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 })
-      const lampHeadMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0x2c3d58, metalness: 0.8, roughness: 0.3 })
+      const lampHeadMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
 
       for (let z = -this.roadSegmentLength / 2 + 20; z < this.roadSegmentLength / 2; z += 44) {
         // Left Pole
@@ -323,27 +323,27 @@ export class HighwayScene3D {
     const car = new THREE.Group()
 
     // 1. Core Materials
-    // Titanium / Metallic Graphite Hull (#252E3D)
+    // Elevated Navy Hull (#1B2B46)
     const titaniumMat = new THREE.MeshStandardMaterial({
-      color: 0x242b35,
-      roughness: 0.28,
-      metalness: 0.85
+      color: 0x1b2b46,
+      roughness: 0.32,
+      metalness: 0.75
     })
 
-    // Technical Sapphire Accent (#1D4ED8)
+    // Primary Light Blue Accent (#8CC8FF)
     const sapphireMat = new THREE.MeshStandardMaterial({
-      color: 0x1d4ed8,
-      emissive: 0x1e40af,
+      color: 0x8cc8ff,
+      emissive: 0x4a9be0,
       emissiveIntensity: 0.35,
       roughness: 0.2,
       metalness: 0.8
     })
 
-    // Dark Carbon Fiber Aero Trim
+    // Dark Divider Trim (#14233D)
     const carbonMat = new THREE.MeshStandardMaterial({
-      color: 0x0f172a,
-      roughness: 0.45,
-      metalness: 0.6
+      color: 0x14233d,
+      roughness: 0.5,
+      metalness: 0.5
     })
 
     // Tinted Greenhouse Canopy Glass
@@ -354,10 +354,10 @@ export class HighwayScene3D {
     })
 
     // Front Integrated LED Headlights
-    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
 
     // Full-Width Red LED Taillight Bar
-    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xff1744 })
+    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xf87171 })
 
     // 2. Sculpted Chassis Panels
     // Lower Chassis Floor & Carbon Side Skirts (y: 0.16 to 0.42)
@@ -459,8 +459,8 @@ export class HighwayScene3D {
     taillightBar.position.set(0, 0.64, 2.12)
     car.add(taillightBar)
 
-    // Subtle Technical Sapphire Underglow (Grounds car to asphalt)
-    const underglow = new THREE.PointLight(0x2563eb, 1.8, 4.5, 1.2)
+    // Subtle Light Blue Underglow
+    const underglow = new THREE.PointLight(0x8cc8ff, 1.4, 4.0, 1.2)
     underglow.position.set(0, 0.18, 0)
     car.add(underglow)
 
@@ -472,11 +472,11 @@ export class HighwayScene3D {
 
     const rimGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.29, 20)
     rimGeo.rotateZ(Math.PI / 2)
-    const rimMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.25, metalness: 0.85 })
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0x2c3d58, roughness: 0.25, metalness: 0.85 })
 
     const hubGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.31, 16)
     hubGeo.rotateZ(Math.PI / 2)
-    const hubMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.2, metalness: 0.8 })
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0x8cc8ff, roughness: 0.2, metalness: 0.8 })
 
     const wheelPositions = [
       [-0.98, 0.34, -1.35], // Front-Left
@@ -514,14 +514,14 @@ export class HighwayScene3D {
    */
   buildCampusSkyline() {
     const buildingMat = new THREE.MeshStandardMaterial({
-      color: 0x0c1322,
-      roughness: 0.4,
-      metalness: 0.65
+      color: 0x14233d,
+      roughness: 0.45,
+      metalness: 0.6
     })
 
-    const winWhiteMat = new THREE.MeshBasicMaterial({ color: 0xdbeafe })
-    const winBlueMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
-    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xef4444 })
+    const winWhiteMat = new THREE.MeshBasicMaterial({ color: 0xf4f7fc })
+    const winBlueMat = new THREE.MeshBasicMaterial({ color: 0x8cc8ff })
+    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xf87171 })
 
     for (let i = 0; i < 20; i++) {
       const side = i % 2 === 0 ? 1 : -1
@@ -579,10 +579,10 @@ export class HighwayScene3D {
 
     // Realistic vehicle specifications
     const trafficConfigs = [
-      { type: 'sedan', color: 0x1e293b, length: 4.2, width: 1.85, height: 1.35, speed: 72 }, // Obsidian Slate Sedan
-      { type: 'coupe', color: 0x1e3a8a, length: 3.9, width: 1.82, height: 1.25, speed: 78 }, // Sapphire Coupe
-      { type: 'van',   color: 0x334155, length: 4.8, width: 2.0,  height: 1.75, speed: 68 }, // NOC Service Van
-      { type: 'sedan', color: 0xe2e8f0, length: 4.2, width: 1.85, height: 1.35, speed: 74 }  // Platinum Sedan
+      { type: 'sedan', color: 0x14233d, length: 4.2, width: 1.85, height: 1.35, speed: 72 }, // Dark Navy Sedan
+      { type: 'coupe', color: 0x1b2b46, length: 3.9, width: 1.82, height: 1.25, speed: 78 }, // Elevated Navy Coupe
+      { type: 'van',   color: 0x2c3d58, length: 4.8, width: 2.0,  height: 1.75, speed: 68 }, // Slate Service Van
+      { type: 'sedan', color: 0x233554, length: 4.2, width: 1.85, height: 1.35, speed: 74 }  // Steel Sedan
     ]
 
     trafficConfigs.forEach((cfg, idx) => {
@@ -700,14 +700,14 @@ export class HighwayScene3D {
     this.telemetryPackets = []
 
     const packetMat = new THREE.MeshStandardMaterial({
-      color: 0x00f0ff,
-      emissive: 0x0284c7,
-      emissiveIntensity: 0.85,
-      roughness: 0.1,
-      metalness: 0.9
+      color: 0x8cc8ff,
+      emissive: 0x38bdf8,
+      emissiveIntensity: 0.65,
+      roughness: 0.2,
+      metalness: 0.8
     })
 
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.6 })
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x8cc8ff, transparent: true, opacity: 0.5 })
 
     for (let i = 0; i < 5; i++) {
       const lane = (i * 2 + 1) % 4
@@ -724,7 +724,7 @@ export class HighwayScene3D {
       pGroup.add(ringMesh)
 
       // Soft road bounce light
-      const pLight = new THREE.PointLight(0x00f0ff, 1.2, 3.2, 1.2)
+      const pLight = new THREE.PointLight(0x8cc8ff, 1.0, 3.0, 1.2)
       pLight.position.y = 0.1
       pGroup.add(pLight)
 
