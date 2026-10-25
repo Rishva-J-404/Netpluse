@@ -185,23 +185,30 @@ export class HighwayCanvasFallback {
     ctx.lineWidth = 2
     ctx.stroke()
 
-    // Left Guardrail: Electric Cyan Neon Rail (#00f0ff)
+    // Left Crash Barrier with subtle blue retroreflectors
     ctx.save()
-    ctx.shadowColor = '#00f0ff'
-    ctx.shadowBlur = 8
-    ctx.strokeStyle = '#00f0ff'
-    ctx.lineWidth = 3.5
+    ctx.strokeStyle = '#1e293b'
+    ctx.lineWidth = 4
     ctx.beginPath()
     ctx.moveTo(roadTopX, horizonY)
     ctx.lineTo(roadBottomX, h)
     ctx.stroke()
 
-    // Right Guardrail: Electric Neon Violet Rail (#a855f7)
-    ctx.shadowColor = '#a855f7'
-    ctx.strokeStyle = '#a855f7'
+    // Right Crash Barrier with subtle blue retroreflectors
+    ctx.strokeStyle = '#1e293b'
     ctx.beginPath()
     ctx.moveTo(roadTopX + roadTopWidth, horizonY)
     ctx.lineTo(roadBottomX + roadBottomWidth, h)
+    ctx.stroke()
+
+    // Blue retroreflectors along barrier tops
+    ctx.strokeStyle = '#38bdf8'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(roadTopX - 2, horizonY)
+    ctx.lineTo(roadBottomX - 4, h)
+    ctx.moveTo(roadTopX + roadTopWidth + 2, horizonY)
+    ctx.lineTo(roadBottomX + roadBottomWidth + 4, h)
     ctx.stroke()
     ctx.restore()
 

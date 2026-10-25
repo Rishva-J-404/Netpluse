@@ -16,16 +16,18 @@ export function isWebGLAvailable() {
 }
 
 /**
- * HighwayScene3D - Production-Grade Vibrant Network Highway Simulator
+ * HighwayScene3D - Professional 3D Driving Simulator for NETPULSE
+ * Course: Probability and Statistics for Computer Science (25CS203)
  * 
  * Features:
- * - Cyber nocturnal atmosphere with starry sky dome and dynamic horizon haze
- * - Futuristic server city skyline with multi-colored glowing window matrices & beacon spires
- * - High-intensity neon highway rails (cyan left, violet right) and animated fiber pulses
- * - Vibrant electric sapphire metallic player interceptor with dual LED headlights, underglow & taillights
- * - Multi-colored AI traffic vehicles with functional lights
- * - Multi-spectrum glowing telemetry crystals (cyan, emerald, gold, purple)
- * - Centered chase camera tracking and realistic turn banking
+ * - Approved "Modern NOC Titanium & Technical Sapphire" high-fidelity interceptor vehicle
+ * - Balanced third-person chase camera with smooth follow damping and panoramic forward road view
+ * - Realistic 4-lane dark asphalt highway with correct proportions, lane dividers, and crash barriers
+ * - Highway streetlights and distant NOC server campus skyline with blinking communication towers
+ * - Realistic AI traffic vehicles with proper automotive styling, wheels, and taillights (NO placeholder cubes)
+ * - Purposeful Network Telemetry Data Packets (hovering data units, NO giant rings or floating diamonds)
+ * - Intelligent highway electronic gantries displaying statistical decision gates
+ * - Responsive, grounded vehicle physics with automatic highway cruising speed (85 km/h)
  */
 export class HighwayScene3D {
   constructor({ container, onTelemetryUpdate, onCheckpointReached, onCollision, onCollectPacket }) {
@@ -39,28 +41,32 @@ export class HighwayScene3D {
     this.isPaused = false
     this.animationFrameId = null
 
-    // 4 Lanes: centered around X=0
-    // Lane 0: -4.5 (Leftmost), Lane 1: -1.5 (Center-Left), Lane 2: +1.5 (Center-Right), Lane 3: +4.5 (Rightmost)
-    this.laneX = [-4.5, -1.5, 1.5, 4.5]
-    this.roadWidth = 14
-    this.roadSegmentLength = 200
+    // 4 Distinct Highway Lanes: each 3.6m wide (Total width = 14.4m)
+    // Lane 0: -5.4m | Lane 1: -1.8m | Lane 2: +1.8m | Lane 3: +5.4m
+    this.laneX = [-5.4, -1.8, 1.8, 5.4]
+    this.laneWidth = 3.6
+    this.roadWidth = 14.4
+    this.roadSegmentLength = 220
 
     // Vehicle physics state
     this.vehicle = {
-      x: -1.5, // Start in Lane 1 (Center-Left)
-      z: 0,
-      vx: 0,
-      vz: 0,
-      speedKmh: 85,
-      targetSpeedKmh: 90,
-      maxSpeedKmh: 180,
-      acceleration: 48,
-      braking: 85,
-      handling: 15,
+      x: -1.8, // Start centered in Lane 1
+      z: 0.0,
+      vx: 0.0,
+      vz: 0.0,
+      speedKmh: 85, // Default active highway cruising velocity
+      targetSpeedKmh: 85,
+      maxSpeedKmh: 175,
+      minSpeedKmh: 30,
+      acceleration: 52,
+      braking: 80,
+      handling: 16.5,
+      width: 1.95,
+      length: 4.3,
       mesh: null,
       wheels: [],
-      recoveryTimer: 0,
-      steerAngle: 0,
+      recoveryTimer: 0.0,
+      steerAngle: 0.0,
       laneIndex: 1
     }
 
@@ -73,22 +79,22 @@ export class HighwayScene3D {
       handbrake: false
     }
 
-    // Checkpoint & Game State
+    // Mission & checkpoint state
     this.distanceToNextCheckpoint = 400
     this.checkpointTargetZ = -400
-    this.checkpointOptions = []
-    this.checkpointActive = false
+    this.checkpointOptions = ['1.2', '2.4', '3.2', '0.8']
+    this.checkpointActive = true
     this.cameraMode = 'CHASE' // 'CHASE' | 'HOOD' | 'ORBIT'
     this.score = 0
     this.packetsCollected = 0
 
-    // Environment Collections
+    // Scene collections
     this.roadSegments = []
-    this.serverBuildings = []
+    this.streetlights = []
+    this.skylineBuildings = []
     this.trafficVehicles = []
-    this.collectibles = []
-    this.fiberPulses = []
-    this.starfield = null
+    this.telemetryPackets = []
+    this.checkpointGantry = null
 
     this.init()
   }
@@ -97,48 +103,48 @@ export class HighwayScene3D {
     const width = this.container.clientWidth || 800
     const height = this.container.clientHeight || 500
 
-    // 1. Scene, Atmospheric Fog & Skybox
+    // 1. Scene & Clean Atmospheric Fog
     this.scene = new THREE.Scene()
-    this.scene.background = new THREE.Color(0x070c18)
-    this.scene.fog = new THREE.FogExp2(0x0a1020, 0.0075)
+    this.scene.background = new THREE.Color(0x080d18)
+    this.scene.fog = new THREE.FogExp2(0x090f1d, 0.0055)
 
-    // 2. Camera: looks along -Z (Screen-left is -X, screen-right is +X)
-    this.camera = new THREE.PerspectiveCamera(65, width / height, 0.5, 350)
-    this.camera.position.set(this.vehicle.x, 3.8, 7.5)
-    this.camera.lookAt(this.vehicle.x, 1.2, -12)
+    // 2. Camera Setup (55 deg FOV for realistic driving perspective)
+    this.camera = new THREE.PerspectiveCamera(55, width / height, 0.5, 380)
+    this.camera.position.set(this.vehicle.x * 0.85, 2.45, this.vehicle.z + 6.4)
+    this.camera.lookAt(this.vehicle.x * 0.4, 0.95, this.vehicle.z - 18)
 
     // 3. WebGL Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
     this.renderer.setSize(width, height)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-    this.renderer.toneMappingExposure = 1.15
+    this.renderer.toneMappingExposure = 1.05
     this.container.appendChild(this.renderer.domElement)
 
-    // 4. Vibrant Atmospheric Lighting
-    // Ambient fill
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45)
+    // 4. Professional Lighting
+    // Ambient light (soft neutral visibility)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
     this.scene.add(ambientLight)
 
-    // Hemisphere light: Celestial sky glow (cyan-blue) + asphalt bounce (deep slate)
-    const hemiLight = new THREE.HemisphereLight(0x38bdf8, 0x0f172a, 0.65)
+    // Hemisphere light: cool twilight sky dome (slate blue) + dark asphalt bounce
+    const hemiLight = new THREE.HemisphereLight(0x94a3b8, 0x0f172a, 0.55)
     hemiLight.position.set(0, 50, 0)
     this.scene.add(hemiLight)
 
-    // Directional moonlight/cyber lighting
-    const dirLight = new THREE.DirectionalLight(0x93c5fd, 0.9)
-    dirLight.position.set(25, 45, -25)
+    // Directional moonlight/facility illumination
+    const dirLight = new THREE.DirectionalLight(0xdbeafe, 0.85)
+    dirLight.position.set(25, 45, -30)
     this.scene.add(dirLight)
 
-    // 5. Build Environment & World
-    this.buildStarfield()
-    this.buildRoad()
-    this.buildPlayerVehicle()
-    this.buildEnvironmentScenery()
+    // 5. Construct Environment & World
+    this.buildSkyBackground()
+    this.buildHighway()
+    this.buildPlayerCar()
+    this.buildCampusSkyline()
     this.spawnInitialTraffic()
-    this.spawnCollectibles()
+    this.spawnTelemetryPackets()
 
-    // 6. Handle Window Resizing
+    // 6. Window resize handler
     this.handleResize = () => {
       if (!this.container) return
       const w = this.container.clientWidth
@@ -150,673 +156,684 @@ export class HighwayScene3D {
       }
     }
     window.addEventListener('resize', this.handleResize)
+
+    // 7. Initial render pass
     this.renderer.render(this.scene, this.camera)
   }
 
-  buildStarfield() {
-    // 500 twinkling star particles in the upper sky dome
-    const starCount = 500
+  buildSkyBackground() {
+    // Subtle starfield in upper celestial hemisphere
+    const starCount = 350
     const starGeo = new THREE.BufferGeometry()
     const positions = new Float32Array(starCount * 3)
-    const colors = new Float32Array(starCount * 3)
-
-    const palette = [
-      new THREE.Color(0x38bdf8), // Cyan
-      new THREE.Color(0x818cf8), // Indigo
-      new THREE.Color(0xa78bfa), // Violet
-      new THREE.Color(0xf8fafc)  // White
-    ]
 
     for (let i = 0; i < starCount; i++) {
-      const idx = i * 3
-      positions[idx] = (Math.random() - 0.5) * 350
-      positions[idx + 1] = 25 + Math.random() * 80
-      positions[idx + 2] = -200 + Math.random() * 400
-
-      const c = palette[Math.floor(Math.random() * palette.length)]
-      colors[idx] = c.r
-      colors[idx + 1] = c.g
-      colors[idx + 2] = c.b
+      positions[i * 3] = (Math.random() - 0.5) * 360
+      positions[i * 3 + 1] = 20 + Math.random() * 80
+      positions[i * 3 + 2] = -220 + Math.random() * 400
     }
 
     starGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    starGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-
     const starMat = new THREE.PointsMaterial({
-      size: 1.4,
-      vertexColors: true,
+      color: 0x93c5fd,
+      size: 1.1,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.75
     })
 
     this.starfield = new THREE.Points(starGeo, starMat)
     this.scene.add(this.starfield)
   }
 
-  buildRoad() {
-    // 2 segments for continuous scrolling along -Z
-    for (let i = 0; i < 2; i++) {
-      const group = new THREE.Group()
+  buildHighway() {
+    // 2 looping road segments for seamless scrolling
+    for (let s = 0; s < 2; s++) {
+      const segGroup = new THREE.Group()
 
-      // Asphalt base with refined slate texture
-      const roadGeo = new THREE.PlaneGeometry(this.roadWidth, this.roadSegmentLength)
-      const roadMat = new THREE.MeshStandardMaterial({
-        color: 0x0d1525,
-        roughness: 0.75,
-        metalness: 0.25
+      // 1. Asphalt Highway Surface
+      const asphaltGeo = new THREE.PlaneGeometry(this.roadWidth, this.roadSegmentLength)
+      const asphaltMat = new THREE.MeshStandardMaterial({
+        color: 0x121824, // Realistic charcoal dark asphalt
+        roughness: 0.85,
+        metalness: 0.15
       })
-      const roadMesh = new THREE.Mesh(roadGeo, roadMat)
-      roadMesh.rotation.x = -Math.PI / 2
-      roadMesh.position.y = 0
-      group.add(roadMesh)
+      const asphaltMesh = new THREE.Mesh(asphaltGeo, asphaltMat)
+      asphaltMesh.rotation.x = -Math.PI / 2
+      asphaltMesh.position.y = 0.0
+      segGroup.add(asphaltMesh)
 
-      // Outer highway terrain shoulders
-      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x080e1a, roughness: 0.9 })
-      const leftShoulder = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.35, this.roadSegmentLength), shoulderMat)
-      leftShoulder.position.set(-this.roadWidth / 2 - 1.0, 0.17, 0)
-      group.add(leftShoulder)
+      // 2. Concrete Highway Shoulders
+      const shoulderGeo = new THREE.BoxGeometry(1.6, 0.15, this.roadSegmentLength)
+      const shoulderMat = new THREE.MeshStandardMaterial({ color: 0x161e2e, roughness: 0.9 })
 
-      const rightShoulder = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.35, this.roadSegmentLength), shoulderMat)
-      rightShoulder.position.set(this.roadWidth / 2 + 1.0, 0.17, 0)
-      group.add(rightShoulder)
+      const leftShoulder = new THREE.Mesh(shoulderGeo, shoulderMat)
+      leftShoulder.position.set(-this.roadWidth / 2 - 0.8, 0.075, 0)
+      segGroup.add(leftShoulder)
 
-      // Vibrant Neon Guardrail Light Rails
-      // Left edge: Electric Cyan Neon Rail (#00f0ff)
-      const leftRailMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-      const leftRail = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.25, this.roadSegmentLength), leftRailMat)
-      leftRail.position.set(-this.roadWidth / 2, 0.35, 0)
-      group.add(leftRail)
+      const rightShoulder = new THREE.Mesh(shoulderGeo, shoulderMat)
+      rightShoulder.position.set(this.roadWidth / 2 + 0.8, 0.075, 0)
+      segGroup.add(rightShoulder)
 
-      // Right edge: Electric Neon Violet Rail (#a855f7)
-      const rightRailMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 })
-      const rightRail = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.25, this.roadSegmentLength), rightRailMat)
-      rightRail.position.set(this.roadWidth / 2, 0.35, 0)
-      group.add(rightRail)
+      // 3. Realistic Concrete / Galvanized Steel Crash Barriers
+      const barrierGeo = new THREE.BoxGeometry(0.35, 0.65, this.roadSegmentLength)
+      const barrierMat = new THREE.MeshStandardMaterial({
+        color: 0x1f2937,
+        roughness: 0.5,
+        metalness: 0.6
+      })
 
-      // Glowing dashed lane dividers (bright electric white/cyan)
-      const dashMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe })
+      const leftBarrier = new THREE.Mesh(barrierGeo, barrierMat)
+      leftBarrier.position.set(-this.roadWidth / 2 - 1.5, 0.325, 0)
+      segGroup.add(leftBarrier)
+
+      const rightBarrier = new THREE.Mesh(barrierGeo, barrierMat)
+      rightBarrier.position.set(this.roadWidth / 2 + 1.5, 0.325, 0)
+      segGroup.add(rightBarrier)
+
+      // 4. Subtle Blue Retroreflective Safety Markers on Barrier Tops
+      const markerGeo = new THREE.BoxGeometry(0.08, 0.1, 0.25)
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+
+      for (let z = -this.roadSegmentLength / 2 + 6; z < this.roadSegmentLength / 2; z += 14) {
+        const leftMarker = new THREE.Mesh(markerGeo, markerMat)
+        leftMarker.position.set(-this.roadWidth / 2 - 1.45, 0.68, z)
+        segGroup.add(leftMarker)
+
+        const rightMarker = new THREE.Mesh(markerGeo, markerMat)
+        rightMarker.position.set(this.roadWidth / 2 + 1.45, 0.68, z)
+        segGroup.add(rightMarker)
+      }
+
+      // 5. Solid White Highway Edge Lines
+      const edgeLineGeo = new THREE.PlaneGeometry(0.18, this.roadSegmentLength)
+      const whiteLineMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9 })
+
+      const leftEdgeLine = new THREE.Mesh(edgeLineGeo, whiteLineMat)
+      leftEdgeLine.rotation.x = -Math.PI / 2
+      leftEdgeLine.position.set(-this.roadWidth / 2 + 0.15, 0.015, 0)
+      segGroup.add(leftEdgeLine)
+
+      const rightEdgeLine = new THREE.Mesh(edgeLineGeo, whiteLineMat)
+      rightEdgeLine.rotation.x = -Math.PI / 2
+      rightEdgeLine.position.set(this.roadWidth / 2 - 0.15, 0.015, 0)
+      segGroup.add(rightEdgeLine)
+
+      // 6. Dashed White Lane Dividers (3 dividers separating 4 lanes)
+      const dashGeo = new THREE.PlaneGeometry(0.16, 3.2)
       for (let l = 1; l <= 3; l++) {
-        const lx = -this.roadWidth / 2 + (this.roadWidth / 4) * l
-        for (let z = -this.roadSegmentLength / 2; z < this.roadSegmentLength / 2; z += 6) {
-          const dash = new THREE.Mesh(new THREE.PlaneGeometry(0.18, 3.2), dashMat)
+        const lx = -this.roadWidth / 2 + this.laneWidth * l
+        for (let z = -this.roadSegmentLength / 2; z < this.roadSegmentLength / 2; z += 7.5) {
+          const dash = new THREE.Mesh(dashGeo, whiteLineMat)
           dash.rotation.x = -Math.PI / 2
-          dash.position.set(lx, 0.02, z)
-          group.add(dash)
+          dash.position.set(lx, 0.015, z)
+          segGroup.add(dash)
         }
       }
 
-      // Animated fiber pulse markers along the rails
-      for (let p = 0; p < 8; p++) {
-        const pulseMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
-        const pulseMesh = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 8), pulseMat)
-        pulseMesh.position.set(
-          p % 2 === 0 ? -this.roadWidth / 2 : this.roadWidth / 2,
-          0.45,
-          -this.roadSegmentLength / 2 + p * 25
-        )
-        group.add(pulseMesh)
-        this.fiberPulses.push(pulseMesh)
+      // 7. Modern Highway Streetlight Poles
+      const poleMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.3 })
+      const lampHeadMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
+
+      for (let z = -this.roadSegmentLength / 2 + 20; z < this.roadSegmentLength / 2; z += 44) {
+        // Left Pole
+        const poleLeft = new THREE.Group()
+        const mastL = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.14, 7.5, 12), poleMat)
+        mastL.position.y = 3.75
+        poleLeft.add(mastL)
+
+        const armL = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 0.1), poleMat)
+        armL.position.set(1.2, 7.4, 0)
+        poleLeft.add(armL)
+
+        const lampL = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.08, 0.25), lampHeadMat)
+        lampL.position.set(2.4, 7.35, 0)
+        poleLeft.add(lampL)
+
+        poleLeft.position.set(-this.roadWidth / 2 - 2.6, 0, z)
+        segGroup.add(poleLeft)
+
+        // Right Pole
+        const poleRight = new THREE.Group()
+        const mastR = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.14, 7.5, 12), poleMat)
+        mastR.position.y = 3.75
+        poleRight.add(mastR)
+
+        const armR = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.1, 0.1), poleMat)
+        armR.position.set(-1.2, 7.4, 0)
+        poleRight.add(armR)
+
+        const lampR = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.08, 0.25), lampHeadMat)
+        lampR.position.set(-2.4, 7.35, 0)
+        poleRight.add(lampR)
+
+        poleRight.position.set(this.roadWidth / 2 + 2.6, 0, z + 22)
+        segGroup.add(poleRight)
       }
 
-      group.position.z = -i * this.roadSegmentLength
-      this.scene.add(group)
-      this.roadSegments.push(group)
+      segGroup.position.z = -s * this.roadSegmentLength
+      this.scene.add(segGroup)
+      this.roadSegments.push(segGroup)
     }
   }
 
-  buildPlayerVehicle() {
-    const carGroup = new THREE.Group()
+  /**
+   * Build Player Car: Modern NOC Titanium & Technical Sapphire Interceptor
+   */
+  buildPlayerCar() {
+    const car = new THREE.Group()
 
-    // 1. Materials
-    // Vibrant Electric Sapphire Metallic Body (#2563EB)
-    const sapphireBodyMat = new THREE.MeshStandardMaterial({
+    // 1. Core Materials
+    // Titanium / Metallic Graphite Hull (#252E3D)
+    const titaniumMat = new THREE.MeshStandardMaterial({
+      color: 0x242b35,
+      roughness: 0.28,
+      metalness: 0.85
+    })
+
+    // Technical Sapphire Accent (#1D4ED8)
+    const sapphireMat = new THREE.MeshStandardMaterial({
       color: 0x1d4ed8,
-      emissive: 0x1e3a8a,
-      emissiveIntensity: 0.25,
-      roughness: 0.15,
-      metalness: 0.88
+      emissive: 0x1e40af,
+      emissiveIntensity: 0.35,
+      roughness: 0.2,
+      metalness: 0.8
     })
 
-    // Gloss Carbon Fiber Skirts & Splitters
-    const carbonSkirtMat = new THREE.MeshStandardMaterial({
+    // Dark Carbon Fiber Aero Trim
+    const carbonMat = new THREE.MeshStandardMaterial({
       color: 0x0f172a,
-      roughness: 0.35,
-      metalness: 0.7
+      roughness: 0.45,
+      metalness: 0.6
     })
 
-    // Radiant Cyan Racing Decals & Trim (#00f0ff)
-    const neonCyanTrimMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-    const whiteStripeMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
-
-    // Aerodynamic Tinted Canopy Glass
-    const glassCanopyMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0f172a,
-      transparent: true,
-      opacity: 0.75,
-      roughness: 0.04,
-      metalness: 0.95,
-      reflectivity: 0.95
+    // Tinted Greenhouse Canopy Glass
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0x070c14,
+      roughness: 0.08,
+      metalness: 0.95
     })
 
-    // High-Intensity Forward LED Headlights
-    const ledHeadlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
+    // Front Integrated LED Headlights
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
 
-    // Full-Width Radiant Red Taillight Bar
-    const tailLedMat = new THREE.MeshBasicMaterial({ color: 0xff1744 })
+    // Full-Width Red LED Taillight Bar
+    const taillightMat = new THREE.MeshBasicMaterial({ color: 0xff1744 })
 
-    // 2. Chassis Geometries
-    // Lower Carbon Skirt
-    const lowerBody = new THREE.Mesh(new THREE.BoxGeometry(2.14, 0.45, 4.4), carbonSkirtMat)
-    lowerBody.position.y = 0.48
-    carGroup.add(lowerBody)
+    // 2. Sculpted Chassis Panels
+    // Lower Chassis Floor & Carbon Side Skirts (y: 0.16 to 0.42)
+    const lowerChassis = new THREE.Mesh(new THREE.BoxGeometry(1.92, 0.24, 4.3), carbonMat)
+    lowerChassis.position.y = 0.28
+    car.add(lowerChassis)
 
-    // Main Sapphire Upper Body
-    const upperBody = new THREE.Mesh(new THREE.BoxGeometry(2.02, 0.42, 3.8), sapphireBodyMat)
-    upperBody.position.set(0, 0.76, -0.1)
-    carGroup.add(upperBody)
+    // Aerodynamic Front Splitter (Front points along -Z)
+    const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.08, 0.5), carbonMat)
+    frontSplitter.position.set(0, 0.16, -2.15)
+    car.add(frontSplitter)
 
-    // Aerodynamic Front Splitter (Front points towards -Z)
-    const frontSplitter = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.12, 0.7), carbonSkirtMat)
-    frontSplitter.position.set(0, 0.32, -2.3)
-    carGroup.add(frontSplitter)
+    // Rear Carbon Diffuser with Strakes
+    const rearDiffuser = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.12, 0.4), carbonMat)
+    rearDiffuser.position.set(0, 0.2, 2.15)
+    car.add(rearDiffuser)
 
-    // Rear Carbon Diffuser
-    const rearDiffuser = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.15, 0.45), carbonSkirtMat)
-    rearDiffuser.position.set(0, 0.32, 2.22)
-    carGroup.add(rearDiffuser)
+    // Main Metallic Graphite Body Hull (y: 0.40 to 0.78)
+    const mainBody = new THREE.Mesh(new THREE.BoxGeometry(1.88, 0.38, 3.8), titaniumMat)
+    mainBody.position.set(0, 0.55, -0.05)
+    car.add(mainBody)
 
-    // Sport GT Rear Wing Spoiler
-    const spoilerWing = new THREE.Mesh(new THREE.BoxGeometry(1.95, 0.08, 0.42), sapphireBodyMat)
-    spoilerWing.position.set(0, 1.34, 1.95)
-    carGroup.add(spoilerWing)
+    // Sculpted Hood Slope
+    const hoodSlope = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.24, 1.2), titaniumMat)
+    hoodSlope.position.set(0, 0.56, -1.35)
+    hoodSlope.rotation.x = Math.PI / 16
+    car.add(hoodSlope)
 
-    // Spoiler Endplates (Neon Cyan accents)
-    const leftEndplate = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.22, 0.46), neonCyanTrimMat)
-    leftEndplate.position.set(-0.98, 1.35, 1.95)
-    carGroup.add(leftEndplate)
+    // Sculpted Rear Deck
+    const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.22, 0.9), titaniumMat)
+    rearDeck.position.set(0, 0.58, 1.35)
+    car.add(rearDeck)
 
-    const rightEndplate = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.22, 0.46), neonCyanTrimMat)
-    rightEndplate.position.set(0.98, 1.35, 1.95)
-    carGroup.add(rightEndplate)
+    // 3. Technical Sapphire Racing Accents
+    // Twin Racing Stripes along the center hood
+    const stripeLeft = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 2.2), sapphireMat)
+    stripeLeft.position.set(-0.25, 0.74, -0.85)
+    car.add(stripeLeft)
 
-    // Spoiler Carbon Pylons
-    const pylonGeo = new THREE.BoxGeometry(0.06, 0.35, 0.16)
-    const leftPylon = new THREE.Mesh(pylonGeo, carbonSkirtMat)
-    leftPylon.position.set(-0.72, 1.15, 1.95)
-    carGroup.add(leftPylon)
+    const stripeRight = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.03, 2.2), sapphireMat)
+    stripeRight.position.set(0.25, 0.74, -0.85)
+    car.add(stripeRight)
 
-    const rightPylon = new THREE.Mesh(pylonGeo, carbonSkirtMat)
-    rightPylon.position.set(0.72, 1.15, 1.95)
-    carGroup.add(rightPylon)
+    // Side Aero Blades in Sapphire Blue
+    const leftAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.6), sapphireMat)
+    leftAeroBlade.position.set(-0.96, 0.32, 0)
+    car.add(leftAeroBlade)
 
-    // 3. Cockpit Glass Canopy
-    const cabinCore = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.5, 1.9), glassCanopyMat)
-    cabinCore.position.set(0, 1.2, 0.2)
-    carGroup.add(cabinCore)
+    const rightAeroBlade = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.08, 2.6), sapphireMat)
+    rightAeroBlade.position.set(0.96, 0.32, 0)
+    car.add(rightAeroBlade)
 
-    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.48, 0.8), glassCanopyMat)
-    windshield.position.set(0, 1.1, -0.72)
-    windshield.rotation.x = Math.PI / 6.5
-    carGroup.add(windshield)
+    // Integrated Low-Profile Rear Spoiler Wing
+    const spoilerWing = new THREE.Mesh(new THREE.BoxGeometry(1.76, 0.06, 0.35), titaniumMat)
+    spoilerWing.position.set(0, 0.95, 1.95)
+    car.add(spoilerWing)
 
-    const rearWindow = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.44, 0.8), glassCanopyMat)
-    rearWindow.position.set(0, 1.08, 1.1)
-    rearWindow.rotation.x = -Math.PI / 7.5
-    carGroup.add(rearWindow)
+    // Sapphire Spoiler Accent Lip
+    const spoilerLip = new THREE.Mesh(new THREE.BoxGeometry(1.74, 0.03, 0.08), sapphireMat)
+    spoilerLip.position.set(0, 0.98, 2.1)
+    car.add(spoilerLip)
 
-    // Interior Cyber HUD Dashboard Glow
-    const dashHUD = new THREE.Mesh(
-      new THREE.BoxGeometry(0.85, 0.08, 0.14),
-      new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-    )
-    dashHUD.position.set(0, 1.02, -0.5)
-    carGroup.add(dashHUD)
+    // Spoiler Struts
+    const strutL = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.25, 0.12), carbonMat)
+    strutL.position.set(-0.6, 0.82, 1.95)
+    car.add(strutL)
 
-    // 4. Vibrant Dual Racing Stripes (White core with Cyan pinstripes)
-    const whiteStripeGeo = new THREE.BoxGeometry(0.14, 0.04, 2.05)
-    const leftWhiteStripe = new THREE.Mesh(whiteStripeGeo, whiteStripeMat)
-    leftWhiteStripe.position.set(-0.32, 0.96, -1.0)
-    carGroup.add(leftWhiteStripe)
+    const strutR = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.25, 0.12), carbonMat)
+    strutR.position.set(0.6, 0.82, 1.95)
+    car.add(strutR)
 
-    const rightWhiteStripe = new THREE.Mesh(whiteStripeGeo, whiteStripeMat)
-    rightWhiteStripe.position.set(0.32, 0.96, -1.0)
-    carGroup.add(rightWhiteStripe)
+    // 4. Aerodynamic Fastback Greenhouse / Cockpit Canopy
+    const greenhouse = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.4, 1.7), glassMat)
+    greenhouse.position.set(0, 0.92, 0.1)
+    car.add(greenhouse)
 
-    const cyanPinstripeGeo = new THREE.BoxGeometry(0.04, 0.045, 2.05)
-    const leftCyanStripe = new THREE.Mesh(cyanPinstripeGeo, neonCyanTrimMat)
-    leftCyanStripe.position.set(-0.42, 0.96, -1.0)
-    carGroup.add(leftCyanStripe)
+    const windshield = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.38, 0.75), glassMat)
+    windshield.position.set(0, 0.85, -0.72)
+    windshield.rotation.x = Math.PI / 5.5
+    car.add(windshield)
 
-    const rightCyanStripe = new THREE.Mesh(cyanPinstripeGeo, neonCyanTrimMat)
-    rightCyanStripe.position.set(0.42, 0.96, -1.0)
-    carGroup.add(rightCyanStripe)
+    const rearHatch = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.35, 0.75), glassMat)
+    rearHatch.position.set(0, 0.84, 0.92)
+    rearHatch.rotation.x = -Math.PI / 6.5
+    car.add(rearHatch)
 
-    // Roof Stripes
-    const roofStripeGeo = new THREE.BoxGeometry(0.14, 0.03, 1.7)
-    const leftRoofStripe = new THREE.Mesh(roofStripeGeo, whiteStripeMat)
-    leftRoofStripe.position.set(-0.32, 1.45, 0.2)
-    carGroup.add(leftRoofStripe)
+    // 5. Lighting Integration
+    // Dual Front LED Headlights
+    const hlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.1, 0.08), ledMat)
+    hlLeft.position.set(-0.68, 0.52, -2.12)
+    car.add(hlLeft)
 
-    const rightRoofStripe = new THREE.Mesh(roofStripeGeo, whiteStripeMat)
-    rightRoofStripe.position.set(0.32, 1.45, 0.2)
-    carGroup.add(rightRoofStripe)
+    const hlRight = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.1, 0.08), ledMat)
+    hlRight.position.set(0.68, 0.52, -2.12)
+    car.add(hlRight)
 
-    // Side Skirt Neon Cyan Blades
-    const sideBladeGeo = new THREE.BoxGeometry(0.06, 0.08, 3.2)
-    const leftBlade = new THREE.Mesh(sideBladeGeo, neonCyanTrimMat)
-    leftBlade.position.set(-1.08, 0.38, 0)
-    carGroup.add(leftBlade)
+    // Full-Width Rear Red LED Lightbar
+    const taillightBar = new THREE.Mesh(new THREE.BoxGeometry(1.72, 0.09, 0.08), taillightMat)
+    taillightBar.position.set(0, 0.64, 2.12)
+    car.add(taillightBar)
 
-    const rightBlade = new THREE.Mesh(sideBladeGeo, neonCyanTrimMat)
-    rightBlade.position.set(1.08, 0.38, 0)
-    carGroup.add(rightBlade)
+    // Subtle Technical Sapphire Underglow (Grounds car to asphalt)
+    const underglow = new THREE.PointLight(0x2563eb, 1.8, 4.5, 1.2)
+    underglow.position.set(0, 0.18, 0)
+    car.add(underglow)
 
-    // 5. Illumination: Dual Forward Headlights & Forward Light Cones
-    const headlightLensGeo = new THREE.BoxGeometry(0.38, 0.14, 0.12)
-    const leftHeadlightMesh = new THREE.Mesh(headlightLensGeo, ledHeadlightMat)
-    leftHeadlightMesh.position.set(-0.74, 0.65, -2.22)
-    carGroup.add(leftHeadlightMesh)
-
-    const rightHeadlightMesh = new THREE.Mesh(headlightLensGeo, ledHeadlightMat)
-    rightHeadlightMesh.position.set(0.74, 0.65, -2.22)
-    carGroup.add(rightHeadlightMesh)
-
-    // Simulated Forward Headlight Beams (Semi-transparent projected cones onto asphalt)
-    const beamGeo = new THREE.ConeGeometry(3.5, 30, 16)
-    beamGeo.rotateX(Math.PI / 2)
-    const beamMat = new THREE.MeshBasicMaterial({
-      color: 0x93c5fd,
-      transparent: true,
-      opacity: 0.18,
-      blending: THREE.AdditiveBlending
-    })
-
-    const leftBeam = new THREE.Mesh(beamGeo, beamMat)
-    leftBeam.position.set(-0.74, 0.5, -16)
-    carGroup.add(leftBeam)
-
-    const rightBeam = new THREE.Mesh(beamGeo, beamMat)
-    rightBeam.position.set(0.74, 0.5, -16)
-    carGroup.add(rightBeam)
-
-    // Forward SpotLight illuminating oncoming road (-Z)
-    const mainHeadlightSpot = new THREE.SpotLight(0xdbeafe, 4.0, 60, Math.PI / 6, 0.4, 1.2)
-    mainHeadlightSpot.position.set(0, 0.8, -2.3)
-    const spotTarget = new THREE.Object3D()
-    spotTarget.position.set(0, 0, -35)
-    carGroup.add(spotTarget)
-    mainHeadlightSpot.target = spotTarget
-    carGroup.add(mainHeadlightSpot)
-
-    // 6. Illumination: Full-Width Red LED Taillight Bar
-    const taillightBar = new THREE.Mesh(new THREE.BoxGeometry(1.82, 0.12, 0.08), tailLedMat)
-    taillightBar.position.set(0, 0.76, 2.22)
-    carGroup.add(taillightBar)
-
-    // 7. Illumination: Electric Cyan Underglow
-    const underglowLight = new THREE.PointLight(0x00f0ff, 3.5, 7.5, 1.4)
-    underglowLight.position.set(0, 0.22, 0)
-    carGroup.add(underglowLight)
-
-    // 8. 4 Sport Alloy Wheels
-    const tireGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.32, 24)
+    // 6. 4 High-Grip Alloy Wheels & Rubber Tires
+    // Wheel Radius: 0.34m (Center height = 0.34m -> Touches asphalt at y = 0.0)
+    const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.28, 24)
     tireGeo.rotateZ(Math.PI / 2)
-    const tireMat = new THREE.MeshStandardMaterial({ color: 0x0a0f1d, roughness: 0.85 })
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x090e17, roughness: 0.9 })
 
-    const rimGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.34, 24)
+    const rimGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.29, 20)
     rimGeo.rotateZ(Math.PI / 2)
-    const rimMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.2, metalness: 0.9 })
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.25, metalness: 0.85 })
 
-    const rimRingGeo = new THREE.RingGeometry(0.25, 0.28, 24)
-    rimRingGeo.rotateY(Math.PI / 2)
-    const rimRingMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide })
-
-    const hubGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.36, 16)
+    const hubGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.31, 16)
     hubGeo.rotateZ(Math.PI / 2)
-    const hubMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.1, metalness: 0.95 })
-
-    const spokeGeo = new THREE.BoxGeometry(0.35, 0.54, 0.05)
-    const spokeMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.2, metalness: 0.9 })
+    const hubMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.2, metalness: 0.8 })
 
     const wheelPositions = [
-      [-1.06, 0.38, -1.35], // Front-Left
-      [1.06, 0.38, -1.35],  // Front-Right
-      [-1.06, 0.38, 1.35],  // Rear-Left
-      [1.06, 0.38, 1.35]    // Rear-Right
+      [-0.98, 0.34, -1.35], // Front-Left
+      [0.98, 0.34, -1.35],  // Front-Right
+      [-0.98, 0.34, 1.35],  // Rear-Left
+      [0.98, 0.34, 1.35]    // Rear-Right
     ]
 
     this.vehicle.wheels = []
     wheelPositions.forEach(pos => {
       const wheelGroup = new THREE.Group()
 
-      // Rubber Tire
-      const tireMesh = new THREE.Mesh(tireGeo, tireMat)
-      wheelGroup.add(tireMesh)
+      const tire = new THREE.Mesh(tireGeo, tireMat)
+      wheelGroup.add(tire)
 
-      // Alloy Rim
-      const rimMesh = new THREE.Mesh(rimGeo, rimMat)
-      wheelGroup.add(rimMesh)
+      const rim = new THREE.Mesh(rimGeo, rimMat)
+      wheelGroup.add(rim)
 
-      // Cyan Accent Rim Edge
-      const rimRing = new THREE.Mesh(rimRingGeo, rimRingMat)
-      rimRing.position.set(pos[0] < 0 ? -0.17 : 0.17, 0, 0)
-      wheelGroup.add(rimRing)
-
-      // Center Hub
-      const hubMesh = new THREE.Mesh(hubGeo, hubMat)
-      wheelGroup.add(hubMesh)
-
-      // Spokes
-      const spoke1 = new THREE.Mesh(spokeGeo, spokeMat)
-      wheelGroup.add(spoke1)
-      const spoke2 = new THREE.Mesh(spokeGeo, spokeMat)
-      spoke2.rotation.x = Math.PI / 2
-      wheelGroup.add(spoke2)
+      const hub = new THREE.Mesh(hubGeo, hubMat)
+      wheelGroup.add(hub)
 
       wheelGroup.position.set(...pos)
-      carGroup.add(wheelGroup)
+      car.add(wheelGroup)
       this.vehicle.wheels.push(wheelGroup)
     })
 
-    carGroup.position.set(this.vehicle.x, 0, this.vehicle.z)
-    this.scene.add(carGroup)
-    this.vehicle.mesh = carGroup
+    // Ground vehicle so wheels contact y = 0.0
+    car.position.set(this.vehicle.x, 0.0, this.vehicle.z)
+    this.scene.add(car)
+    this.vehicle.mesh = car
   }
 
-  buildEnvironmentScenery() {
-    // Futuristic Server City with Multi-Colored Glowing Window Matrices
-    const towerMat = new THREE.MeshStandardMaterial({
+  /**
+   * Distant NOC Server Facility & Telecommunication Infrastructure Skyline
+   */
+  buildCampusSkyline() {
+    const buildingMat = new THREE.MeshStandardMaterial({
       color: 0x0c1322,
-      roughness: 0.35,
-      metalness: 0.7
+      roughness: 0.4,
+      metalness: 0.65
     })
 
-    const windowPalettes = [
-      0x38bdf8, // Electric Cyan
-      0x34d399, // Emerald Green
-      0xfbbf24, // Amber Server Glow
-      0xa855f7, // Cyber Purple
-      0xf8fafc  // Pure White
-    ]
+    const winWhiteMat = new THREE.MeshBasicMaterial({ color: 0xdbeafe })
+    const winBlueMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xef4444 })
 
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 20; i++) {
       const side = i % 2 === 0 ? 1 : -1
-      const x = (this.roadWidth / 2 + 15 + (i * 3.8) % 24) * side
-      const z = -(i * 18) + 40
-      const bHeight = 30 + (i * 9) % 45
-      const bWidth = 14 + (i * 3) % 12
+      const x = (this.roadWidth / 2 + 16 + (i * 4) % 20) * side
+      const z = -(i * 20) + 30
+      const bHeight = 28 + (i * 7) % 40
+      const bWidth = 14 + (i * 3) % 10
 
       const bGroup = new THREE.Group()
 
-      // Tower Core Mesh
-      const bMesh = new THREE.Mesh(new THREE.BoxGeometry(bWidth, bHeight, bWidth), towerMat)
+      // Facility Core Block
+      const bMesh = new THREE.Mesh(new THREE.BoxGeometry(bWidth, bHeight, bWidth), buildingMat)
       bMesh.position.y = bHeight / 2
       bGroup.add(bMesh)
 
-      // Glowing Window Matrix Panels on Tower Front Facade
-      const windowRows = Math.floor(bHeight / 4)
-      const windowCols = 4
-      const frontFacingX = x < 0 ? (bWidth / 2) + 0.05 : (-bWidth / 2) - 0.05
+      // Clean, Ordered Server Room Windows (Facing Highway)
+      const frontX = side > 0 ? -bWidth / 2 - 0.05 : bWidth / 2 + 0.05
+      const floors = Math.floor(bHeight / 5)
 
-      for (let r = 1; r < windowRows; r++) {
-        // Skip some floors randomly for realistic skyscraper variety
-        if ((r + i) % 5 === 0) continue
-
-        const winColor = windowPalettes[(r + i) % windowPalettes.length]
-        const winMat = new THREE.MeshBasicMaterial({ color: winColor })
-
+      for (let f = 1; f < floors; f++) {
+        if ((f + i) % 4 === 0) continue
         const winMesh = new THREE.Mesh(
-          new THREE.BoxGeometry(0.12, 1.6, bWidth * 0.7),
-          winMat
+          new THREE.BoxGeometry(0.1, 1.4, bWidth * 0.7),
+          (f + i) % 2 === 0 ? winWhiteMat : winBlueMat
         )
-        winMesh.position.set(frontFacingX, r * 4, 0)
+        winMesh.position.set(frontX, f * 5, 0)
         bGroup.add(winMesh)
       }
 
-      // Vertical Fiber-Optic Pulse Strip on Tower Edge
-      const stripColor = windowPalettes[i % windowPalettes.length]
-      const stripMat = new THREE.MeshBasicMaterial({ color: stripColor })
-      const stripMesh = new THREE.Mesh(
-        new THREE.BoxGeometry(0.25, bHeight * 0.9, 0.25),
-        stripMat
-      )
-      stripMesh.position.set(
-        frontFacingX,
-        bHeight * 0.45,
-        bWidth * 0.4
-      )
-      bGroup.add(stripMesh)
+      // Communication Tower Mast on Selected Roofs
+      if (i % 3 === 0) {
+        const mastGeo = new THREE.CylinderGeometry(0.08, 0.2, 8, 8)
+        const mastMesh = new THREE.Mesh(mastGeo, buildingMat)
+        mastMesh.position.set(0, bHeight + 4, 0)
+        bGroup.add(mastMesh)
 
-      // Rooftop Hazard Beacon (Red or Cyan)
-      const beaconMat = new THREE.MeshBasicMaterial({
-        color: i % 3 === 0 ? 0xef4444 : 0x00f0ff
-      })
-      const beaconMesh = new THREE.Mesh(new THREE.SphereGeometry(0.35, 8, 8), beaconMat)
-      beaconMesh.position.set(0, bHeight + 0.4, 0)
-      bGroup.add(beaconMesh)
+        // Blinking Red Aviation Safety Beacon
+        const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.28, 8, 8), beaconMat)
+        beacon.position.set(0, bHeight + 8.1, 0)
+        bGroup.add(beacon)
+      }
 
       bGroup.position.set(x, 0, z)
       this.scene.add(bGroup)
-      this.serverBuildings.push(bGroup)
+      this.skylineBuildings.push(bGroup)
     }
   }
 
+  /**
+   * Spawn Realistic AI Traffic Vehicles (NO giant brown placeholder cubes!)
+   */
   spawnInitialTraffic() {
     this.trafficVehicles.forEach(t => this.scene.remove(t.mesh))
     this.trafficVehicles = []
 
-    // Distinct, vibrant vehicle color palettes
-    const vehicleStyles = [
-      { color: 0xd90429, name: 'Crimson Data Interceptor', isTruck: false }, // Crimson
-      { color: 0xf59e0b, name: 'Amber Server Hauler', isTruck: true },        // Amber
-      { color: 0x06b6d4, name: 'Teal Packet Courier', isTruck: false },        // Teal
-      { color: 0xf8fafc, name: 'Arctic Express Pod', isTruck: false }          // White
+    // Realistic vehicle specifications
+    const trafficConfigs = [
+      { type: 'sedan', color: 0x1e293b, length: 4.2, width: 1.85, height: 1.35, speed: 72 }, // Obsidian Slate Sedan
+      { type: 'coupe', color: 0x1e3a8a, length: 3.9, width: 1.82, height: 1.25, speed: 78 }, // Sapphire Coupe
+      { type: 'van',   color: 0x334155, length: 4.8, width: 2.0,  height: 1.75, speed: 68 }, // NOC Service Van
+      { type: 'sedan', color: 0xe2e8f0, length: 4.2, width: 1.85, height: 1.35, speed: 74 }  // Platinum Sedan
     ]
 
-    for (let i = 0; i < 4; i++) {
-      const lane = i % 4
-      const style = vehicleStyles[i % vehicleStyles.length]
-      const tGroup = new THREE.Group()
+    trafficConfigs.forEach((cfg, idx) => {
+      const lane = idx % 4
+      const tMesh = this.createTrafficVehicleMesh(cfg)
 
-      const bodyMat = new THREE.MeshStandardMaterial({
-        color: style.color,
-        roughness: 0.25,
-        metalness: 0.8
-      })
-      const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x0f172a, roughness: 0.1, metalness: 0.9 })
-
-      if (style.isTruck) {
-        // Data Truck Mesh
-        const truckBody = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.2, 5.8), bodyMat)
-        truckBody.position.y = 1.15
-        tGroup.add(truckBody)
-
-        const cabMesh = new THREE.Mesh(new THREE.BoxGeometry(2.35, 1.8, 1.8), bodyMat)
-        cabMesh.position.set(0, 1.0, -2.8)
-        tGroup.add(cabMesh)
-      } else {
-        // Sports Sedan Mesh
-        const sedanBody = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.75, 4.0), bodyMat)
-        sedanBody.position.y = 0.52
-        tGroup.add(sedanBody)
-
-        const sedanCabin = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.55, 2.0), glassMat)
-        sedanCabin.position.set(0, 1.05, 0.1)
-        tGroup.add(sedanCabin)
-      }
-
-      // Traffic Headlights (White, front faces -Z)
-      const headlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff })
-      const hlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.1), headlightMat)
-      hlLeft.position.set(-0.7, 0.6, -2.05)
-      tGroup.add(hlLeft)
-
-      const hlRight = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.1), headlightMat)
-      hlRight.position.set(0.7, 0.6, -2.05)
-      tGroup.add(hlRight)
-
-      // Traffic Taillights (Red, rear faces +Z)
-      const taillightMat = new THREE.MeshBasicMaterial({ color: 0xff1744 })
-      const tlLeft = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.1), taillightMat)
-      tlLeft.position.set(-0.7, 0.6, 2.05)
-      tGroup.add(tlLeft)
-
-      const tlRight = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.1), taillightMat)
-      tlRight.position.set(0.7, 0.6, 2.05)
-      tGroup.add(tlRight)
-
-      const spawnZ = this.vehicle.z - 45 - i * 40
-      tGroup.position.set(this.laneX[lane], 0, spawnZ)
-      this.scene.add(tGroup)
+      // Spawn well ahead of the player (65m to 170m)
+      const spawnZ = this.vehicle.z - 65 - idx * 35
+      tMesh.position.set(this.laneX[lane], 0, spawnZ)
+      this.scene.add(tMesh)
 
       this.trafficVehicles.push({
-        mesh: tGroup,
+        mesh: tMesh,
         lane,
-        speedKmh: 65 + (i * 8),
-        isTruck: style.isTruck,
-        width: style.isTruck ? 2.4 : 2.0,
-        length: style.isTruck ? 6.0 : 4.0
+        speedKmh: cfg.speed,
+        width: cfg.width,
+        length: cfg.length
       })
-    }
+    })
   }
 
-  spawnCollectibles() {
-    this.collectibles.forEach(c => this.scene.remove(c.mesh))
-    this.collectibles = []
+  createTrafficVehicleMesh(cfg) {
+    const group = new THREE.Group()
 
-    const crystalPalettes = [
-      { color: 0x00f0ff, emissive: 0x0284c7 }, // Electric Cyan
-      { color: 0x10b981, emissive: 0x047857 }, // Emerald Green
-      { color: 0xf59e0b, emissive: 0xb45309 }, // Golden Amber
-      { color: 0xa855f7, emissive: 0x7e22ce }  // Tech Violet
+    const bodyMat = new THREE.MeshStandardMaterial({
+      color: cfg.color,
+      roughness: 0.35,
+      metalness: 0.7
+    })
+    const glassMat = new THREE.MeshStandardMaterial({ color: 0x090e17, roughness: 0.1, metalness: 0.9 })
+    const tireMat = new THREE.MeshStandardMaterial({ color: 0x0a0f1d, roughness: 0.9 })
+    const rimMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8, roughness: 0.3 })
+    const redTailMat = new THREE.MeshBasicMaterial({ color: 0xff1744 })
+    const whiteHeadMat = new THREE.MeshBasicMaterial({ color: 0xf1f5f9 })
+
+    if (cfg.type === 'van') {
+      // Commercial Van Body
+      const lower = new THREE.Mesh(new THREE.BoxGeometry(cfg.width, 0.45, cfg.length), bodyMat)
+      lower.position.y = 0.4
+      group.add(lower)
+
+      const upper = new THREE.Mesh(new THREE.BoxGeometry(cfg.width * 0.95, 1.05, cfg.length * 0.92), bodyMat)
+      upper.position.set(0, 1.05, 0.1)
+      group.add(upper)
+
+      // Windshield & Front Cab Slope
+      const windshield = new THREE.Mesh(new THREE.BoxGeometry(cfg.width * 0.9, 0.6, 0.5), glassMat)
+      windshield.position.set(0, 1.05, -cfg.length / 2 + 0.45)
+      windshield.rotation.x = Math.PI / 7
+      group.add(windshield)
+    } else {
+      // Passenger Sedan / Coupe Body
+      const lower = new THREE.Mesh(new THREE.BoxGeometry(cfg.width, 0.38, cfg.length), bodyMat)
+      lower.position.y = 0.36
+      group.add(lower)
+
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(cfg.width * 0.82, 0.48, cfg.length * 0.52), glassMat)
+      cabin.position.set(0, 0.78, 0.1)
+      group.add(cabin)
+
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(cfg.width * 0.78, 0.08, cfg.length * 0.45), bodyMat)
+      roof.position.set(0, 1.04, 0.1)
+      group.add(roof)
+    }
+
+    // Rear Taillights (Facing +Z toward player)
+    const tlL = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.05), redTailMat)
+    tlL.position.set(-cfg.width / 2 + 0.25, 0.55, cfg.length / 2 + 0.02)
+    group.add(tlL)
+
+    const tlR = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.05), redTailMat)
+    tlR.position.set(cfg.width / 2 - 0.25, 0.55, cfg.length / 2 + 0.02)
+    group.add(tlR)
+
+    // Front Headlights (Facing -Z)
+    const hlL = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.05), whiteHeadMat)
+    hlL.position.set(-cfg.width / 2 + 0.25, 0.48, -cfg.length / 2 - 0.02)
+    group.add(hlL)
+
+    const hlR = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.05), whiteHeadMat)
+    hlR.position.set(cfg.width / 2 - 0.25, 0.48, -cfg.length / 2 - 0.02)
+    group.add(hlR)
+
+    // 4 Wheels
+    const tireGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.24, 16)
+    tireGeo.rotateZ(Math.PI / 2)
+    const rimGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.25, 12)
+    rimGeo.rotateZ(Math.PI / 2)
+
+    const wheelZ = cfg.length * 0.32
+    const wheelX = cfg.width / 2
+    const wheels = [
+      [-wheelX, 0.32, -wheelZ],
+      [wheelX, 0.32, -wheelZ],
+      [-wheelX, 0.32, wheelZ],
+      [wheelX, 0.32, wheelZ]
     ]
 
-    for (let i = 0; i < 6; i++) {
+    wheels.forEach(pos => {
+      const wGroup = new THREE.Group()
+      wGroup.add(new THREE.Mesh(tireGeo, tireMat))
+      wGroup.add(new THREE.Mesh(rimGeo, rimMat))
+      wGroup.position.set(...pos)
+      group.add(wGroup)
+    })
+
+    return group
+  }
+
+  /**
+   * Spawn Network Telemetry Data Packets (Refined, compact data units; NO giant orange rings!)
+   */
+  spawnTelemetryPackets() {
+    this.telemetryPackets.forEach(p => this.scene.remove(p.mesh))
+    this.telemetryPackets = []
+
+    const packetMat = new THREE.MeshStandardMaterial({
+      color: 0x00f0ff,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.85,
+      roughness: 0.1,
+      metalness: 0.9
+    })
+
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.6 })
+
+    for (let i = 0; i < 5; i++) {
       const lane = (i * 2 + 1) % 4
-      const p = crystalPalettes[i % crystalPalettes.length]
-      const cGroup = new THREE.Group()
+      const pGroup = new THREE.Group()
 
-      // Multi-Faceted Crystal
-      const crystalGeo = new THREE.OctahedronGeometry(0.75)
-      const crystalMat = new THREE.MeshStandardMaterial({
-        color: p.color,
-        emissive: p.emissive,
-        emissiveIntensity: 1.1,
-        roughness: 0.1,
-        metalness: 0.95
-      })
-      const crystalMesh = new THREE.Mesh(crystalGeo, crystalMat)
-      cGroup.add(crystalMesh)
+      // Compact Luminous Telemetry Data Module (0.35m x 0.35m x 0.12m)
+      const dataModule = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.14, 0.38), packetMat)
+      pGroup.add(dataModule)
 
-      // Orbiting Glowing Ring
-      const ringGeo = new THREE.TorusGeometry(1.05, 0.04, 8, 24)
+      // Thin Horizontal Telemetry Signal Ring (Radius 0.45m)
+      const ringGeo = new THREE.RingGeometry(0.42, 0.46, 24)
       ringGeo.rotateX(Math.PI / 2)
-      const ringMat = new THREE.MeshBasicMaterial({ color: p.color })
       const ringMesh = new THREE.Mesh(ringGeo, ringMat)
-      cGroup.add(ringMesh)
+      pGroup.add(ringMesh)
 
-      const spawnZ = this.vehicle.z - 25 - i * 35
-      cGroup.position.set(this.laneX[lane], 1.25, spawnZ)
-      this.scene.add(cGroup)
+      // Soft road bounce light
+      const pLight = new THREE.PointLight(0x00f0ff, 1.2, 3.2, 1.2)
+      pLight.position.y = 0.1
+      pGroup.add(pLight)
 
-      this.collectibles.push({
-        mesh: cGroup,
-        crystal: crystalMesh,
+      // Hovering smoothly just above road surface at y = 0.45m
+      const spawnZ = this.vehicle.z - 30 - i * 40
+      pGroup.position.set(this.laneX[lane], 0.45, spawnZ)
+      this.scene.add(pGroup)
+
+      this.telemetryPackets.push({
+        mesh: pGroup,
+        module: dataModule,
         ring: ringMesh,
         active: true,
-        rotSpeed: 0.045 + (i * 0.01)
+        rotSpeed: 0.035 + i * 0.005
       })
     }
   }
 
-  setupCheckpointGantry(options = [], distanceMeters = 400) {
-    this.checkpointOptions = options
+  /**
+   * Overhead Electronic Highway Truss Gantry for Checkpoint Decision Gates
+   */
+  setupCheckpointGantry(options = ['1.2', '2.4', '3.2', '0.8'], distanceMeters = 400) {
+    this.checkpointOptions = Array.isArray(options) && options.length > 0 ? options : ['1.2', '2.4', '3.2', '0.8']
     this.distanceToNextCheckpoint = distanceMeters
     this.checkpointTargetZ = this.vehicle.z - distanceMeters
     this.checkpointActive = true
 
-    // Remove old gantry
     if (this.checkpointGantry) {
       this.scene.remove(this.checkpointGantry)
       this.checkpointGantry = null
     }
 
-    const gantryGroup = new THREE.Group()
+    const gantry = new THREE.Group()
 
-    // Truss columns & beam
-    const trussMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.7 })
-    const leftCol = new THREE.Mesh(new THREE.BoxGeometry(1.0, 7.5, 1.0), trussMat)
-    leftCol.position.set(-this.roadWidth / 2 - 1.2, 3.75, 0)
-    gantryGroup.add(leftCol)
+    // Structural Steel Lattice Truss (Realistic Intelligent Highway Gantry)
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4, metalness: 0.8 })
 
-    const rightCol = new THREE.Mesh(new THREE.BoxGeometry(1.0, 7.5, 1.0), trussMat)
-    rightCol.position.set(this.roadWidth / 2 + 1.2, 3.75, 0)
-    gantryGroup.add(rightCol)
+    // Left Column
+    const colL = new THREE.Mesh(new THREE.BoxGeometry(0.7, 6.2, 0.7), steelMat)
+    colL.position.set(-this.roadWidth / 2 - 1.2, 3.1, 0)
+    gantry.add(colL)
 
-    const topBeam = new THREE.Mesh(new THREE.BoxGeometry(this.roadWidth + 4, 1.2, 1.2), trussMat)
-    topBeam.position.set(0, 7.0, 0)
-    gantryGroup.add(topBeam)
+    // Right Column
+    const colR = new THREE.Mesh(new THREE.BoxGeometry(0.7, 6.2, 0.7), steelMat)
+    colR.position.set(this.roadWidth / 2 + 1.2, 3.1, 0)
+    gantry.add(colR)
 
-    // Glowing Neon Gantry Border Strip
-    const gantryNeon = new THREE.Mesh(
-      new THREE.BoxGeometry(this.roadWidth + 3.8, 0.15, 0.2),
-      new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-    )
-    gantryNeon.position.set(0, 7.65, 0.6)
-    gantryGroup.add(gantryNeon)
+    // Main Overhead Crossbeam
+    const crossbeam = new THREE.Mesh(new THREE.BoxGeometry(this.roadWidth + 3.2, 0.9, 0.8), steelMat)
+    crossbeam.position.set(0, 5.8, 0)
+    gantry.add(crossbeam)
 
-    // 4 Lane Digital Signboards (facing +Z towards oncoming driver)
-    const signMat = new THREE.MeshBasicMaterial({ color: 0x0b0f19 })
-    const borderMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+    // 4 Digital LED Matrix Overhead Signboards (Facing +Z toward oncoming driver)
+    const signMat = new THREE.MeshBasicMaterial({ color: 0x0b111e })
+    const frameMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8 })
 
     for (let l = 0; l < 4; l++) {
       const signGroup = new THREE.Group()
 
-      const signMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 1.5), signMat)
-      signMesh.position.set(0, 0, 0.02)
-      signGroup.add(signMesh)
+      // Sign Housing Frame
+      const frameMesh = new THREE.Mesh(new THREE.BoxGeometry(2.7, 1.45, 0.15), frameMat)
+      signGroup.add(frameMesh)
 
-      const borderMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.95, 1.65), borderMat)
-      borderMesh.position.set(0, 0, 0)
-      signGroup.add(borderMesh)
+      // Sign Display Face
+      const faceMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.55, 1.3), signMat)
+      faceMesh.position.set(0, 0, 0.08)
+      signGroup.add(faceMesh)
 
-      // Procedural Canvas Texture for Option Text
-      const textCanvas = document.createElement('canvas')
-      textCanvas.width = 256
-      textCanvas.height = 128
-      const tCtx = textCanvas.getContext('2d')
-      tCtx.fillStyle = '#0b0f19'
-      tCtx.fillRect(0, 0, 256, 128)
+      // High-Contrast Canvas Texture for Gate Option
+      const canvas = document.createElement('canvas')
+      canvas.width = 256
+      canvas.height = 128
+      const ctx = canvas.getContext('2d')
 
-      tCtx.strokeStyle = '#38bdf8'
-      tCtx.lineWidth = 6
-      tCtx.strokeRect(4, 4, 248, 120)
+      ctx.fillStyle = '#0b111e'
+      ctx.fillRect(0, 0, 256, 128)
 
-      tCtx.fillStyle = '#94a3b8'
-      tCtx.font = 'bold 22px sans-serif'
-      tCtx.textAlign = 'center'
-      tCtx.fillText(`GATE ${String.fromCharCode(65 + l)}`, 128, 38)
+      // Sapphire Blue Inner Border
+      ctx.strokeStyle = '#0284c7'
+      ctx.lineWidth = 4
+      ctx.strokeRect(4, 4, 248, 120)
 
-      tCtx.fillStyle = '#ffffff'
-      tCtx.font = 'bold 36px monospace'
-      const optVal = options[l] !== undefined ? String(options[l]) : '—'
-      tCtx.fillText(optVal, 128, 88)
+      // Gate Label
+      ctx.fillStyle = '#38bdf8'
+      ctx.font = 'bold 20px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText(`GATE ${String.fromCharCode(65 + l)}`, 128, 36)
 
-      const textTex = new THREE.CanvasTexture(textCanvas)
-      const textPlane = new THREE.Mesh(
-        new THREE.PlaneGeometry(2.7, 1.4),
-        new THREE.MeshBasicMaterial({ map: textTex, transparent: true })
+      // Statistical Value
+      ctx.fillStyle = '#ffffff'
+      ctx.font = 'bold 36px monospace'
+      const optText = this.checkpointOptions[l] !== undefined ? String(this.checkpointOptions[l]) : '—'
+      ctx.fillText(optText, 128, 88)
+
+      const texture = new THREE.CanvasTexture(canvas)
+      const textMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.4, 1.15),
+        new THREE.MeshBasicMaterial({ map: texture, transparent: true })
       )
-      textPlane.position.set(0, 0, 0.04)
-      signGroup.add(textPlane)
+      textMesh.position.set(0, 0, 0.09)
+      signGroup.add(textMesh)
 
-      signGroup.position.set(this.laneX[l], 6.2, 0)
-      gantryGroup.add(signGroup)
+      signGroup.position.set(this.laneX[l], 5.8, 0)
+      gantry.add(signGroup)
     }
 
-    gantryGroup.position.set(0, 0, this.checkpointTargetZ)
-    this.scene.add(gantryGroup)
-    this.checkpointGantry = gantryGroup
+    gantry.position.set(0, 0, this.checkpointTargetZ)
+    this.scene.add(gantry)
+    this.checkpointGantry = gantry
   }
 
   setInput(key, value) {
@@ -830,7 +847,7 @@ export class HighwayScene3D {
   }
 
   updatePhysics(delta) {
-    // 1. Acceleration & Braking
+    // 1. Throttle / Braking / Cruising
     if (this.inputs.forward) {
       this.vehicle.speedKmh = Math.min(
         this.vehicle.maxSpeedKmh,
@@ -838,20 +855,20 @@ export class HighwayScene3D {
       )
     } else if (this.inputs.backward) {
       this.vehicle.speedKmh = Math.max(
-        25,
+        this.vehicle.minSpeedKmh,
         this.vehicle.speedKmh - this.vehicle.braking * delta
       )
     } else if (this.inputs.handbrake) {
       this.vehicle.speedKmh = Math.max(
-        15,
-        this.vehicle.speedKmh - this.vehicle.braking * 2.2 * delta
+        20,
+        this.vehicle.speedKmh - this.vehicle.braking * 2.0 * delta
       )
     } else {
-      // Natural highway cruising: smoothly converges to targetSpeedKmh (90 km/h)
+      // Natural highway cruising: gently converges to targetSpeedKmh (85 km/h)
       if (this.vehicle.speedKmh < this.vehicle.targetSpeedKmh) {
         this.vehicle.speedKmh = Math.min(
           this.vehicle.targetSpeedKmh,
-          this.vehicle.speedKmh + this.vehicle.acceleration * 0.7 * delta
+          this.vehicle.speedKmh + this.vehicle.acceleration * 0.6 * delta
         )
       } else if (this.vehicle.speedKmh > this.vehicle.targetSpeedKmh) {
         this.vehicle.speedKmh = Math.max(
@@ -861,29 +878,27 @@ export class HighwayScene3D {
       }
     }
 
-    // Convert km/h to units per second (1 unit ~= 1 meter)
+    // Convert km/h to units/sec (1 unit = 1 meter)
     const speedUnitsPerSec = (this.vehicle.speedKmh * 1000) / 3600
     this.vehicle.vz = speedUnitsPerSec
 
     // 2. Lateral Steering
-    // Left: steers left to lower lane index / negative X
-    // Right: steers right to higher lane index / positive X
     if (this.inputs.left) {
       this.vehicle.vx = -this.vehicle.handling
-      this.vehicle.steerAngle = Math.min(0.25, this.vehicle.steerAngle + 2.2 * delta)
+      this.vehicle.steerAngle = Math.min(0.22, this.vehicle.steerAngle + 2.5 * delta)
     } else if (this.inputs.right) {
       this.vehicle.vx = this.vehicle.handling
-      this.vehicle.steerAngle = Math.max(-0.25, this.vehicle.steerAngle - 2.2 * delta)
+      this.vehicle.steerAngle = Math.max(-0.22, this.vehicle.steerAngle - 2.5 * delta)
     } else {
-      this.vehicle.vx *= 0.8
+      this.vehicle.vx *= 0.82
       this.vehicle.steerAngle *= 0.8
     }
 
-    // Apply movement (forward along -Z, lateral along X)
+    // Apply movement
     this.vehicle.z -= this.vehicle.vz * delta
     this.vehicle.x += this.vehicle.vx * delta
 
-    // Road boundary clamp
+    // Road boundary clamp (keep vehicle within highway barriers)
     const maxRoadX = (this.roadWidth / 2) - 1.2
     if (this.vehicle.x < -maxRoadX) {
       this.vehicle.x = -maxRoadX
@@ -894,7 +909,7 @@ export class HighwayScene3D {
       this.vehicle.vx = 0
     }
 
-    // Determine closest lane
+    // Determine current lane
     let closestLane = 0
     let minDiff = 999
     this.laneX.forEach((lx, idx) => {
@@ -906,19 +921,18 @@ export class HighwayScene3D {
     })
     this.vehicle.laneIndex = closestLane
 
-    // Update 3D car position, yaw turning, roll banking & wheel spin
+    // 3. Update Vehicle Mesh, Roll Banking & Wheel Rotation
     if (this.vehicle.mesh) {
-      this.vehicle.mesh.position.set(this.vehicle.x, 0, this.vehicle.z)
-      this.vehicle.mesh.rotation.y = this.vehicle.steerAngle * 0.6
-      this.vehicle.mesh.rotation.z = this.vehicle.steerAngle * 0.4
+      this.vehicle.mesh.position.set(this.vehicle.x, 0.0, this.vehicle.z)
+      this.vehicle.mesh.rotation.y = this.vehicle.steerAngle * 0.55
+      this.vehicle.mesh.rotation.z = this.vehicle.steerAngle * 0.35
 
-      // Spin wheels cleanly around axle
-      const wheelSpin = this.vehicle.vz * delta * 2.5
+      const wheelSpin = this.vehicle.vz * delta * 2.8
       this.vehicle.wheels.forEach(w => {
         w.rotation.x -= wheelSpin
       })
 
-      // Collision recovery visual flash
+      // Collision flash feedback
       if (this.vehicle.recoveryTimer > 0) {
         this.vehicle.recoveryTimer -= delta
         this.vehicle.mesh.visible = Math.floor(this.vehicle.recoveryTimer * 12) % 2 === 0
@@ -927,51 +941,54 @@ export class HighwayScene3D {
       }
     }
 
-    // 3. Update Camera Tracking
+    // 4. Third-Person Follow Camera Update
     if (this.camera) {
       if (this.cameraMode === 'CHASE') {
-        const targetCamX = this.vehicle.x
-        const targetCamY = 3.6 + (this.vehicle.speedKmh / 180) * 0.6
-        const targetCamZ = this.vehicle.z + 7.5
+        const targetCamX = this.vehicle.x * 0.85
+        const targetCamY = 2.45 + (this.vehicle.speedKmh / 180) * 0.35
+        const targetCamZ = this.vehicle.z + 6.4
 
-        this.camera.position.lerp(new THREE.Vector3(targetCamX, targetCamY, targetCamZ), 0.15)
-        this.camera.lookAt(this.vehicle.x, 1.2, this.vehicle.z - 12)
+        this.camera.position.x += (targetCamX - this.camera.position.x) * 0.14
+        this.camera.position.y += (targetCamY - this.camera.position.y) * 0.15
+        this.camera.position.z = targetCamZ
+
+        this.camera.lookAt(this.vehicle.x * 0.4, 0.95, this.vehicle.z - 18)
       } else if (this.cameraMode === 'HOOD') {
-        this.camera.position.set(this.vehicle.x, 1.35, this.vehicle.z - 1.2)
-        this.camera.lookAt(this.vehicle.x, 1.2, this.vehicle.z - 25)
+        this.camera.position.set(this.vehicle.x, 1.25, this.vehicle.z - 0.8)
+        this.camera.lookAt(this.vehicle.x, 1.1, this.vehicle.z - 28)
       } else if (this.cameraMode === 'ORBIT') {
-        this.camera.position.set(this.vehicle.x + 8, 4.5, this.vehicle.z + 6)
-        this.camera.lookAt(this.vehicle.x, 1.0, this.vehicle.z - 5)
+        this.camera.position.set(this.vehicle.x + 6.5, 3.8, this.vehicle.z + 5.5)
+        this.camera.lookAt(this.vehicle.x, 0.9, this.vehicle.z - 6)
       }
     }
 
-    // 4. Update Infinite Looping Road Segments
+    // 5. Infinite Highway Scrolling
     this.roadSegments.forEach(seg => {
       if (seg.position.z - this.roadSegmentLength > this.vehicle.z) {
         seg.position.z -= this.roadSegmentLength * 2
       }
     })
 
-    // 5. Update Buildings (Infinite scrolling ahead)
-    this.serverBuildings.forEach(b => {
-      if (b.position.z - 50 > this.vehicle.z) {
+    // 6. Infinite Skyline Scrolling
+    this.skylineBuildings.forEach(b => {
+      if (b.position.z - 40 > this.vehicle.z) {
         b.position.z -= 200
       }
     })
 
-    // 6. Update Starfield Position to follow player
+    // 7. Update Starfield Position to follow player
     if (this.starfield) {
       this.starfield.position.z = this.vehicle.z
     }
 
-    // 7. Update AI Traffic
+    // 8. Update AI Traffic
     this.trafficVehicles.forEach(t => {
       const trafficSpeedUnits = (t.speedKmh * 1000) / 3600
       t.mesh.position.z -= trafficSpeedUnits * delta
 
-      // If traffic fell behind, respawn ahead
-      if (t.mesh.position.z - 20 > this.vehicle.z) {
-        t.mesh.position.z = this.vehicle.z - 70 - Math.random() * 50
+      // If traffic fell behind player, respawn safely ahead
+      if (t.mesh.position.z - 25 > this.vehicle.z) {
+        t.mesh.position.z = this.vehicle.z - 75 - Math.random() * 55
         t.lane = Math.floor(Math.random() * 4)
         t.mesh.position.x = this.laneX[t.lane]
       }
@@ -980,9 +997,9 @@ export class HighwayScene3D {
       if (this.vehicle.recoveryTimer <= 0) {
         const dx = Math.abs(this.vehicle.x - t.mesh.position.x)
         const dz = Math.abs(this.vehicle.z - t.mesh.position.z)
-        if (dx < (t.width / 2 + 1.0) && dz < (t.length / 2 + 2.1)) {
-          this.vehicle.speedKmh = Math.max(20, this.vehicle.speedKmh - 45)
-          this.vehicle.recoveryTimer = 1.4
+        if (dx < (t.width / 2 + this.vehicle.width / 2 - 0.2) && dz < (t.length / 2 + this.vehicle.length / 2 - 0.2)) {
+          this.vehicle.speedKmh = Math.max(30, this.vehicle.speedKmh - 40)
+          this.vehicle.recoveryTimer = 1.2
           if (this.onCollision) {
             this.onCollision({ speed: this.vehicle.speedKmh })
           }
@@ -990,20 +1007,18 @@ export class HighwayScene3D {
       }
     })
 
-    // 8. Update Multi-Spectrum Collectibles
-    this.collectibles.forEach(c => {
-      if (c.active) {
-        c.crystal.rotation.y += c.rotSpeed
-        c.crystal.rotation.x += c.rotSpeed * 0.5
-        c.ring.rotation.z += c.rotSpeed * 1.2
-        c.mesh.position.y = 1.25 + Math.sin(this.vehicle.z * 0.1 + c.mesh.position.x) * 0.25
+    // 9. Update Telemetry Data Packets
+    this.telemetryPackets.forEach(p => {
+      if (p.active) {
+        p.module.rotation.y += p.rotSpeed
+        p.ring.rotation.z += p.rotSpeed * 1.4
 
         // Pickup collision
-        const dx = Math.abs(this.vehicle.x - c.mesh.position.x)
-        const dz = Math.abs(this.vehicle.z - c.mesh.position.z)
-        if (dx < 1.4 && dz < 2.0) {
-          c.active = false
-          c.mesh.visible = false
+        const dx = Math.abs(this.vehicle.x - p.mesh.position.x)
+        const dz = Math.abs(this.vehicle.z - p.mesh.position.z)
+        if (dx < 1.3 && dz < 1.8) {
+          p.active = false
+          p.mesh.visible = false
           this.packetsCollected += 1
           this.score += 50
           if (this.onCollectPacket) {
@@ -1012,23 +1027,22 @@ export class HighwayScene3D {
         }
       }
 
-      // Respawn ahead if passed behind
-      if (c.mesh.position.z - 15 > this.vehicle.z) {
-        c.mesh.position.z = this.vehicle.z - 60 - Math.random() * 80
+      // Respawn ahead if passed
+      if (p.mesh.position.z - 15 > this.vehicle.z) {
+        p.mesh.position.z = this.vehicle.z - 60 - Math.random() * 80
         const lane = Math.floor(Math.random() * 4)
-        c.mesh.position.x = this.laneX[lane]
-        c.active = true
-        c.mesh.visible = true
+        p.mesh.position.x = this.laneX[lane]
+        p.active = true
+        p.mesh.visible = true
       }
     })
 
-    // 9. Checkpoint Trigger Check
+    // 10. Checkpoint Gantry Detection
     if (this.checkpointActive && this.checkpointGantry) {
       const remainingDist = Math.max(0, this.vehicle.z - this.checkpointTargetZ)
       this.distanceToNextCheckpoint = Math.round(remainingDist)
 
-      // When crossing the gantry line:
-      if (this.vehicle.z <= this.checkpointTargetZ + 1.5) {
+      if (this.vehicle.z <= this.checkpointTargetZ + 1.2) {
         this.checkpointActive = false
         const chosenLane = this.vehicle.laneIndex
         if (this.onCheckpointReached) {
@@ -1040,7 +1054,7 @@ export class HighwayScene3D {
       }
     }
 
-    // 10. Dispatch Telemetry Update to HUD
+    // 11. Dispatch Telemetry Update to HUD
     if (this.onTelemetryUpdate) {
       this.onTelemetryUpdate({
         speedKmh: Math.round(this.vehicle.speedKmh),
@@ -1091,7 +1105,7 @@ export class HighwayScene3D {
     }
     window.removeEventListener('resize', this.handleResize)
 
-    // Dispose Three.js objects
+    // Dispose scene objects
     if (this.scene) {
       this.scene.traverse(obj => {
         if (obj.geometry) obj.geometry.dispose()
