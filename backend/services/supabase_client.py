@@ -8,6 +8,15 @@ import httpx
 import uuid
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    env_file = Path(__file__).resolve().parent.parent / ".env"
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file)
+except ImportError:
+    pass
 
 from services.progression_engine import (
     calculate_level,

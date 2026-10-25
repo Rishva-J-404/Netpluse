@@ -6,6 +6,15 @@ Course: Probability and Statistics for Computer Science (25CS203)
 import os
 import httpx
 from typing import Optional, Dict, Any
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    env_file = Path(__file__).resolve().parent.parent / ".env"
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file)
+except ImportError:
+    pass
 from fastapi import Request, HTTPException, status, Depends
 
 

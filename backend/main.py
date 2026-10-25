@@ -5,6 +5,15 @@ Course Code: 25CS203
 """
 
 import os
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+    env_file = Path(__file__).resolve().parent / ".env"
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file)
+except ImportError:
+    pass
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse

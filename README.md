@@ -107,7 +107,7 @@ netpulse/
 - **Phase 7: Supabase Database Integration** (Completed — 6-table relational schema, RLS policies, Storage bucket, persistence services, repeatable seeds)
 - **Phase 8: Supabase Authentication & User Profiles** (Completed — Central AuthContext, ProtectedRoute guards, functional Register/Login/Profile views, automatic profile trigger, graceful unconfigured fallback)
 - **Phase 9: Persistent XP, Achievements & Leaderboard** (Completed & Approved — Authoritative completion, idempotency, atomic XP awards, 7 curriculum achievements, real leaderboard, audit history)
-- **Phase 10: Final Integration Testing, Security Audit & Deployment Readiness** (Completed — Statistical ground truth verification, database security hardening migration 5, zero pytest warnings, 128 tests passed, bundle code-splitting down to 28 kB)
+- **Phase 10: Final Integration Testing, Security Audit & Deployment Readiness** (Completed — Statistical ground truth verification, database security hardening migration 5, zero pytest warnings, 137 tests passed, bundle code-splitting down to 28 kB)
 
 ---
 
@@ -124,7 +124,7 @@ python -m venv venv
 # Windows:
 venv\Scripts\activate
 # Run pytest test suite (all 116 tests):
-# Run pytest test suite (all 128 tests, 0 warnings):
+# Run pytest test suite (all 137 tests, 0 warnings):
 python -m pytest tests/ -v
 # Run FastAPI server:
 python -m uvicorn main:app --reload --port 8000
