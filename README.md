@@ -114,32 +114,68 @@ netpulse/
 ## 6. How to Run (Development Setup)
 
 ### Prerequisites
-- Node.js (v18+) and npm
-- Python (v3.11+)
+- **Node.js**: v18+ and npm
+- **Python**: v3.11+ (Python 3.11 or 3.12 recommended)
+- **Git**
 
-### Backend Setup (FastAPI + NumPy / SciPy)
-```bash
-cd netpulse/backend
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# Run pytest test suite (all 116 tests):
-# Run pytest test suite (all 137 tests, 0 warnings):
-python -m pytest tests/ -v
-# Run FastAPI server:
-python -m uvicorn main:app --reload --port 8000
-```
-- Interactive API Documentation (Swagger): `http://localhost:8000/docs`
-- Service Health Probe: `http://localhost:8000/health`
+---
 
-### Frontend Setup (React 18 + Vite 8 + Tailwind CSS 4)
-```bash
+### Quick Start: Single-Command Combined Dev Server (Recommended)
+
+Start both the **React frontend** and the **Python FastAPI backend** concurrently with a single command:
+
+```powershell
 cd netpulse/frontend
-# Install dependencies:
-npm install
-# Run production build:
-npm run build
-# Start Vite development server:
 npm run dev
 ```
-Frontend will be accessible at: `http://localhost:5173`
+
+This single command automatically:
+1. **Verifies Port Availability**: Checks ports `8000` and `5173`. If either is occupied, it provides immediate diagnostics and recovery instructions rather than crashing or hanging.
+2. **Auto-Discovers Python**: Automatically searches active virtual environments (`.venv`, `venv`), user-configured `PYTHON_PATH`, and system PATH for Python 3.11+.
+3. **Validates Dependencies**: Verifies that all required packages (`fastapi`, `uvicorn`, `numpy`, `pandas`, `scipy`, `pydantic`, `dotenv`) are present before launching.
+4. **Starts FastAPI Backend**: Binds to `http://127.0.0.1:8000` with hot-reload enabled and correct `backend/` working directory.
+5. **Starts Vite Frontend**: Binds to `http://localhost:5173` with instant HMR (Hot Module Replacement).
+6. **Graceful Unified Shutdown**: Pressing `Ctrl+C` cleans up both the frontend and backend process trees without leaving orphaned background processes.
+
+#### Service URLs
+- **Web Application**: [`http://localhost:5173`](http://localhost:5173)
+- **FastAPI Documentation (Swagger UI)**: [`http://127.0.0.1:8000/docs`](http://127.0.0.1:8000/docs)
+- **Backend Health Check**: [`http://127.0.0.1:8000/health`](http://127.0.0.1:8000/health)
+
+---
+
+### Standalone Development Commands
+
+If you prefer running services independently:
+
+```powershell
+# In netpulse/frontend:
+
+# Run ONLY the Vite frontend (port 5173):
+npm run dev:frontend
+
+# Run ONLY the FastAPI backend (port 8000):
+npm run dev:backend
+
+# Production frontend build:
+npm run build
+```
+
+---
+
+### Manual Backend Setup (Optional Alternative)
+
+If you prefer to start the Python environment manually without npm:
+
+```powershell
+cd netpulse/backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+# Run pytest test suite (137 tests, 0 warnings):
+python -m pytest tests/ -v
+
+# Start Uvicorn manually:
+python -m uvicorn main:app --reload --port 8000
+```
